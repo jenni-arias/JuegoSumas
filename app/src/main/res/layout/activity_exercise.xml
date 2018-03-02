@@ -65,8 +65,8 @@
             android:id="@+id/dec_down"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/cent_up"
-            android:layout_centerHorizontal="true"
+            android:layout_toRightOf="@+id/cent_down"
+            android:layout_below="@+id/dec_up"
             android:textAlignment="center"
             android:textSize="60dp"
             android:text="0" />
@@ -75,18 +75,19 @@
             android:id="@+id/cent_down"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/dec_down"
             android:layout_below="@+id/cent_up"
+            android:layout_centerHorizontal="true"
             android:textAlignment="center"
             android:textSize="60dp"
             android:text="0" />
+
 
         <TextView
             android:id="@+id/mil_down"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_below="@+id/mil_up"
-            android:layout_toStartOf="@+id/dec_down"
+            android:layout_toStartOf="@+id/cent_up"
             android:textAlignment="center"
             android:textSize="60dp"
             android:text="0" />
@@ -96,7 +97,7 @@
             android:id="@+id/suma"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="21dp"
+            android:layout_marginEnd="10dp"
             android:layout_alignBaseline="@+id/mil_down"
             android:layout_toStartOf="@+id/mil_down"
             android:textAlignment="center"
