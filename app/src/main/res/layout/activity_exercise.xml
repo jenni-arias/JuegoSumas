@@ -8,12 +8,12 @@
 
 
     <RelativeLayout
+        android:id="@+id/exercise"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="80dp"
         android:layout_above="@+id/select_numbers"
-        android:padding="5dp"
-        android:id="@+id/exercise">
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/unid_up"
@@ -112,9 +112,60 @@
         android:layout_height="2dp"
         android:background="#808c8c8c"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="270dp"
+        android:layout_marginTop="270dp" />
 
-        />
+    <RelativeLayout
+        android:id="@+id/result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/select_numbers"
+        android:layout_alignParentStart="true">
+
+        <EditText
+            android:id="@+id/res_unid"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/res_dec"
+            android:text="0"
+            android:textAlignment="center"
+            android:maxLength="1"
+            android:inputType="number"
+            android:textSize="50sp" />
+
+        <EditText
+            android:id="@+id/res_dec"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/res_cent"
+            android:text="0"
+            android:textAlignment="center"
+            android:maxLength="1"
+            android:inputType="number"
+            android:textSize="50sp" />
+
+        <EditText
+            android:id="@+id/res_cent"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="0"
+            android:textAlignment="center"
+            android:maxLength="1"
+            android:inputType="number"
+            android:textSize="50sp" />
+
+        <EditText
+            android:id="@+id/res_mil"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/res_cent"
+            android:text="0"
+            android:textAlignment="center"
+            android:maxLength="1"
+            android:inputType="number"
+            android:textSize="50sp" />
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
