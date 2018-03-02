@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="arias.jenifer.juegosumas.ExerciseActivity">
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="50dp"
+        android:id="@+id/select_numbers">
+
+        <Button
+            android:id="@+id/btn_1"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/btn_2"
+            android:onClick="clicat"
+            android:text="1"
+            android:textSize="45sp" />
+
+        <Button
+            android:id="@+id/btn_2"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/btn_3"
+            android:onClick="clicat"
+            android:text="2"
+            android:textSize="45sp" />
+
+        <Button
+            android:id="@+id/btn_3"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:onClick="clicat"
+            android:text="3"
+            android:textSize="45sp" />
+
+        <Button
+            android:id="@+id/btn_4"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/btn_3"
+            android:onClick="clicat"
+            android:text="4"
+            android:textSize="45sp" />
+
+        <Button
+            android:id="@+id/btn_5"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/btn_4"
+            android:onClick="clicat"
+            android:text="5"
+            android:textSize="45sp" />
+
+        <Button
+            android:id="@+id/btn_6"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_1"
+            android:layout_toStartOf="@+id/btn_7"
+            android:onClick="clicat"
+            android:text="6"
+            android:textSize="45sp" />
+
+        <Button
+            android:id="@+id/btn_7"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_2"
+            android:layout_toStartOf="@+id/btn_8"
+            android:onClick="clicat"
+            android:text="7"
+            android:textSize="45sp" />
+
+        <Button
+            android:id="@+id/btn_8"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_3"
+            android:layout_centerHorizontal="true"
+            android:onClick="clicat"
+            android:text="8"
+            android:textSize="45sp" />
+
+        <Button
+            android:id="@+id/btn_9"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_4"
+            android:layout_toRightOf="@id/btn_8"
+            android:onClick="clicat"
+            android:text="9"
+            android:textSize="45sp" />
+
+        <Button
+            android:id="@+id/btn_0"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_5"
+            android:layout_toRightOf="@+id/btn_9"
+            android:onClick="clicat"
+            android:text="0"
+            android:textSize="45sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
