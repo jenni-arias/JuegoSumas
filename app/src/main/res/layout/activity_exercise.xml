@@ -6,6 +6,70 @@
     android:layout_height="match_parent"
     tools:context="arias.jenifer.juegosumas.ExerciseActivity">
 
+    <LinearLayout
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="35dp"
+        android:layout_above="@+id/exercise"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:id="@+id/good_1"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/progressbar"
+            android:text="1"
+            android:textAlignment="center"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/good_2"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:background="@drawable/progressbar"
+            android:layout_weight="1"
+            android:text="2"
+            android:textAlignment="center"
+            android:textSize="15dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/good_3"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:background="@drawable/progressbar"
+            android:layout_weight="1"
+            android:text="3"
+            android:textAlignment="center"
+            android:textSize="15dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/good_4"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:background="@drawable/progressbar"
+            android:layout_weight="1"
+            android:text="4"
+            android:textAlignment="center"
+            android:textSize="15dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/good_5"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:background="@drawable/progressbar"
+            android:layout_weight="1"
+            android:text="5"
+            android:textAlignment="center"
+            android:textSize="15dp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/exercise"
