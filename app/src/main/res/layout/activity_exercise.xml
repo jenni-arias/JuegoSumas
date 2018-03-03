@@ -6,13 +6,25 @@
     android:layout_height="match_parent"
     tools:context="arias.jenifer.juegosumas.ExerciseActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_exercise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    </android.support.v7.widget.Toolbar>
+
     <LinearLayout
         android:id="@+id/progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="35dp"
         android:layout_above="@+id/exercise"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toolbar_exercise">
 
         <TextView
             android:id="@+id/good_1"
@@ -232,14 +244,14 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/select_numbers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:paddingTop="10dp"
-        android:paddingBottom="50dp"
-        android:id="@+id/select_numbers">
+        android:paddingBottom="50dp">
 
         <Button
             android:id="@+id/btn_1"

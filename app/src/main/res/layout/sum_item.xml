@@ -9,13 +9,13 @@
     <!--/************************************************************************************
     * TIPO 1
     ***************************************************************************************-->
-        <ImageButton
-               android:id="@+id/num_level"
-               android:background="@drawable/oval"
-               android:stateListAnimator="@animator/raise"
-               android:layout_width="56dp"
-               android:layout_height="56dp"
-               android:layout_margin="1dp" />
+            <ImageButton
+                android:id="@+id/btn_level"
+                android:background="@drawable/oval"
+                android:stateListAnimator="@animator/raise"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="1dp" />
 
     <!--/************************************************************************************
     * TIPO 2
