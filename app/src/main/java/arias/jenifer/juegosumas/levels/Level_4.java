@@ -5,7 +5,8 @@ package arias.jenifer.juegosumas.levels;
  */
 
 /**************************************************************************************
- *NIVEL 4 --> Numbers up: Unidades, Decenas, Centenas. Numbers down: Unidades.
+ *NIVEL 4 --> Numbers up: Unidades, Decenas, Centenas.
+ *            Numbers down: Unidades.
  *            No Acarreo.
  ***************************************************************************************/
 
