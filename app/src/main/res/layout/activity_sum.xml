@@ -8,11 +8,31 @@
     android:padding="10dp"
     tools:context="arias.jenifer.juegosumas.SumActivity">
 
+
+    <!--/************************************************************************************
+* TIPO 1
+***************************************************************************************-->
+
+    <!--
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recView"
         android:layout_marginTop="80dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>
+
+ -->
+    <!--/************************************************************************************
+* TIPO 3
+***************************************************************************************-->
+
+           <GridView
+               android:id="@+id/gridView"
+               android:layout_marginTop="80dp"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:numColumns="4">
+
+           </GridView>
 
 </RelativeLayout>

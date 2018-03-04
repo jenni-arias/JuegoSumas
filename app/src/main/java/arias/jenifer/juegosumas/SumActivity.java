@@ -1,5 +1,6 @@
 package arias.jenifer.juegosumas;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -8,6 +9,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
 
 import java.util.ArrayList;
 
@@ -15,7 +18,7 @@ import java.util.ArrayList;
 /**************************************************************************************
  *TIPO 1
  ***************************************************************************************/
-
+/*
 public class SumActivity extends AppCompatActivity {
 
     private RecyclerView recView;
@@ -26,7 +29,7 @@ public class SumActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sum);
 
-        // Inicialización de la lista de datos de ejemplo con 50 niveles
+        // Inicialización de la lista de datos de ejemplo con 49 niveles
         nums = new ArrayList<>();
         for (int i = 0; i < 48; i++) {
             nums.add(new SumItem(i));
@@ -47,53 +50,52 @@ public class SumActivity extends AppCompatActivity {
         recView.addItemDecoration(
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recView.setItemAnimator(new DefaultItemAnimator());
-
     }
+
 }
 
-
+*/
 /**************************************************************************************
- * TIPO 2
+ * TIPO 3
  ***************************************************************************************/
-/*
-public class SumActivity extends AppCompatActivity implements SumAdapter.ItemClickListener{
 
-    private SumAdapter adapter;
-    private RecyclerView recView;
+public class SumActivity extends AppCompatActivity {
+    private GridView gridView;
+    private SumAdapter adaptador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sum);
 
-        // Inicialización de la lista de datos de ejemplo con 50 niveles
-        String[] data = new String[48];
-        for (int i = 1; i < 49; i++) {
-            data[i-1] = String.valueOf(i);
-        }
-
         // Adaptador
-        adapter = new SumAdapter(this, data);
-        adapter.setClickListener(this);
-
-        // RecyclerView
-        recView = (RecyclerView) findViewById(R.id.recView);
-        recView.setHasFixedSize(true);                           // setHasFixedSize: Fijar tamaño
-        recView.setAdapter(adapter);
+        adaptador = new SumAdapter(this);
 
         //GridView
-        recView.setLayoutManager(new GridLayoutManager(this, 4));
+        gridView = (GridView ) findViewById(R.id.gridView);
+        gridView.setAdapter(adaptador);
+        //gridView.setOnItemClickListener(this);
 
-        //Divisiones niveles dificultad
-        recView.addItemDecoration(
-                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        recView.setItemAnimator(new DefaultItemAnimator());
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Level item = (Level) parent.getItemAtPosition(position);
+                Log.i("Jenn", item.toString());
+
+                Intent intent = new Intent(SumActivity.this, ExerciseActivity.class);
+                intent.putExtra("Nivel", String.valueOf(item.getId()));
+                startActivity(intent);
+            }
+        });
     }
 
-    @Override
-    public void onItemClick(View view, int position) {
-        Log.i("TAG", "Nivel " + adapter.getItem(position));  //+ ", en la posición " + position);
-    }
+   /* @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Level item = (Level) parent.getItemAtPosition(position);
+
+        Intent intent = new Intent(this, ExerciseActivity.class);
+        intent.putExtra("Nivel", String.valueOf(item.getId()));
+        startActivity(intent);
+    }*/
+
 }
-*/
-

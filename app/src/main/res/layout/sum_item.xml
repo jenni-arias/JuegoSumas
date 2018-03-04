@@ -9,7 +9,7 @@
     <!--/************************************************************************************
     * TIPO 1
     ***************************************************************************************-->
-            <ImageButton
+            <Button
                 android:id="@+id/btn_level"
                 android:background="@drawable/oval"
                 android:stateListAnimator="@animator/raise"
@@ -17,19 +17,6 @@
                 android:layout_height="56dp"
                 android:layout_margin="1dp" />
 
-    <!--/************************************************************************************
-    * TIPO 2
-    ***************************************************************************************-->
-    <!--    <TextView
-           android:id="@+id/num_level"
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:gravity="center"
-           android:background="@color/light_gray"
-           android:textColor="@color/deep_purple"
-           android:textStyle="bold"
-           android:textSize="17dp"
-           android:text="level"/> -->
 
     <!--/************************************************************************************
     * OTROS
