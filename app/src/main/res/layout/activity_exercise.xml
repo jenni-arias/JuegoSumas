@@ -206,6 +206,7 @@
             android:textAlignment="center"
             android:maxLength="1"
             android:inputType="number"
+            android:cursorVisible="false"
             android:textSize="50sp" />
 
         <EditText
@@ -217,6 +218,7 @@
             android:textAlignment="center"
             android:maxLength="1"
             android:inputType="number"
+            android:cursorVisible="false"
             android:textSize="50sp" />
 
         <EditText
@@ -228,6 +230,7 @@
             android:textAlignment="center"
             android:maxLength="1"
             android:inputType="number"
+            android:cursorVisible="false"
             android:textSize="50sp" />
 
         <EditText
@@ -239,6 +242,7 @@
             android:textAlignment="center"
             android:maxLength="1"
             android:inputType="number"
+            android:cursorVisible="false"
             android:textSize="50sp" />
 
     </RelativeLayout>
