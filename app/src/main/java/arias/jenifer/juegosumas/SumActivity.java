@@ -53,8 +53,8 @@ public class SumActivity extends AppCompatActivity {
     }
 
 }
-
 */
+
 /**************************************************************************************
  * TIPO 3
  ***************************************************************************************/
@@ -70,32 +70,17 @@ public class SumActivity extends AppCompatActivity {
 
         // Adaptador
         adaptador = new SumAdapter(this);
-
-        //GridView
-        gridView = (GridView ) findViewById(R.id.gridView);
-        gridView.setAdapter(adaptador);
-        //gridView.setOnItemClickListener(this);
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        adaptador.setOnLevelClickListener(new SumAdapter.OnLevelClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Level item = (Level) parent.getItemAtPosition(position);
-                Log.i("Jenn", item.toString());
-
+            public void onLevelClick(Level level) {
                 Intent intent = new Intent(SumActivity.this, ExerciseActivity.class);
-                intent.putExtra("Nivel", String.valueOf(item.getId()));
+                intent.putExtra("Nivel", level.getLevel());
                 startActivity(intent);
             }
         });
+
+        //GridView
+        gridView = (GridView) findViewById(R.id.gridView);
+        gridView.setAdapter(adaptador);
     }
-
-   /* @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Level item = (Level) parent.getItemAtPosition(position);
-
-        Intent intent = new Intent(this, ExerciseActivity.class);
-        intent.putExtra("Nivel", String.valueOf(item.getId()));
-        startActivity(intent);
-    }*/
-
 }

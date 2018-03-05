@@ -3,6 +3,7 @@ package arias.jenifer.juegosumas;
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +72,11 @@ public class SumAdapter extends RecyclerView.Adapter<SumAdapter.SumViewHolder> {
 
 public class SumAdapter extends BaseAdapter {
     private Context context;
-    Button btn_level;
+    private OnLevelClickListener levelClickListener;
+
+    interface OnLevelClickListener {
+        void onLevelClick(Level level);
+    }
 
     public SumAdapter(Context context) {
         this.context = context;
@@ -101,11 +106,20 @@ public class SumAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.sum_item, viewGroup, false);
         }
 
-        btn_level = (Button) view.findViewById(R.id.btn_level);
-        final Level item = getItem(position);
-        btn_level.setText(String.valueOf(item.getLevel()));
-
+        Button btn_level = (Button) view.findViewById(R.id.btn_level);
+        final Level level = getItem(position);
+        btn_level.setText(String.valueOf(level.getLevel()));
+        btn_level.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                levelClickListener.onLevelClick(level);
+            }
+        });
         return view;
+    }
+
+    void setOnLevelClickListener(OnLevelClickListener listener) {
+        this.levelClickListener = listener;
     }
 
 }

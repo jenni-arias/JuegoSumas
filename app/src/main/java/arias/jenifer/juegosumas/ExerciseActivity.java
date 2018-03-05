@@ -19,8 +19,8 @@ public class ExerciseActivity extends AppCompatActivity {
 
         //Intent SumActivity
         Intent intent = getIntent();
-        String message = intent.getStringExtra("Nivel");
-        String title = String.format("%s", "Ejercicio Nivel " + message);
+        int nivel = intent.getIntExtra("Nivel", -1);
+        String title = String.format("Ejercicio Nivel %d", nivel);
 
         //Configuración actionbar - toolbar
         toolbar_exercise = (Toolbar) findViewById(R.id.toolbar_exercise);
