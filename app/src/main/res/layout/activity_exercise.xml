@@ -198,10 +198,10 @@
         android:layout_alignParentStart="true">
 
         <EditText
-            android:id="@+id/res_unid"
+            android:id="@+id/unid_res"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/res_dec"
+            android:layout_toRightOf="@+id/dec_res"
             android:text="0"
             android:textAlignment="center"
             android:maxLength="1"
@@ -210,10 +210,10 @@
             android:textSize="50sp" />
 
         <EditText
-            android:id="@+id/res_dec"
+            android:id="@+id/dec_res"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/res_cent"
+            android:layout_toRightOf="@+id/cent_res"
             android:text="0"
             android:textAlignment="center"
             android:maxLength="1"
@@ -222,7 +222,7 @@
             android:textSize="50sp" />
 
         <EditText
-            android:id="@+id/res_cent"
+            android:id="@+id/cent_res"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -234,10 +234,10 @@
             android:textSize="50sp" />
 
         <EditText
-            android:id="@+id/res_mil"
+            android:id="@+id/mil_res"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@+id/res_cent"
+            android:layout_toStartOf="@+id/cent_res"
             android:text="0"
             android:textAlignment="center"
             android:maxLength="1"

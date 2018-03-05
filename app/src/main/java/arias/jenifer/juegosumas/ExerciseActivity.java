@@ -1,6 +1,5 @@
 package arias.jenifer.juegosumas;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,51 +11,56 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.Locale;
 
-public class ExerciseActivity extends AppCompatActivity {
 
-    Toolbar toolbar_exercise;
+public class ExerciseActivity extends AppCompatActivity
+{
+    private String prefixes[] = { "unid", "dec", "cent", "mil" };
+    private Level level;
+    private int levelIndex;
 
-    TextView unid_up;
-    TextView dec_up;
-    TextView cent_up;
-    TextView mil_up;
-    TextView unid_down;
-    TextView dec_down;
-    TextView cent_down;
-    TextView mil_down;
+    private Toolbar toolbar_exercise;
+    private TextView digitsUp[], digitsDown[];
+    private EditText results[];
+    private int[] numbersUp;
+    private int[] numbersDown;
 
-    EditText res_unid;
-    EditText res_dec;
-    EditText res_cent;
-    EditText res_mil;
+    private int getId(String digit, String position) {
+        String name = String.format("%s_%s", digit, position);
+        return getResources().getIdentifier(name, "id", getPackageName());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
 
-        unid_up = (TextView) findViewById(R.id.unid_up);
-        dec_up = (TextView) findViewById(R.id.dec_up);
-        cent_up = (TextView) findViewById(R.id.cent_up);
-        mil_up = (TextView) findViewById(R.id.mil_up);
-        unid_down = (TextView) findViewById(R.id.unid_down);
-        dec_down = (TextView) findViewById(R.id.dec_down);
-        cent_down = (TextView) findViewById(R.id.cent_down);
-        mil_down = (TextView) findViewById(R.id.mil_down);
-
-        res_unid = (EditText) findViewById(R.id.res_unid);
-        res_dec = (EditText) findViewById(R.id.res_dec);
-        res_cent = (EditText) findViewById(R.id.res_cent);
-        res_mil = (EditText) findViewById(R.id.res_mil);
+        digitsUp = new TextView[4];
+        digitsDown = new TextView[4];
+        results = new EditText[4];
+        for (int i = 0; i < prefixes.length; i++) {
+            digitsUp[i] = (TextView) findViewById(getId(prefixes[i],"up"));
+            digitsDown[i] = (TextView) findViewById(getId(prefixes[i], "down"));
+            results[i] = (EditText) findViewById(getId(prefixes[i], "res"));
+        }
 
         //Intent SumActivity
-        Bundle datos = this.getIntent().getExtras();
-        int nivel = datos.getInt("Nivel", -1);
-        String title = String.format("Ejercicio Nivel %d", nivel);
+        levelIndex = getIntent().getIntExtra("Nivel", -1);
+        int showNum = levelIndex + 1;
+        String title = String.format(Locale.getDefault(), "Ejercicio Nivel %d", showNum);
+
+        // Obtenemos el nivel y le pedimos que nos genere unos números concretos
+        // a partir de la plantilla
+        level = Level.ALL_LEVELS[levelIndex];
+        numbersUp = level.generateUp();
+        numbersDown = level.generateDown();
 
         //Mostrar ejercicio dependiendo de los datos que se reciben
-        showExercise(datos);
+        setDigits(digitsUp, numbersUp);
+        setDigits(digitsDown, numbersDown);
+        // TODO: Aquí falta hacer invisibles los resultados pero esto implica mirar el acarreo
+        // TODO: porque ciertos niveles puede ser que generen un número de 3 cifras sumando números de 2, etc.
 
         //Configuración actionbar - toolbar
         toolbar_exercise = (Toolbar) findViewById(R.id.toolbar_exercise);
@@ -66,10 +70,9 @@ public class ExerciseActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(title);
 
         //Ocultar teclado
-        hideKeyboard(res_unid);
-        hideKeyboard(res_dec);
-        hideKeyboard(res_cent);
-        hideKeyboard(res_mil);
+        for (EditText e : results) {
+            hideKeyboard(e);
+        }
     }
 
     //Inflamos el menú en la Toolbar
@@ -97,155 +100,17 @@ public class ExerciseActivity extends AppCompatActivity {
         editText.setInputType(InputType.TYPE_NULL);
     }
 
-    //Mostrar ejercicio
-    private void showExercise(Bundle datos) {
-
-        int nivel = datos.getInt("Nivel", -1);
-        String Num_UnidUp = String.valueOf(datos.getInt("Unid_up", -1));
-        String Num_DecUp = String.valueOf(datos.getInt("Dec_up", -1));
-        String Num_CentUp = String.valueOf(datos.getInt("Cent_up", -1));
-        String Num_MilUp = String.valueOf(datos.getInt("Mil_up", -1));
-        String Num_UnidDown = String.valueOf(datos.getInt("Unid_down", -1));
-        String Num_DecDown = String.valueOf(datos.getInt("Dec_down", -1));
-        String Num_CentDown = String.valueOf(datos.getInt("Cent_down", -1));
-        String Num_MilDown = String.valueOf(datos.getInt("Mil_down", -1));
-
-        switch (nivel) {
-            case 1:
-                unid_up.setText(Num_UnidUp);
-                dec_up.setVisibility(View.INVISIBLE);
-                cent_up.setVisibility(View.INVISIBLE);
-                mil_up.setVisibility(View.INVISIBLE);
-                unid_down.setText(Num_UnidDown);
-                dec_down.setVisibility(View.INVISIBLE);
-                cent_down.setVisibility(View.INVISIBLE);
-                mil_down.setVisibility(View.INVISIBLE);
-
-                res_dec.setVisibility(View.INVISIBLE);
-                res_cent.setVisibility(View.INVISIBLE);
-                res_mil.setVisibility(View.INVISIBLE);
-                break;
-
-            case 2:
-                unid_up.setText(Num_UnidUp);
-                dec_up.setVisibility(View.INVISIBLE);
-                cent_up.setVisibility(View.INVISIBLE);
-                mil_up.setVisibility(View.INVISIBLE);
-                unid_down.setText(Num_UnidDown);
-                dec_down.setText(Num_DecDown);
-                cent_down.setVisibility(View.INVISIBLE);
-                mil_down.setVisibility(View.INVISIBLE);
-
-                res_cent.setVisibility(View.INVISIBLE);
-                res_mil.setVisibility(View.INVISIBLE);
-                break;
-
-            case 3:
-                unid_up.setText(Num_UnidUp);
-                dec_up.setText(Num_DecUp);
-                cent_up.setVisibility(View.INVISIBLE);
-                mil_up.setVisibility(View.INVISIBLE);
-                unid_down.setText(Num_UnidDown);
-                dec_down.setVisibility(View.INVISIBLE);
-                cent_down.setVisibility(View.INVISIBLE);
-                mil_down.setVisibility(View.INVISIBLE);
-
-                res_cent.setVisibility(View.INVISIBLE);
-                res_mil.setVisibility(View.INVISIBLE);
-                break;
-
-            case 4:
-                unid_up.setText(Num_UnidUp);
-                dec_up.setText(Num_DecUp);
-                cent_up.setText(Num_CentUp);
-                mil_up.setVisibility(View.INVISIBLE);
-                unid_down.setText(Num_UnidDown);
-                dec_down.setVisibility(View.INVISIBLE);
-                cent_down.setVisibility(View.INVISIBLE);
-                mil_down.setVisibility(View.INVISIBLE);
-
-                res_mil.setVisibility(View.INVISIBLE);
-                break;
-
-            case 5:
-                unid_up.setText(Num_UnidUp);
-                dec_up.setVisibility(View.INVISIBLE);
-                cent_up.setVisibility(View.INVISIBLE);
-                mil_up.setVisibility(View.INVISIBLE);
-                unid_down.setText(Num_UnidDown);
-                dec_down.setText(Num_DecDown);
-                cent_down.setText(Num_CentDown);
-                mil_down.setVisibility(View.INVISIBLE);
-
-                res_mil.setVisibility(View.INVISIBLE);
-                break;
-
-            case 6:
-                unid_up.setText(Num_UnidUp);
-                dec_up.setText(Num_DecUp);
-                cent_up.setVisibility(View.INVISIBLE);
-                mil_up.setVisibility(View.INVISIBLE);
-                unid_down.setText(Num_UnidDown);
-                dec_down.setText(Num_DecDown);
-                cent_down.setVisibility(View.INVISIBLE);
-                mil_down.setVisibility(View.INVISIBLE);
-
-                res_cent.setVisibility(View.INVISIBLE);
-                res_mil.setVisibility(View.INVISIBLE);
-                break;
-
-            case 7:
-                unid_up.setText(Num_UnidUp);
-                dec_up.setText(Num_DecUp);
-                cent_up.setVisibility(View.INVISIBLE);
-                mil_up.setVisibility(View.INVISIBLE);
-                unid_down.setText(Num_UnidDown);
-                dec_down.setText(Num_DecDown);
-                cent_down.setText(Num_CentDown);
-                mil_down.setVisibility(View.INVISIBLE);
-
-                res_mil.setVisibility(View.INVISIBLE);
-                break;
-
-            case 8:
-                unid_up.setText(Num_UnidUp);
-                dec_up.setText(Num_DecUp);
-                cent_up.setText(Num_CentUp);
-                mil_up.setVisibility(View.INVISIBLE);
-                unid_down.setText(Num_UnidDown);
-                dec_down.setText(Num_DecDown);
-                cent_down.setVisibility(View.INVISIBLE);
-                mil_down.setVisibility(View.INVISIBLE);
-
-                res_mil.setVisibility(View.INVISIBLE);
-                break;
-
-            case 9:
-                unid_up.setText(Num_UnidUp);
-                dec_up.setText(Num_DecUp);
-                cent_up.setVisibility(View.INVISIBLE);
-                mil_up.setVisibility(View.INVISIBLE);
-                unid_down.setText(Num_UnidDown);
-                dec_down.setText(Num_DecDown);
-                cent_down.setText(Num_CentDown);
-                mil_down.setText(Num_MilDown);
-
-                break;
-
-            case 10:
-                unid_up.setText(Num_UnidUp);
-                dec_up.setText(Num_DecUp);
-                cent_up.setText(Num_CentUp);
-                mil_up.setText(Num_MilUp);
-                unid_down.setText(Num_UnidDown);
-                dec_down.setText(Num_DecDown);
-                cent_down.setVisibility(View.INVISIBLE);
-                mil_down.setVisibility(View.INVISIBLE);
-
-                break;
+    private static void setDigits(TextView[] digits, int[] numbers) {
+        for (int i = 0; i < digits.length; i++) {
+            if (i < numbers.length) {
+                digits[i].setText(String.valueOf(numbers[i]));
+            } else {
+                digits[i].setVisibility(View.INVISIBLE);
+            }
         }
-
     }
 
-
+    public void clicat(View view) {
+        // TODO: hacer algo, lo he puesto para que no pete
+    }
 }

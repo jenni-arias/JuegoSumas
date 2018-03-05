@@ -12,14 +12,10 @@ import android.widget.Button;
  * Created by j.arias.gallego on 24/02/2018.
  */
 
-
 public class LevelAdapter extends BaseAdapter {
     private Context context;
     private OnLevelClickListener levelClickListener;
 
-    interface OnLevelClickListener {
-        void onLevelClick(Level level);
-    }
 
     public LevelAdapter(Context context) {
         this.context = context;
@@ -27,22 +23,22 @@ public class LevelAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return Level.ITEMS.length;
+        return Level.ALL_LEVELS.length;
     }
 
     @Override
-    public Level getItem(int position) {
-        return Level.ITEMS[position];
+    public Object getItem(int position) {
+        return Level.ALL_LEVELS[position];
     }
 
     @Override
     public long getItemId(int position) {
-        return getItem(position).getId();
+        return (long) position;
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup viewGroup) {
-
+    public View getView(final int position, View view, ViewGroup viewGroup)
+    {
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -50,15 +46,20 @@ public class LevelAdapter extends BaseAdapter {
         }
 
         Button btn_level = (Button) view.findViewById(R.id.btn_level);
-        final Level level = getItem(position);
-        btn_level.setText(String.valueOf(level.getLevel()));
+
+        final int showNum = position + 1; //
+        btn_level.setText(String.valueOf(showNum));
         btn_level.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                levelClickListener.onLevelClick(level);
+                levelClickListener.onLevelClick(position);
             }
         });
         return view;
+    }
+
+    interface OnLevelClickListener {
+        void onLevelClick(int level);
     }
 
     void setOnLevelClickListener(OnLevelClickListener listener) {
