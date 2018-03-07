@@ -21,13 +21,29 @@ class Level {
     private static int[] generateDigits(int n) {
         int[] digits = new int[n];
         for (int i = 0; i < digits.length; i++) {
-            digits[i] = 1; // FIXME: Metemos un 1 en cada dígito, esto es solo una prueba
+            digits[i] = (int) (Math.random() * 9);
         }
         return digits;
     }
 
-    int[] generateUp() { return generateDigits(this.numDigitsUp); } // FIXME: Esto es incorrecto ahora
-    int[] generateDown() { return generateDigits(this.numDigitsDown); } // FIXME: Esto es incorrecto ahora
+    int[] generateUp() { return generateDigits(this.numDigitsUp); }
+    int[] generateDown() { return generateDigits(this.numDigitsDown); }
+
+    //Comprobar si el nivel acepta acarreo o no
+    private static boolean acceptAcarreo(boolean[] carry) {
+        boolean acarreo = false;
+        for (int i = 0; i < carry.length; i++) {
+            if (carry[i] && !acarreo) {
+                acarreo = true;
+            } else if (!acarreo){
+                acarreo = false;
+            }
+        }
+        return acarreo;
+    }
+
+    boolean acceptCarry() { return acceptAcarreo(this.carry); }
+
 
     // TABLA CON TODOS LOS NIVELES
         static Level[] ALL_LEVELS = {

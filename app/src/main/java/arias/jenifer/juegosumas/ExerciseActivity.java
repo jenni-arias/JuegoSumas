@@ -25,6 +25,7 @@ public class ExerciseActivity extends AppCompatActivity
     private EditText results[];
     private int[] numbersUp;
     private int[] numbersDown;
+    private boolean acceptCarry;
 
     private int getId(String digit, String position) {
         String name = String.format("%s_%s", digit, position);
@@ -56,11 +57,23 @@ public class ExerciseActivity extends AppCompatActivity
         numbersUp = level.generateUp();
         numbersDown = level.generateDown();
 
-        //Mostrar ejercicio dependiendo de los datos que se reciben
-        setDigits(digitsUp, numbersUp);
-        setDigits(digitsDown, numbersDown);
-        // TODO: Aquí falta hacer invisibles los resultados pero esto implica mirar el acarreo
-        // TODO: porque ciertos niveles puede ser que generen un número de 3 cifras sumando números de 2, etc.
+        //Comprobar si el nivel acepta acarreo o no
+        acceptCarry = level.acceptCarry();
+
+        //Comprobar si la suma tiene acarreo o no
+        boolean acarreo = checkCarry(numbersUp, numbersDown);
+
+        //Comprobar si el formato de la suma es el correcto, si no, generamos una nueva hasta que sea correcto
+        boolean correct = checkFormat(acarreo);
+        if (correct) {
+            //Mostrar ejercicio dependiendo de los datos que se reciben
+            setDigits(digitsUp, numbersUp);
+            setDigits(digitsDown, numbersDown);
+            // TODO: Aquí falta hacer invisibles los resultados pero esto implica mirar el acarreo
+            // TODO: porque ciertos niveles puede ser que generen un número de 3 cifras sumando números de 2, etc.
+        } else {
+            recreate();
+        }
 
         //Configuración actionbar - toolbar
         toolbar_exercise = (Toolbar) findViewById(R.id.toolbar_exercise);
@@ -100,6 +113,37 @@ public class ExerciseActivity extends AppCompatActivity
         editText.setInputType(InputType.TYPE_NULL);
     }
 
+    //Comprobar si la suma tiene acarreo o no
+    private boolean checkCarry(int[] numbersUp, int[] numbersDown) {
+        boolean acarreo = false;
+        if (numbersUp.length <= numbersDown.length) {
+            for (int i = 0; i < numbersUp.length; i++) {
+                if (numbersUp[i] + numbersDown[i] > 9 && !acarreo) {
+                    acarreo = true;}
+                else if (!acarreo){
+                    acarreo = false;}
+            }
+        } else {
+            for (int i = 0; i < numbersDown.length; i++) {
+                if (numbersUp[i] + numbersDown[i] > 9 && !acarreo) {
+                    acarreo = true;}
+                else if (!acarreo){
+                    acarreo = false;}
+            }
+        }
+        return acarreo;
+    }
+
+    //Comprobar si el formato de la suma es el correcto
+    private boolean checkFormat(boolean acarreo) {
+        boolean correct = false;
+        if (!acceptCarry && acarreo) {    //Si el nivel NO acepta acarreo pero existe en la suma actual, el formato NO es correcto
+            correct = false;}
+        else {correct = true;}
+        return correct;
+    }
+
+    //Insertar los números en los TextView.
     private static void setDigits(TextView[] digits, int[] numbers) {
         for (int i = 0; i < digits.length; i++) {
             if (i < numbers.length) {
