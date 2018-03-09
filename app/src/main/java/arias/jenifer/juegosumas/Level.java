@@ -15,9 +15,6 @@ class Level {
         this.carry = carry;
     }
 
-    //
-    // TODO: Métodos para generar una suma concreta con los requisitos del nivel
-    //
     private static int[] generateDigits(int n) {
         int[] digits = new int[n];
         for (int i = 0; i < digits.length; i++) {

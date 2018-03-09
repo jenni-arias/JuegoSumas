@@ -67,12 +67,14 @@ public class ExerciseActivity extends AppCompatActivity
         //Comprobar si la suma tiene los acarreos en las posiciones correctas
         boolean correctCarry = checkCarry(numbersUp, numbersDown, acceptCarry, posCarry);
 
-        if (correctCarry) { 
+        if (correctCarry) {
             //Mostrar ejercicio dependiendo de los datos que se reciben
             setDigits(digitsUp, numbersUp);
             setDigits(digitsDown, numbersDown);
-            // TODO: Aquí falta hacer invisibles los resultados pero esto implica mirar el acarreo
-            // TODO: porque ciertos niveles puede ser que generen un número de 3 cifras sumando números de 2, etc.
+
+            //Mostrar / Ocultar los EditText del resultado según acarreo del nivel.
+            hideEditResult(numbersUp, numbersDown, posCarry, results);
+
         } else {
             recreate();
         }
@@ -108,11 +110,6 @@ public class ExerciseActivity extends AppCompatActivity
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    //Ocultar teclado del móvil
-    private void hideKeyboard(EditText editText) {
-        editText.setInputType(InputType.TYPE_NULL);
     }
 
     //Comprobar si la suma tiene los acarreos en las posiciones correctas
@@ -165,6 +162,29 @@ public class ExerciseActivity extends AppCompatActivity
             }
         }
     }
+
+    //Mostrar / Ocultar los EditText del resultado según acarreo del nivel.
+    private void hideEditResult(int[] numbersUp, int[] numbersDown, boolean[] posCarry, EditText result[]) {
+        int max;
+
+        if (numbersUp.length >= numbersDown.length) {
+            max = numbersUp.length;
+        } else {max = numbersDown.length; }
+
+        for (int i = max; i < result.length; i++) {
+            result[i].setVisibility(View.INVISIBLE);
+        }
+
+        if (posCarry[posCarry.length-1]) {
+            result[posCarry.length].setVisibility(View.VISIBLE);
+        }
+    }
+
+    //Ocultar teclado del móvil
+    private void hideKeyboard(EditText editText) {
+        editText.setInputType(InputType.TYPE_NULL);
+    }
+
 
     public void clicat(View view) {
         // TODO: hacer algo, lo he puesto para que no pete
