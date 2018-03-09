@@ -25,6 +25,7 @@ public class ExerciseActivity extends AppCompatActivity
     private EditText results[];
     private int[] numbersUp;
     private int[] numbersDown;
+    private boolean[] posCarry;
     private boolean acceptCarry;
 
     private int getId(String digit, String position) {
@@ -60,12 +61,13 @@ public class ExerciseActivity extends AppCompatActivity
         //Comprobar si el nivel acepta acarreo o no
         acceptCarry = level.acceptCarry();
 
-        //Comprobar si la suma tiene acarreo o no
-        boolean acarreo = checkCarry(numbersUp, numbersDown);
+        //Obtener las posiciones de los acarreos
+        posCarry = level.posCarry();
 
-        //Comprobar si el formato de la suma es el correcto, si no, generamos una nueva hasta que sea correcto
-        boolean correct = checkFormat(acarreo);
-        if (correct) {
+        //Comprobar si la suma tiene los acarreos en las posiciones correctas
+        boolean correctCarry = checkCarry(numbersUp, numbersDown, acceptCarry, posCarry);
+
+        if (correctCarry) { 
             //Mostrar ejercicio dependiendo de los datos que se reciben
             setDigits(digitsUp, numbersUp);
             setDigits(digitsDown, numbersDown);
@@ -113,34 +115,44 @@ public class ExerciseActivity extends AppCompatActivity
         editText.setInputType(InputType.TYPE_NULL);
     }
 
-    //Comprobar si la suma tiene acarreo o no
-    private boolean checkCarry(int[] numbersUp, int[] numbersDown) {
-        boolean acarreo = false;
+    //Comprobar si la suma tiene los acarreos en las posiciones correctas
+    private boolean checkCarry(int[] numbersUp, int[] numbersDown, boolean acceptCarry, boolean[] posCarry) {
+        boolean correctCarry = true;
+        int max;
+
         if (numbersUp.length <= numbersDown.length) {
-            for (int i = 0; i < numbersUp.length; i++) {
-                if (numbersUp[i] + numbersDown[i] > 9 && !acarreo) {
-                    acarreo = true;}
-                else if (!acarreo){
-                    acarreo = false;}
+            max = numbersUp.length;
+        } else {max = numbersDown.length; }
+
+        boolean [] acarreo = new boolean[max];
+
+        if (!acceptCarry) {     //No acepta acarreo
+            for (int i = 0; i < max; i++) {
+                if (numbersUp[i] + numbersDown[i] > 9) {
+                    acarreo[i] = false;     //Incorrecto
+                }
+                else if (numbersUp[i] + numbersDown[i] < 9){
+                    acarreo[i] = true;      //Correcto
+                }
             }
-        } else {
-            for (int i = 0; i < numbersDown.length; i++) {
-                if (numbersUp[i] + numbersDown[i] > 9 && !acarreo) {
-                    acarreo = true;}
-                else if (!acarreo){
-                    acarreo = false;}
+        } else {                //Acepta acarreo
+            for (int i = 0; i < max; i++) {
+                if (numbersUp[i] + numbersDown[i] > 9 && posCarry[i]) {
+                    acarreo[i] = true;      //Correcto
+                }
+                else if (numbersUp[i] + numbersDown[i] < 9 && !posCarry[i]){
+                    acarreo[i] = true;      //Correcto
+                }
+                else {acarreo[i] = false; }     //Incorrecto
             }
         }
-        return acarreo;
-    }
 
-    //Comprobar si el formato de la suma es el correcto
-    private boolean checkFormat(boolean acarreo) {
-        boolean correct = false;
-        if (!acceptCarry && acarreo) {    //Si el nivel NO acepta acarreo pero existe en la suma actual, el formato NO es correcto
-            correct = false;}
-        else {correct = true;}
-        return correct;
+        for (int i = 0; i< acarreo.length; i++) {
+            if (acarreo[i] && correctCarry) {
+                correctCarry = true;
+            } else {correctCarry = false; }
+        }
+        return correctCarry;
     }
 
     //Insertar los números en los TextView.
