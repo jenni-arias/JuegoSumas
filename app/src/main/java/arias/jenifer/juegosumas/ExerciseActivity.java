@@ -72,6 +72,7 @@ public class ExerciseActivity extends AppCompatActivity
 
         if (correctCarry) {
             //Mostrar ejercicio dependiendo de los datos que se reciben
+            //TODO: Comprobar que los números no empiezan por 0
             setDigits(digitsUp, numbersUp);
             setDigits(digitsDown, numbersDown);
 
@@ -194,6 +195,8 @@ public class ExerciseActivity extends AppCompatActivity
 
     //Mostrar / Ocultar los EditText del acarreo según el nivel.
     private void hideEditCarry(boolean[] posCarry, EditText[] carry) {
+
+        //TODO: se repite, crear método
         boolean[] pos = new boolean[4];
         for (int i = 0; i < posCarry.length; i++) {
             pos[i] = posCarry[i];
@@ -207,7 +210,6 @@ public class ExerciseActivity extends AppCompatActivity
                 carry[i].setVisibility(View.INVISIBLE);
             }
         }
-
     }
 
     //Ocultar teclado del móvil
@@ -215,33 +217,56 @@ public class ExerciseActivity extends AppCompatActivity
         editText.setInputType(InputType.TYPE_NULL);
     }
 
-
     //Captura click del número seleccionado
     public void clicat(View view) {
         Button boton = (Button) view;
         int num = Integer.parseInt(boton.getText().toString());
-        setResults(results, num);
+        setResults(results, carry, posCarry, num);
     }
 
     //Insertar número seleccionado en el EditText y organización del Focus.
-    //TODO: Falta ver como deshabilitar los EditText una vez introducido un número
-    public void setResults (EditText results[], int num) {
+    //TODO: Falta deshabilitar el último EditText una vez introducido todos los números
+    public void setResults (EditText results[], EditText carry[], boolean[] posCarry, int num) {
         String number = String.valueOf(num);
+
+        //TODO: se repite, crear método
+        boolean[] pos = new boolean[4];
+        for (int i = 0; i < posCarry.length; i++) {
+            pos[i] = posCarry[i];
+        }
 
         if (results[0].hasFocus()) {
            results[0].setText(number);
-           results[1].requestFocus();
+            if(pos[0]) {
+                carry[1].requestFocus();
+            } else { results[1].requestFocus(); }
+        }
+        else if (carry[1].hasFocus()) {
+            carry[1].setText(number);
+            results[1].requestFocus();
         }
         else if (results[1].hasFocus()) {
            results[1].setText(number);
-           results[2].requestFocus();
+           if(pos[1]) {
+               carry[2].requestFocus();
+           } else { results[2].requestFocus(); }
+        }
+        else if (carry[2].hasFocus()) {
+            carry[2].setText(number);
+            results[2].requestFocus();
         }
         else if (results[2].hasFocus()) {
            results[2].setText(number);
-           results[3].requestFocus();
+            if(pos[2]) {
+                carry[3].requestFocus();
+            } else { results[3].requestFocus(); }
+        }
+        else if (carry[3].hasFocus()) {
+            carry[3].setText(number);
+            results[3].requestFocus();
         }
         else if (results[3].hasFocus()) {
-           results[3].setText(number);
+            results[3].setText(number);
         }
     }
 
