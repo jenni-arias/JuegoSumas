@@ -22,7 +22,7 @@
         android:id="@+id/progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/exercise"
+        android:layout_above="@+id/carry"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/toolbar_exercise">
 
@@ -84,6 +84,50 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/carry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/exercise">
+
+        <EditText
+            android:id="@+id/dec_carry"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/cent_carry"
+            android:cursorVisible="false"
+            android:inputType="number"
+            android:maxLength="1"
+            android:text="1"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/cent_carry"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:cursorVisible="false"
+            android:inputType="number"
+            android:maxLength="1"
+            android:text="1"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/mil_carry"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/cent_carry"
+            android:cursorVisible="false"
+            android:inputType="number"
+            android:maxLength="1"
+            android:text="1"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/exercise"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -96,56 +140,56 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/dec_up"
+            android:text="0"
             android:textAlignment="center"
-            android:textSize="60dp"
-            android:text="0"/>
+            android:textSize="55dp" />
 
         <TextView
             android:id="@+id/dec_up"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/cent_up"
+            android:text="0"
             android:textAlignment="center"
-            android:textSize="60dp"
-            android:text="0" />
+            android:textSize="55dp" />
 
         <TextView
             android:id="@+id/cent_up"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:text="0"
             android:textAlignment="center"
-            android:textSize="60dp"
-            android:text="0" />
+            android:textSize="55dp" />
 
         <TextView
             android:id="@+id/mil_up"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/cent_up"
+            android:text="0"
             android:textAlignment="center"
-            android:textSize="60dp"
-            android:text="0" />
+            android:textSize="55dp" />
 
         <TextView
             android:id="@+id/unid_down"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/dec_up"
             android:layout_below="@+id/unid_up"
+            android:layout_toRightOf="@+id/dec_up"
+            android:text="0"
             android:textAlignment="center"
-            android:textSize="60dp"
-            android:text="0" />
+            android:textSize="55dp" />
 
         <TextView
             android:id="@+id/dec_down"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/cent_down"
             android:layout_below="@+id/dec_up"
+            android:layout_toRightOf="@+id/cent_down"
+            android:text="0"
             android:textAlignment="center"
-            android:textSize="60dp"
-            android:text="0" />
+            android:textSize="55dp" />
 
         <TextView
             android:id="@+id/cent_down"
@@ -153,9 +197,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/cent_up"
             android:layout_centerHorizontal="true"
+            android:text="0"
             android:textAlignment="center"
-            android:textSize="60dp"
-            android:text="0" />
+            android:textSize="55dp" />
 
 
         <TextView
@@ -164,20 +208,20 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/mil_up"
             android:layout_toStartOf="@+id/cent_up"
+            android:text="0"
             android:textAlignment="center"
-            android:textSize="60dp"
-            android:text="0" />
+            android:textSize="55dp" />
 
 
         <TextView
             android:id="@+id/suma"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
             android:layout_alignBaseline="@+id/mil_down"
+            android:layout_marginEnd="10dp"
             android:layout_toStartOf="@+id/mil_down"
-            android:textAlignment="center"
             android:text="+"
+            android:textAlignment="center"
             android:textSize="50dp" />
 
     </RelativeLayout>
@@ -188,7 +232,7 @@
         android:layout_height="2dp"
         android:background="#808c8c8c"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="270dp" />
+        android:layout_marginTop="300dp" />
 
     <RelativeLayout
         android:id="@+id/result"
@@ -206,7 +250,7 @@
             android:maxLength="1"
             android:inputType="number"
             android:cursorVisible="false"
-            android:textSize="50sp" />
+            android:textSize="45sp" />
 
         <EditText
             android:id="@+id/dec_res"
@@ -217,7 +261,7 @@
             android:maxLength="1"
             android:inputType="number"
             android:cursorVisible="false"
-            android:textSize="50sp" />
+            android:textSize="45sp" />
 
         <EditText
             android:id="@+id/cent_res"
@@ -228,7 +272,7 @@
             android:maxLength="1"
             android:inputType="number"
             android:cursorVisible="false"
-            android:textSize="50sp" />
+            android:textSize="45sp" />
 
         <EditText
             android:id="@+id/mil_res"
@@ -239,7 +283,7 @@
             android:maxLength="1"
             android:inputType="number"
             android:cursorVisible="false"
-            android:textSize="50sp" />
+            android:textSize="45sp" />
 
     </RelativeLayout>
 
@@ -251,7 +295,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:paddingTop="10dp"
-        android:paddingBottom="50dp">
+        android:paddingBottom="35dp">
 
         <Button
             android:id="@+id/btn_1"
@@ -261,7 +305,7 @@
             android:layout_toStartOf="@+id/btn_2"
             android:onClick="clicat"
             android:text="1"
-            android:textSize="45sp" />
+            android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_2"
@@ -271,7 +315,7 @@
             android:layout_toStartOf="@+id/btn_3"
             android:onClick="clicat"
             android:text="2"
-            android:textSize="45sp" />
+            android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_3"
@@ -281,7 +325,7 @@
             android:layout_centerHorizontal="true"
             android:onClick="clicat"
             android:text="3"
-            android:textSize="45sp" />
+            android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_4"
@@ -291,7 +335,7 @@
             android:layout_toRightOf="@+id/btn_3"
             android:onClick="clicat"
             android:text="4"
-            android:textSize="45sp" />
+            android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_5"
@@ -301,7 +345,7 @@
             android:layout_toRightOf="@+id/btn_4"
             android:onClick="clicat"
             android:text="5"
-            android:textSize="45sp" />
+            android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_6"
@@ -312,7 +356,7 @@
             android:layout_toStartOf="@+id/btn_7"
             android:onClick="clicat"
             android:text="6"
-            android:textSize="45sp" />
+            android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_7"
@@ -323,7 +367,7 @@
             android:layout_toStartOf="@+id/btn_8"
             android:onClick="clicat"
             android:text="7"
-            android:textSize="45sp" />
+            android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_8"
@@ -334,7 +378,7 @@
             android:layout_centerHorizontal="true"
             android:onClick="clicat"
             android:text="8"
-            android:textSize="45sp" />
+            android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_9"
@@ -345,7 +389,7 @@
             android:layout_toRightOf="@id/btn_8"
             android:onClick="clicat"
             android:text="9"
-            android:textSize="45sp" />
+            android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_0"
@@ -356,7 +400,7 @@
             android:layout_toRightOf="@+id/btn_9"
             android:onClick="clicat"
             android:text="0"
-            android:textSize="45sp" />
+            android:textSize="40sp" />
 
     </RelativeLayout>
 
