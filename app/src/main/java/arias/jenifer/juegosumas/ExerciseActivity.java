@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -74,7 +75,6 @@ public class ExerciseActivity extends AppCompatActivity
 
             //Mostrar / Ocultar los EditText del resultado según acarreo del nivel.
             hideEditResult(numbersUp, numbersDown, posCarry, results);
-
         } else {
             recreate();
         }
@@ -86,10 +86,14 @@ public class ExerciseActivity extends AppCompatActivity
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.back);
         getSupportActionBar().setTitle(title);
 
-        //Ocultar teclado
+        //Ocultar teclado del móvil
         for (EditText e : results) {
             hideKeyboard(e);
         }
+
+        //Indicar primera posición del número a introducir
+        results[0].requestFocus();
+
     }
 
     //Inflamos el menú en la Toolbar
@@ -107,6 +111,9 @@ public class ExerciseActivity extends AppCompatActivity
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.action_check:
+               // checkResult();
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -164,19 +171,19 @@ public class ExerciseActivity extends AppCompatActivity
     }
 
     //Mostrar / Ocultar los EditText del resultado según acarreo del nivel.
-    private void hideEditResult(int[] numbersUp, int[] numbersDown, boolean[] posCarry, EditText result[]) {
+    private void hideEditResult(int[] numbersUp, int[] numbersDown, boolean[] posCarry, EditText results[]) {
         int max;
 
         if (numbersUp.length >= numbersDown.length) {
             max = numbersUp.length;
         } else {max = numbersDown.length; }
 
-        for (int i = max; i < result.length; i++) {
-            result[i].setVisibility(View.INVISIBLE);
+        for (int i = max; i < results.length; i++) {
+            results[i].setVisibility(View.INVISIBLE);
         }
 
         if (posCarry[posCarry.length-1]) {
-            result[posCarry.length].setVisibility(View.VISIBLE);
+            results[posCarry.length].setVisibility(View.VISIBLE);
         }
     }
 
@@ -186,7 +193,37 @@ public class ExerciseActivity extends AppCompatActivity
     }
 
 
+    //Captura click del número seleccionado
     public void clicat(View view) {
-        // TODO: hacer algo, lo he puesto para que no pete
+        Button boton = (Button) view;
+        int num = Integer.parseInt(boton.getText().toString());
+        setResults(results, num);
     }
+
+    //Insertar número seleccionado en el EditText y organización del Focus.
+    //TODO: Falta ver como deshabilitar los EditText una vez introducido un número
+    public void setResults (EditText results[], int num) {
+        String number = String.valueOf(num);
+
+        if (results[0].hasFocus()) {
+           results[0].setText(number);
+           results[1].requestFocus();
+        }
+        else if (results[1].hasFocus()) {
+           results[1].setText(number);
+           results[2].requestFocus();
+        }
+        else if (results[2].hasFocus()) {
+           results[2].setText(number);
+           results[3].requestFocus();
+        }
+        else if (results[3].hasFocus()) {
+           results[3].setText(number);
+        }
+    }
+
+   /* private void checkResult(int[] numbersUp, int[] numbersDown, EditText results[]) {
+
+    }*/
+
 }
