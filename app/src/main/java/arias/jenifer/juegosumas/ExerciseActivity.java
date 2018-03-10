@@ -23,7 +23,7 @@ public class ExerciseActivity extends AppCompatActivity
 
     private Toolbar toolbar_exercise;
     private TextView digitsUp[], digitsDown[];
-    private EditText results[];
+    private EditText results[], carry[];
     private int[] numbersUp;
     private int[] numbersDown;
     private boolean[] posCarry;
@@ -42,10 +42,12 @@ public class ExerciseActivity extends AppCompatActivity
         digitsUp = new TextView[4];
         digitsDown = new TextView[4];
         results = new EditText[4];
+        carry = new EditText[4];
         for (int i = 0; i < prefixes.length; i++) {
             digitsUp[i] = (TextView) findViewById(getId(prefixes[i],"up"));
             digitsDown[i] = (TextView) findViewById(getId(prefixes[i], "down"));
             results[i] = (EditText) findViewById(getId(prefixes[i], "res"));
+            carry[i] = (EditText) findViewById(getId(prefixes[i], "carry"));
         }
 
         //Intent SumActivity
@@ -75,6 +77,7 @@ public class ExerciseActivity extends AppCompatActivity
 
             //Mostrar / Ocultar los EditText del resultado según acarreo del nivel.
             hideEditResult(numbersUp, numbersDown, posCarry, results);
+            hideEditCarry(posCarry, carry);
         } else {
             recreate();
         }
@@ -88,6 +91,9 @@ public class ExerciseActivity extends AppCompatActivity
 
         //Ocultar teclado del móvil
         for (EditText e : results) {
+            hideKeyboard(e);
+        }
+        for (EditText e : carry) {
             hideKeyboard(e);
         }
 
@@ -133,19 +139,19 @@ public class ExerciseActivity extends AppCompatActivity
         if (!acceptCarry) {     //No acepta acarreo
             for (int i = 0; i < max; i++) {
                 if (numbersUp[i] + numbersDown[i] > 9) {
-                    acarreo[i] = false;     //Incorrecto
+                    acarreo[i] = false;         //Incorrecto
                 }
                 else if (numbersUp[i] + numbersDown[i] < 9){
-                    acarreo[i] = true;      //Correcto
+                    acarreo[i] = true;          //Correcto
                 }
             }
         } else {                //Acepta acarreo
             for (int i = 0; i < max; i++) {
                 if (numbersUp[i] + numbersDown[i] > 9 && posCarry[i]) {
-                    acarreo[i] = true;      //Correcto
+                    acarreo[i] = true;          //Correcto
                 }
                 else if (numbersUp[i] + numbersDown[i] < 9 && !posCarry[i]){
-                    acarreo[i] = true;      //Correcto
+                    acarreo[i] = true;          //Correcto
                 }
                 else {acarreo[i] = false; }     //Incorrecto
             }
@@ -173,7 +179,6 @@ public class ExerciseActivity extends AppCompatActivity
     //Mostrar / Ocultar los EditText del resultado según acarreo del nivel.
     private void hideEditResult(int[] numbersUp, int[] numbersDown, boolean[] posCarry, EditText results[]) {
         int max;
-
         if (numbersUp.length >= numbersDown.length) {
             max = numbersUp.length;
         } else {max = numbersDown.length; }
@@ -185,6 +190,24 @@ public class ExerciseActivity extends AppCompatActivity
         if (posCarry[posCarry.length-1]) {
             results[posCarry.length].setVisibility(View.VISIBLE);
         }
+    }
+
+    //Mostrar / Ocultar los EditText del acarreo según el nivel.
+    private void hideEditCarry(boolean[] posCarry, EditText[] carry) {
+        boolean[] pos = new boolean[4];
+        for (int i = 0; i < posCarry.length; i++) {
+            pos[i] = posCarry[i];
+        }
+
+        carry[0].setVisibility(View.INVISIBLE);
+        for (int i = 1; i < pos.length; i++) {
+            if(pos[i-1]) {
+                carry[i].setVisibility(View.VISIBLE);
+            } else {
+                carry[i].setVisibility(View.INVISIBLE);
+            }
+        }
+
     }
 
     //Ocultar teclado del móvil

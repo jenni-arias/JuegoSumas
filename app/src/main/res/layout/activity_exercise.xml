@@ -89,6 +89,18 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/exercise">
 
+        <!--Unid_carry no se utiliza. Se pone para seguir el formato-->
+        <EditText
+            android:id="@+id/unid_carry"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/dec_carry"
+            android:cursorVisible="false"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
         <EditText
             android:id="@+id/dec_carry"
             android:layout_width="40dp"
@@ -97,7 +109,6 @@
             android:cursorVisible="false"
             android:inputType="number"
             android:maxLength="1"
-            android:text="1"
             android:textAlignment="center"
             android:textSize="20sp" />
 
@@ -109,7 +120,6 @@
             android:cursorVisible="false"
             android:inputType="number"
             android:maxLength="1"
-            android:text="1"
             android:textAlignment="center"
             android:textSize="20sp" />
 
@@ -121,7 +131,6 @@
             android:cursorVisible="false"
             android:inputType="number"
             android:maxLength="1"
-            android:text="1"
             android:textAlignment="center"
             android:textSize="20sp" />
 
