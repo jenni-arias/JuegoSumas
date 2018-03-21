@@ -16,4 +16,27 @@
         android:layout_height="56dp"
         android:layout_margin="1dp" />
 
+    <ProgressBar
+        android:id="@+id/progress_level"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/btn_level"
+        android:layout_below="@+id/btn_level"
+        android:progress="0"
+        android:secondaryProgress="20"
+        android:theme="@style/MyProgressBarTwo"
+        style="@style/MyProgressBarTwo"/>
+
+    <!--  Circular
+   <ProgressBar
+      android:id="@+id/progress2_level"
+      android:layout_width="58dp"
+      android:layout_height="58dp"
+      android:indeterminate="false"
+      android:indeterminateTint="@color/gray"
+      /> -->
+
+
+
+
 </RelativeLayout>

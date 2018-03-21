@@ -9,4 +9,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MyProgressBarTwo" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="colorControlActivated">@color/light_green</item>
+        <item name="colorControlHighlight">@color/yellow</item>
+        <item name="android:progressDrawable">@drawable/progressbar_level</item>
+        <item name="android:minWidth">200dp</item>
+    </style>
+
 </resources>
