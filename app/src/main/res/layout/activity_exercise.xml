@@ -19,7 +19,7 @@
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
-        android:id="@+id/progress"
+        android:id="@+id/correct_result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/carry"
@@ -27,21 +27,21 @@
         android:layout_below="@+id/toolbar_exercise">
 
         <TextView
-            android:id="@+id/good_1"
+            android:id="@+id/correct_1"
             android:layout_width="0dp"
             android:layout_height="20dp"
             android:layout_weight="1"
-            android:background="@drawable/progressbar"
+            android:background="@drawable/progressbar_gray"
             android:text="1"
             android:textAlignment="center"
             android:textSize="15dp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/good_2"
+            android:id="@+id/correct_2"
             android:layout_width="0dp"
             android:layout_height="20dp"
-            android:background="@drawable/progressbar"
+            android:background="@drawable/progressbar_gray"
             android:layout_weight="1"
             android:text="2"
             android:textAlignment="center"
@@ -49,10 +49,10 @@
             android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/good_3"
+            android:id="@+id/correct_3"
             android:layout_width="0dp"
             android:layout_height="20dp"
-            android:background="@drawable/progressbar"
+            android:background="@drawable/progressbar_gray"
             android:layout_weight="1"
             android:text="3"
             android:textAlignment="center"
@@ -60,10 +60,10 @@
             android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/good_4"
+            android:id="@+id/correct_4"
             android:layout_width="0dp"
             android:layout_height="20dp"
-            android:background="@drawable/progressbar"
+            android:background="@drawable/progressbar_gray"
             android:layout_weight="1"
             android:text="4"
             android:textAlignment="center"
@@ -71,10 +71,10 @@
             android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/good_5"
+            android:id="@+id/correct_5"
             android:layout_width="0dp"
             android:layout_height="20dp"
-            android:background="@drawable/progressbar"
+            android:background="@drawable/progressbar_gray"
             android:layout_weight="1"
             android:text="5"
             android:textAlignment="center"

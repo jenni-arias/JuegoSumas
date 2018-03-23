@@ -287,12 +287,16 @@ public class ExerciseActivity extends AppCompatActivity
 
 public class ExerciseActivity extends AppCompatActivity
 {
+    static final String CURRENT_EXERCISE = "current_exercise";
+    int mCurrentExercise = 0;
+
     private String prefixes[] = { "unid", "dec", "cent", "mil" };
+    private int correct[] = { 1, 2, 3, 4, 5 };
     private Level level;
     private int levelIndex;
 
     private Toolbar toolbar_exercise;
-    private TextView digitsUp[], digitsDown[];
+    private TextView digitsUp[], digitsDown[], correct_result[];
     private EditText results[], carry[];
     private int[] numbersUp, numbersDown;
     private int[] Numbers;
@@ -301,6 +305,21 @@ public class ExerciseActivity extends AppCompatActivity
     private int getId(String digit, String position) {
         String name = String.format("%s_%s", digit, position);
         return getResources().getIdentifier(name, "id", getPackageName());
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putInt(CURRENT_EXERCISE, mCurrentExercise);
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+        // Restore state members from saved instance
+        mCurrentExercise = savedInstanceState.getInt(CURRENT_EXERCISE);
     }
 
     @Override
@@ -319,46 +338,58 @@ public class ExerciseActivity extends AppCompatActivity
             carry[i] = (EditText) findViewById(getId(prefixes[i], "carry"));
         }
 
-        //Intent SumActivity
-        levelIndex = getIntent().getIntExtra("Nivel", -1);
-        int showNum = levelIndex + 1;
-        String title = String.format(Locale.getDefault(), "Ejercicio Nivel %d", showNum);
-
-        // Obtenemos el nivel y le pedimos que nos genere unos números concretos
-        // a partir de la plantilla
-        level = Level.ALL_LEVELS[levelIndex];
-        Numbers = level.Numbers();
-        numbersUp = level.numbersUp();
-        numbersDown = level.numbersDown();
-
-        //Obtener las posiciones de los acarreos
-        posCarry = level.posCarry();
-
-        //Mostrar ejercicio dependiendo de los datos que se reciben
-        setDigits(digitsUp, numbersUp);
-        setDigits(digitsDown, numbersDown);
-
-        //Mostrar / Ocultar los EditText del resultado según acarreo del nivel.
-        hideEditResult(numbersUp, numbersDown, posCarry, results);
-        hideEditCarry(posCarry, carry);
-
-        //Configuración actionbar - toolbar
-        toolbar_exercise = (Toolbar) findViewById(R.id.toolbar_exercise);
-        setSupportActionBar(toolbar_exercise);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.back);
-        getSupportActionBar().setTitle(title);
-
-        //Ocultar teclado del móvil
-        for (EditText e : results) {
-            hideKeyboard(e);
-        }
-        for (EditText e : carry) {
-            hideKeyboard(e);
+        correct_result = new TextView[5];
+        for (int i = 0; i < correct.length; i++) {
+            correct_result[i] = (TextView) findViewById(getId("correct", String.valueOf(correct[i])));
         }
 
-        //Indicar primera posición del número a introducir
-        results[0].requestFocus();
+        if (savedInstanceState != null) {
+            mCurrentExercise = savedInstanceState.getInt(CURRENT_EXERCISE);
+        } else {
+            //Intent SumActivity
+            levelIndex = getIntent().getIntExtra("Nivel", -1);
+            int showNum = levelIndex + 1;
+            String title = String.format(Locale.getDefault(), "Ejercicio Nivel %d", showNum);
+
+            // Obtenemos el nivel y le pedimos que nos genere unos números concretos
+            // a partir de la plantilla
+            level = Level.ALL_LEVELS[levelIndex];
+            Numbers = level.Numbers();
+            numbersUp = level.numbersUp();
+            numbersDown = level.numbersDown();
+
+            correct_result[mCurrentExercise].setBackground(getResources()
+                    .getDrawable(R.drawable.progressbar_yellow));
+
+            //Obtener las posiciones de los acarreos
+            posCarry = level.posCarry();
+
+            //Mostrar ejercicio dependiendo de los datos que se reciben
+            setDigits(digitsUp, numbersUp);
+            setDigits(digitsDown, numbersDown);
+
+            //Mostrar / Ocultar los EditText del resultado según acarreo del nivel.
+            hideEditResult(numbersUp, numbersDown, posCarry, results);
+            hideEditCarry(posCarry, carry);
+
+            //Configuración actionbar - toolbar
+            toolbar_exercise = (Toolbar) findViewById(R.id.toolbar_exercise);
+            setSupportActionBar(toolbar_exercise);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.back);
+            getSupportActionBar().setTitle(title);
+
+            //Ocultar teclado del móvil
+            for (EditText e : results) {
+                hideKeyboard(e);
+            }
+            for (EditText e : carry) {
+                hideKeyboard(e);
+            }
+
+            //Indicar primera posición del número a introducir
+            results[0].requestFocus();
+        }
     }
 
     //Inflamos el menú en la Toolbar
@@ -369,7 +400,7 @@ public class ExerciseActivity extends AppCompatActivity
         return true;
     }
 
-    // Acciones para el menú del Toolbar
+    //Acciones para el menú del Toolbar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -377,7 +408,9 @@ public class ExerciseActivity extends AppCompatActivity
                 finish();
                 return true;
             case R.id.action_check:
-                 checkResult(numbersUp, numbersDown, carry, results);
+                if (mCurrentExercise == 5) {
+                    finish();
+                } else { checkResult(numbersUp, numbersDown, results); }
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -412,7 +445,6 @@ public class ExerciseActivity extends AppCompatActivity
 
     //Mostrar / Ocultar los EditText del acarreo según el nivel.
     private void hideEditCarry(boolean[] posCarry, EditText[] carry) {
-
         //TODO: se repite, crear método
         boolean[] pos = new boolean[4];
         for (int i = 0; i < posCarry.length; i++) {
@@ -487,7 +519,8 @@ public class ExerciseActivity extends AppCompatActivity
         }
     }
 
-    private void checkResult(int[] numbersUp, int[] numbersDown, EditText carry[], EditText results[]) {
+    //Comprobar si los resultados introducidos son correctos
+    private void checkResult(int[] numbersUp, int[] numbersDown, EditText results[]) {
         int min, tipo, dif = 0, suma, digito, end = 0;
         boolean correct = true;
 
@@ -554,19 +587,23 @@ public class ExerciseActivity extends AppCompatActivity
 
         if (tipo != 4 && correct) {
             //Diferente número de dígitos
-            correct = setEndDigits (tipo, dif, end, correct);
+            correct = setEndDigits (tipo, dif, end);
         }
 
         if (correct) {
             Toast.makeText(this, "Bien hecho!", Toast.LENGTH_LONG).show();
+            nextExercise(mCurrentExercise, correct);
         } else {
             Toast.makeText(this, "Vuelve a intentarlo...", Toast.LENGTH_LONG).show();
+            mCurrentExercise = 0;
+            setColors(mCurrentExercise, correct);
         }
     }
 
-    private boolean setEndDigits(int tipo, int dif, int end, boolean correct) {
+    private boolean setEndDigits(int tipo, int dif, int end) {
         int result = Integer.parseInt(results[end].getText().toString());
         int result2 = Integer.parseInt(results[end-1].getText().toString());
+        boolean correct = true;
 
         switch (tipo) {
             case 1:
@@ -588,7 +625,8 @@ public class ExerciseActivity extends AppCompatActivity
                     } else {
                         if (numbersUp[end-1] + 1 == result2 && correct) {
                             correct = true;
-                        } else { correct = false; } }
+                        } else { correct = false; }
+                    }
                     if (!posCarry[end-1]) {
                         if (numbersUp[end] == result && correct) {
                             correct = true;
@@ -629,9 +667,7 @@ public class ExerciseActivity extends AppCompatActivity
                     } else {
                         if (numbersDown[end] + 1 == result && correct) {
                             correct = true;
-                        } else {
-                            correct = false;
-                        }
+                        } else { correct = false; }
                     }
                 }
                 break;
@@ -644,6 +680,37 @@ public class ExerciseActivity extends AppCompatActivity
 
         return correct;
     }
+
+    //Muestra el siguiente ejercicio del nivel
+    private void nextExercise(int mCurrentExercise, boolean correct) {
+        setColors(mCurrentExercise, correct);
+        mCurrentExercise++;
+        Bundle nextExercise = new Bundle();
+        nextExercise.putInt(CURRENT_EXERCISE, mCurrentExercise);
+        onRestoreInstanceState(nextExercise);
+        //  onCreate(nextExercise);
+    }
+
+    //Establece los colores en la progressBar del nivel según si el resultado es correcto o no.
+    private void setColors(int mCurrentExercise, boolean correct) {
+        if (correct) {
+            for (int i = 0; i < mCurrentExercise+1; i ++) {
+                correct_result[mCurrentExercise].setBackground(getResources()
+                        .getDrawable(R.drawable.progressbar_green));
+            }
+            if (mCurrentExercise < 4) {
+                correct_result[mCurrentExercise+1].setBackground(getResources()
+                        .getDrawable(R.drawable.progressbar_yellow));
+            }
+        } else {
+            for (int i = 1; i < 5; i ++) {
+                correct_result[i].setBackground(getResources()
+                        .getDrawable(R.drawable.progressbar_gray));
+            } correct_result[mCurrentExercise].setBackground(getResources()
+                    .getDrawable(R.drawable.progressbar_yellow));
+        }
+    }
+
 }
 
 
