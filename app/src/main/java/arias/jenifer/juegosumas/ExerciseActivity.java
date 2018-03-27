@@ -21,6 +21,7 @@ import java.util.Locale;
  *          FORMA 1
  *
  *****************************/
+/*
 
 public class ExerciseActivity extends AppCompatActivity
 {
@@ -143,16 +144,16 @@ public class ExerciseActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-              /*  Intent intent2 = new Intent(this, SumActivity.class);
-                intent2.putExtra("CurrentExercise", mCurrentExercise);
-                startActivity(intent2); */
+              //  Intent intent2 = new Intent(this, SumActivity.class);
+                //intent2.putExtra("CurrentExercise", mCurrentExercise);
+                //startActivity(intent2);
                 return true;
             case R.id.action_check:
                 if (mCurrentExercise == 5) {
                     finish();
-                  /*  Intent intent = new Intent(this, SumActivity.class);
-                    intent.putExtra("CurrentExercise", mCurrentExercise);
-                    startActivity(intent); */
+                  //  Intent intent = new Intent(this, SumActivity.class);
+                    //intent.putExtra("CurrentExercise", mCurrentExercise);
+                    //startActivity(intent);
 
                 } else { checkResult(numbersUp, numbersDown, results); }
             default:
@@ -456,13 +457,14 @@ public class ExerciseActivity extends AppCompatActivity
     }
 
 }
+*/
 
 
 /******************************
  *          FORMA 2
  *
  *****************************/
-/*
+
 public class ExerciseActivity extends AppCompatActivity
 {
     private String prefixes[] = { "unid", "dec", "cent", "mil" };
@@ -473,7 +475,7 @@ public class ExerciseActivity extends AppCompatActivity
     private TextView digitsUp[], digitsDown[];
     private EditText results[], carry[];
     private int[] numbersUp, numbersDown;
-    private int[] Numbers;
+    private int[] Numbers;  //Result
     private boolean[] posCarry;
 
     private int getId(String digit, String position) {
@@ -505,7 +507,7 @@ public class ExerciseActivity extends AppCompatActivity
         // Obtenemos el nivel y le pedimos que nos genere unos números concretos
         // a partir de la plantilla
         level = Level.ALL_LEVELS[levelIndex];
-        Numbers = level.Numbers();
+        Numbers = level.generateResult();
         numbersUp = level.numbersUp();
         numbersDown = level.numbersDown();
 
@@ -666,8 +668,8 @@ public class ExerciseActivity extends AppCompatActivity
         }
     }
 
-   /* private void checkResult(int[] numbersUp, int[] numbersDown, EditText results[]) {
+    private void checkResult(int[] numbersUp, int[] numbersDown, EditText results[]) {
 
     }
 
-}*/
+}
