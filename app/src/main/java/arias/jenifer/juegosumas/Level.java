@@ -267,6 +267,7 @@ class Level {
     //Generar resultados aleatórios
     private Numbers_Result generateDigitsResult (int numDigitsUp, int numDigitsDown, boolean[] posCarry) {
         int size, dif = 0, max;
+        int num1, num2, nums[];
         int total = numDigitsDown + numDigitsUp;
         boolean equal = false;
 
@@ -362,8 +363,10 @@ class Level {
                     all.Numbers[2] = generateNumbers(totalResult[1]);
                     all.Numbers[3] = totalResult[1] - all.Numbers[2];
                 } else if (!posCarry[0] && posCarry[1]) {
+                    nums = all.getResult();
+                    num1 = nums[0];
                     all.Result = new int[max + 1];
-                    all.Result[0] = all.Result[0];
+                    all.Result[0] = num1;
                     all.Result[1] = setResult(10);
                     all.Result[2] = 1;
                     totalResult[1] = all.Result[1] + 10;
@@ -375,8 +378,10 @@ class Level {
                     all.Numbers[2] = generateNumbers(totalResult[1]);
                     all.Numbers[3] = totalResult[1] - all.Numbers[2] - 1;
                 } else if (posCarry[0] && posCarry[1]) {
+                    nums = all.getResult();
+                    num1 = nums[0];
                     all.Result = new int[max + 1];
-                    all.Result[0] = all.Result[0];
+                    all.Result[0] = num1;
                     all.Result[1] = setResult(12);
                     all.Result[2] = 1;
                     totalResult[1] = all.Result[1] + 10;
@@ -472,9 +477,12 @@ class Level {
                     all.Numbers[4] = generateNumbers(totalResult[2]);
                     all.Numbers[5] = totalResult[2] - all.Numbers[2];
                 } else if (!posCarry[1] && posCarry[2]) {
+                    nums = all.getResult();
+                    num1 = nums[0];
+                    num2 = nums[1];
                     all.Result = new int[max + 1];
-                    all.Result[0] = all.Result[0];
-                    all.Result[1] = all.Result[1];
+                    all.Result[0] = num1;
+                    all.Result[1] = num2;
                     all.Result[3] = 1;
                     all.Result[2] = setResult(10);
                     totalResult[2] = all.Result[2] + 10;
@@ -486,9 +494,12 @@ class Level {
                     all.Numbers[4] = generateNumbers(totalResult[2]);
                     all.Numbers[5] = totalResult[2] - all.Numbers[4] - 1;
                 } else if (posCarry[1] && posCarry[2]) {
+                    nums = all.getResult();
+                    num1 = nums[0];
+                    num2 = nums[1];
                     all.Result = new int[max + 1];
-                    all.Result[0] = all.Result[0];
-                    all.Result[1] = all.Result[1];
+                    all.Result[0] = num1;
+                    all.Result[1] = num2;
                     all.Result[3] = 1;
                     all.Result[2] = setResult(12);
                     totalResult[2] = all.Result[2] + 10;
