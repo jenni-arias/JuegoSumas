@@ -469,13 +469,14 @@ public class ExerciseActivity extends AppCompatActivity
 {
     private String prefixes[] = { "unid", "dec", "cent", "mil" };
     private Level level;
+    private Level.Numbers_Result Numbers_Result;
     private int levelIndex;
 
     private Toolbar toolbar_exercise;
     private TextView digitsUp[], digitsDown[];
     private EditText results[], carry[];
     private int[] numbersUp, numbersDown;
-    private int[] Numbers;  //Result
+    private int[] Numbers, Result;
     private boolean[] posCarry;
 
     private int getId(String digit, String position) {
@@ -502,12 +503,14 @@ public class ExerciseActivity extends AppCompatActivity
         //Intent SumActivity
         levelIndex = getIntent().getIntExtra("Nivel", -1);
         int showNum = levelIndex + 1;
-        String title = String.format(Locale.getDefault(), "Ejercicio Nivel %d", showNum);
+        String title = String.format(Locale.getDefault(), "Ejercicios Nivel %d", showNum);
 
         // Obtenemos el nivel y le pedimos que nos genere unos números concretos
         // a partir de la plantilla
         level = Level.ALL_LEVELS[levelIndex];
-        Numbers = level.generateResult();
+        Numbers_Result = level.generateResult();
+        Numbers = Numbers_Result.getNumbers();
+        Result = Numbers_Result.getResult();
         numbersUp = level.numbersUp();
         numbersDown = level.numbersDown();
 
@@ -668,6 +671,7 @@ public class ExerciseActivity extends AppCompatActivity
         }
     }
 
+    //Comprobar que el resultado es correcto
     private void checkResult(int[] numbersUp, int[] numbersDown, EditText results[]) {
 
     }

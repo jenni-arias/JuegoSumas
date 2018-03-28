@@ -234,7 +234,7 @@ class Level {
     private int numDigitsUp, numDigitsDown;
     private boolean[] carry;
     private int result;
-    int[] Numbers;
+    private Numbers_Result all = new Numbers_Result();
 
     private Level(int digitsUp, int digitsDown, boolean[] carry) {
         this.numDigitsDown = digitsDown;
@@ -242,17 +242,32 @@ class Level {
         this.carry = carry;
     }
 
+    public class Numbers_Result {
+        int[] Numbers;
+        int[] Result;
+
+        public int[] getNumbers() { return Numbers; }
+
+        public void setNumbers(int[] numbers) {
+            this.Numbers = numbers;
+        }
+
+        public int[] getResult() { return Result; }
+
+        public void setResult(int[] result) {
+            this.Result = result;
+        }
+    }
+
     //Posicion de los acarreos
     boolean[] posCarry() {
         return this.carry;
     }
 
-
     //Generar resultados aleatórios
-    private int[] generateDigitsResult (int numDigitsUp, int numDigitsDown, boolean[] posCarry) {
+    private Numbers_Result generateDigitsResult (int numDigitsUp, int numDigitsDown, boolean[] posCarry) {
         int size, dif = 0, max;
         int total = numDigitsDown + numDigitsUp;
-        Numbers = new int[total];
         boolean equal = false;
 
         //Diferente nº de dígitos
@@ -270,253 +285,326 @@ class Level {
             equal = true;
         }
 
-        int[] Result = new int[max];       //Dígitos definitivos para el resultado correcto
-        int[] totalResult = new int[max];  //Números reales que representan el resultado
+        all.Numbers = new int[total];       //Números de la suma
+        all.Result = new int[max];          //Dígitos definitivos para el resultado correcto
+        int[] totalResult = new int[max];   //Números reales que representan el resultado
 
         if (size == 1) {
             if (equal) {
                 if(!posCarry[0]) {
-                    Result[0] = setResult(9);
-                    totalResult[0] = Result[0];
-                    Numbers[0] = generateNumbers(totalResult[0]);
-                    Numbers[1] = totalResult[0] - Numbers[0];
+                    all.Result[0] = setResult(9);
+                    totalResult[0] = all.Result[0];
+                    all.Numbers[0] = generateNumbers(totalResult[0]);
+                    all.Numbers[1] = totalResult[0] - all.Numbers[0];
                 } else if (posCarry[0]) {
-                    Result = new int[max + 1];
-                    Result[0] = setResult(10);
-                    Result[1] = 1;
-                    totalResult[0] = Result[0] + 10;
-                    Numbers[0] = generateNumbers(totalResult[0]);
-                    Numbers[1] = totalResult[0] - Numbers[0];
+                    all.Result = new int[max + 1];
+                    all.Result[0] = setResult(10);
+                    all.Result[1] = 1;
+                    totalResult[0] = all.Result[0] + 10;
+                    all.Numbers[0] = generateNumbers(totalResult[0]);
+                    all.Numbers[1] = totalResult[0] - all.Numbers[0];
                 }
             } else {
                 if(!posCarry[0]) {
-                    Result[0] = setResult(5);
-                    totalResult[0] = Result[0];
-                    Numbers[0] = generateNumbers(totalResult[0]);
-                    Numbers[1] = totalResult[0] - Numbers[0];
+                    all.Result[0] = setResult(5);
+                    totalResult[0] = all.Result[0];
+                    all.Numbers[0] = generateNumbers(totalResult[0]);
+                    all.Numbers[1] = totalResult[0] - all.Numbers[0];
                 } else if (posCarry[0]) {
-                    Result[0] = setResult(6);
-                    totalResult[0] = Result[0] + 10;
-                    Numbers[0] = generateNumbers(totalResult[0]);
-                    Numbers[1] = totalResult[0] - Numbers[0];
+                    all.Result[0] = setResult(6);
+                    totalResult[0] = all.Result[0] + 10;
+                    all.Numbers[0] = generateNumbers(totalResult[0]);
+                    all.Numbers[1] = totalResult[0] - all.Numbers[0];
                 }
                 if (dif == 1) {
                     if(!posCarry[0] && !posCarry[1]) {
-                        Result[1] = setResult(16);
-                        totalResult[1] = Result[1];
-                        Numbers[2] = totalResult[1];
+                        all.Result[1] = setResult(16);
+                        totalResult[1] = all.Result[1];
+                        all.Numbers[2] = totalResult[1];
                     } else if (posCarry[0] && !posCarry[1]) {
-                        Result[1] = setResult(17);
-                        totalResult[1] = Result[1];
-                        Numbers[2] = totalResult[1] - 1;
+                        all.Result[1] = setResult(17);
+                        totalResult[1] = all.Result[1];
+                        all.Numbers[2] = totalResult[1] - 1;
                     }
                 } else if (dif == 2) {
                     if(!posCarry[0] && !posCarry[1]) {
-                        Result[1] = setResult(13);
-                        totalResult[1] = Result[1];
-                        Numbers[2] = totalResult[1];
+                        all.Result[1] = setResult(13);
+                        totalResult[1] = all.Result[1];
+                        all.Numbers[2] = totalResult[1];
                     } else if (posCarry[0] && !posCarry[1]) {
-                        Result[1] = setResult(14);
-                        totalResult[1] = Result[1];
-                        Numbers[2] = totalResult[1] - 1;
+                        all.Result[1] = setResult(14);
+                        totalResult[1] = all.Result[1];
+                        all.Numbers[2] = totalResult[1] - 1;
                     }
                     if(!posCarry[1] && !posCarry[2]) {
-                        Result[2] = setResult(16);
-                        totalResult[2] = Result[2];
-                        Numbers[3] = totalResult[2];
+                        all.Result[2] = setResult(16);
+                        totalResult[2] = all.Result[2];
+                        all.Numbers[3] = totalResult[2];
                     }
                 }
             }
         } else if (size == 2) {
             if(!posCarry[0]) {
-                Result[0] = setResult(1);
-                totalResult[0] = Result[0];
-                Numbers[0] = generateNumbers(totalResult[0]);
-                Numbers[1] = totalResult[0] - Numbers[0];
+                all.Result[0] = setResult(1);
+                totalResult[0] = all.Result[0];
+                all.Numbers[0] = generateNumbers(totalResult[0]);
+                all.Numbers[1] = totalResult[0] - all.Numbers[0];
             } else if (posCarry[0]) {
-                Result[0] = setResult(2);
-                totalResult[0] = Result[0] + 10;
-                Numbers[0] = generateNumbers(totalResult[0]);
-                Numbers[1] = totalResult[0] - Numbers[0];
+                all.Result[0] = setResult(2);
+                totalResult[0] = all.Result[0] + 10;
+                all.Numbers[0] = generateNumbers(totalResult[0]);
+                all.Numbers[1] = totalResult[0] - all.Numbers[0];
             }
             if (equal) {
                 if(!posCarry[0] && !posCarry[1]) {
-                    Result[1] = setResult(9);
-                    totalResult[1] = Result[1];
-                    Numbers[2] = generateNumbers(totalResult[1]);
-                    Numbers[3] = totalResult[1] - Numbers[2];
+                    all.Result[1] = setResult(9);
+                    totalResult[1] = all.Result[1];
+                    all.Numbers[2] = generateNumbers(totalResult[1]);
+                    all.Numbers[3] = totalResult[1] - all.Numbers[2];
                 } else if (!posCarry[0] && posCarry[1]) {
-                    Result = new int[max + 1];
-                    Result[0] = Result[0];
-                    Result[1] = setResult(10);
-                    Result[2] = 1;
-                    totalResult[1] = Result[1] + 10;
-                    Numbers[2] = generateNumbers(totalResult[1]);
-                    Numbers[3] = totalResult[1] - Numbers[2];
+                    all.Result = new int[max + 1];
+                    all.Result[0] = all.Result[0];
+                    all.Result[1] = setResult(10);
+                    all.Result[2] = 1;
+                    totalResult[1] = all.Result[1] + 10;
+                    all.Numbers[2] = generateNumbers(totalResult[1]);
+                    all.Numbers[3] = totalResult[1] - all.Numbers[2];
                 } else if (posCarry[0] && !posCarry[1]) {
-                    Result[1] = setResult(11);
-                    totalResult[1] = Result[1];
-                    Numbers[2] = generateNumbers(totalResult[1]);
-                    Numbers[3] = totalResult[1] - Numbers[2] - 1;
+                    all.Result[1] = setResult(11);
+                    totalResult[1] = all.Result[1];
+                    all.Numbers[2] = generateNumbers(totalResult[1]);
+                    all.Numbers[3] = totalResult[1] - all.Numbers[2] - 1;
                 } else if (posCarry[0] && posCarry[1]) {
-                    Result = new int[max + 1];
-                    Result[0] = Result[0];
-                    Result[1] = setResult(12);
-                    Result[2] = 1;
-                    totalResult[1] = Result[1] + 10;
-                    Numbers[2] = generateNumbers(totalResult[1]);
-                    Numbers[3] = totalResult[1] - Numbers[2] - 1;
+                    all.Result = new int[max + 1];
+                    all.Result[0] = all.Result[0];
+                    all.Result[1] = setResult(12);
+                    all.Result[2] = 1;
+                    totalResult[1] = all.Result[1] + 10;
+                    all.Numbers[2] = generateNumbers(totalResult[1]);
+                    all.Numbers[3] = totalResult[1] - all.Numbers[2] - 1;
                 }
             } else {
                 if(!posCarry[0] && !posCarry[1]) {
-                    Result[1] = setResult(5);
-                    totalResult[1] = Result[1];
-                    Numbers[2] = generateNumbers(totalResult[1]);
-                    Numbers[3] = totalResult[1] - Numbers[2];
+                    all.Result[1] = setResult(5);
+                    totalResult[1] = all.Result[1];
+                    all.Numbers[2] = generateNumbers(totalResult[1]);
+                    all.Numbers[3] = totalResult[1] - all.Numbers[2];
                 } else if (!posCarry[0] && posCarry[1]) {
-                    Result[1] = setResult(6);
-                    totalResult[1] = Result[1] + 10;
-                    Numbers[2] = generateNumbers(totalResult[1]);
-                    Numbers[3] = totalResult[1] - Numbers[2];
+                    all.Result[1] = setResult(6);
+                    totalResult[1] = all.Result[1] + 10;
+                    all.Numbers[2] = generateNumbers(totalResult[1]);
+                    all.Numbers[3] = totalResult[1] - all.Numbers[2];
                 } else if (posCarry[0] && !posCarry[1]) {
-                    Result[1] = setResult(7);
-                    totalResult[1] = Result[1];
-                    Numbers[2] = generateNumbers(totalResult[1]);
-                    Numbers[3] = totalResult[1] - Numbers[2] - 1;
+                    all.Result[1] = setResult(7);
+                    totalResult[1] = all.Result[1];
+                    all.Numbers[2] = generateNumbers(totalResult[1]);
+                    all.Numbers[3] = totalResult[1] - all.Numbers[2] - 1;
                 } else if (posCarry[0] && posCarry[1]) {
-                    Result[1] = setResult(8);
-                    totalResult[1] = Result[1] + 10;
-                    Numbers[2] = generateNumbers(totalResult[1]);
-                    Numbers[3] = totalResult[1] - Numbers[2] - 1;
+                    all.Result[1] = setResult(8);
+                    totalResult[1] = all.Result[1] + 10;
+                    all.Numbers[2] = generateNumbers(totalResult[1]);
+                    all.Numbers[3] = totalResult[1] - all.Numbers[2] - 1;
                 }
                 if (dif == 1) {
                     if(!posCarry[1] && !posCarry[2]) {
-                        Result[2] = setResult(16);
-                        totalResult[2] = Result[2];
-                        Numbers[4] = totalResult[2];
+                        all.Result[2] = setResult(16);
+                        totalResult[2] = all.Result[2];
+                        all.Numbers[4] = totalResult[2];
                     } else if (posCarry[1] && !posCarry[2]) {
-                        Result[2] = setResult(17);
-                        totalResult[2] = Result[2];
-                        Numbers[4] = totalResult[2] - 1;
+                        all.Result[2] = setResult(17);
+                        totalResult[2] = all.Result[2];
+                        all.Numbers[4] = totalResult[2] - 1;
                     }
                 } else if (dif == 2) {
                     if(!posCarry[1] && !posCarry[2]) {
-                        Result[2] = setResult(13);
-                        totalResult[2] = Result[2];
-                        Numbers[4] = totalResult[2];
+                        all.Result[2] = setResult(13);
+                        totalResult[2] = all.Result[2];
+                        all.Numbers[4] = totalResult[2];
                     } else if (posCarry[1] && !posCarry[2]) {
-                        Result[2] = setResult(14);
-                        totalResult[2] = Result[2];
-                        Numbers[4] = totalResult[2] - 1;
+                        all.Result[2] = setResult(14);
+                        totalResult[2] = all.Result[2];
+                        all.Numbers[4] = totalResult[2] - 1;
                     }
                     if(!posCarry[2] && !posCarry[3]) {
-                        Result[3] = setResult(16);
-                        totalResult[3] = Result[3];
-                        Numbers[5] = totalResult[3];
+                        all.Result[3] = setResult(16);
+                        totalResult[3] = all.Result[3];
+                        all.Numbers[5] = totalResult[3];
                     }
                 }
             }
         } else if (size == 3) {
             if(!posCarry[0]) {
-                Result[0] = setResult(1);
-                totalResult[0] = Result[0];
-                Numbers[0] = generateNumbers(totalResult[0]);
-                Numbers[1] = totalResult[0] - Numbers[0];
+                all.Result[0] = setResult(1);
+                totalResult[0] = all.Result[0];
+                all.Numbers[0] = generateNumbers(totalResult[0]);
+                all.Numbers[1] = totalResult[0] - all.Numbers[0];
             } else if (posCarry[0]) {
-                Result[0] = setResult(2);
-                totalResult[0] = Result[0] + 10;
-                Numbers[0] = generateNumbers(totalResult[0]);
-                Numbers[1] = totalResult[0] - Numbers[0];
+                all.Result[0] = setResult(2);
+                totalResult[0] = all.Result[0] + 10;
+                all.Numbers[0] = generateNumbers(totalResult[0]);
+                all.Numbers[1] = totalResult[0] - all.Numbers[0];
             }
             if(!posCarry[0] && !posCarry[1]) {
-                Result[1] = setResult(1);
-                totalResult[1] = Result[1];
-                Numbers[2] = generateNumbers(totalResult[1]);
-                Numbers[3] = totalResult[1] - Numbers[2];
+                all.Result[1] = setResult(1);
+                totalResult[1] = all.Result[1];
+                all.Numbers[2] = generateNumbers(totalResult[1]);
+                all.Numbers[3] = totalResult[1] - all.Numbers[2];
             } else if (!posCarry[0] && posCarry[1]) {
-                Result[1] = setResult(2);
-                totalResult[1] = Result[1] + 10;
-                Numbers[2] = generateNumbers(totalResult[1]);
-                Numbers[3] = totalResult[1] - Numbers[2];
+                all.Result[1] = setResult(2);
+                totalResult[1] = all.Result[1] + 10;
+                all.Numbers[2] = generateNumbers(totalResult[1]);
+                all.Numbers[3] = totalResult[1] - all.Numbers[2];
             } else if (posCarry[0] && !posCarry[1]) {
-                Result[1] = setResult(3);
-                totalResult[1] = Result[1];
-                Numbers[2] = generateNumbers(totalResult[1]);
-                Numbers[3] = totalResult[1] - Numbers[2] - 1;
+                all.Result[1] = setResult(3);
+                totalResult[1] = all.Result[1];
+                all.Numbers[2] = generateNumbers(totalResult[1]);
+                all.Numbers[3] = totalResult[1] - all.Numbers[2] - 1;
             } else if (posCarry[0] && posCarry[1]) {
-                Result[1] = setResult(4);
-                totalResult[1] = Result[1] + 10;
-                Numbers[2] = generateNumbers(totalResult[1]);
-                Numbers[3] = totalResult[1] - Numbers[2] - 1;
+                all.Result[1] = setResult(4);
+                totalResult[1] = all.Result[1] + 10;
+                all.Numbers[2] = generateNumbers(totalResult[1]);
+                all.Numbers[3] = totalResult[1] - all.Numbers[2] - 1;
             }
             if (equal) {
                 if(!posCarry[1] && !posCarry[2]) {
-                    Result[2] = setResult(9);
-                    totalResult[2] = Result[2];
-                    Numbers[4] = generateNumbers(totalResult[2]);
-                    Numbers[5] = totalResult[2] - Numbers[2];
+                    all.Result[2] = setResult(9);
+                    totalResult[2] = all.Result[2];
+                    all.Numbers[4] = generateNumbers(totalResult[2]);
+                    all.Numbers[5] = totalResult[2] - all.Numbers[2];
                 } else if (!posCarry[1] && posCarry[2]) {
-                    Result = new int[max + 1];
-                    Result[0] = Result[0];
-                    Result[1] = Result[1];
-                    Result[3] = 1;
-                    Result[2] = setResult(10);
-                    totalResult[2] = Result[2] + 10;
-                    Numbers[4] = generateNumbers(totalResult[2]);
-                    Numbers[5] = totalResult[2] - Numbers[4];
+                    all.Result = new int[max + 1];
+                    all.Result[0] = all.Result[0];
+                    all.Result[1] = all.Result[1];
+                    all.Result[3] = 1;
+                    all.Result[2] = setResult(10);
+                    totalResult[2] = all.Result[2] + 10;
+                    all.Numbers[4] = generateNumbers(totalResult[2]);
+                    all.Numbers[5] = totalResult[2] - all.Numbers[4];
                 } else if (posCarry[1] && !posCarry[2]) {
-                    Result[2] = setResult(11);
-                    totalResult[2] = Result[2];
-                    Numbers[4] = generateNumbers(totalResult[2]);
-                    Numbers[5] = totalResult[2] - Numbers[4] - 1;
+                    all.Result[2] = setResult(11);
+                    totalResult[2] = all.Result[2];
+                    all.Numbers[4] = generateNumbers(totalResult[2]);
+                    all.Numbers[5] = totalResult[2] - all.Numbers[4] - 1;
                 } else if (posCarry[1] && posCarry[2]) {
-                    Result = new int[max + 1];
-                    Result[0] = Result[0];
-                    Result[1] = Result[1];
-                    Result[3] = 1;
-                    Result[2] = setResult(12);
-                    totalResult[2] = Result[2] + 10;
-                    Numbers[4] = generateNumbers(totalResult[2]);
-                    Numbers[5] = totalResult[2] - Numbers[4] - 1;
+                    all.Result = new int[max + 1];
+                    all.Result[0] = all.Result[0];
+                    all.Result[1] = all.Result[1];
+                    all.Result[3] = 1;
+                    all.Result[2] = setResult(12);
+                    totalResult[2] = all.Result[2] + 10;
+                    all.Numbers[4] = generateNumbers(totalResult[2]);
+                    all.Numbers[5] = totalResult[2] - all.Numbers[4] - 1;
                 }
             } else {
                 if (dif == 1) {
                     if(!posCarry[1] && !posCarry[2]) {
-                        Result[2] = setResult(5);
-                        totalResult[2] = Result[2];
-                        Numbers[4] = generateNumbers(totalResult[2]);
-                        Numbers[5] = totalResult[2] - Numbers[4];
+                        all.Result[2] = setResult(5);
+                        totalResult[2] = all.Result[2];
+                        all.Numbers[4] = generateNumbers(totalResult[2]);
+                        all.Numbers[5] = totalResult[2] - all.Numbers[4];
                     } else if (!posCarry[1] && posCarry[2]) {
-                        Result[2] = setResult(6);
-                        totalResult[2] = Result[2] + 10;
-                        Numbers[4] = generateNumbers(totalResult[2]);
-                        Numbers[5] = totalResult[2] - Numbers[4];
+                        all.Result[2] = setResult(6);
+                        totalResult[2] = all.Result[2] + 10;
+                        all.Numbers[4] = generateNumbers(totalResult[2]);
+                        all.Numbers[5] = totalResult[2] - all.Numbers[4];
                     } else if (posCarry[1] && !posCarry[2]) {
-                        Result[2] = setResult(7);
-                        totalResult[2] = Result[2];
-                        Numbers[4] = generateNumbers(totalResult[2]);
-                        Numbers[5] = totalResult[2] - Numbers[4] - 1;
+                        all.Result[2] = setResult(7);
+                        totalResult[2] = all.Result[2];
+                        all.Numbers[4] = generateNumbers(totalResult[2]);
+                        all.Numbers[5] = totalResult[2] - all.Numbers[4] - 1;
                     } else if (posCarry[1] && posCarry[2]) {
-                        Result[2] = setResult(8);
-                        totalResult[2] = Result[2] + 10;
-                        Numbers[4] = generateNumbers(totalResult[2]);
-                        Numbers[5] = totalResult[2] - Numbers[4] - 1;
+                        all.Result[2] = setResult(8);
+                        totalResult[2] = all.Result[2] + 10;
+                        all.Numbers[4] = generateNumbers(totalResult[2]);
+                        all.Numbers[5] = totalResult[2] - all.Numbers[4] - 1;
                     }
                     if(!posCarry[2] && !posCarry[3]) {
-                        Result[3] = setResult(16);
-                        totalResult[3] = Result[3];
-                        Numbers[6] = totalResult[3];
+                        all.Result[3] = setResult(16);
+                        totalResult[3] = all.Result[3];
+                        all.Numbers[6] = totalResult[3];
                     } else if (posCarry[2] && !posCarry[3]) {
-                        Result[3] = setResult(17);
-                        totalResult[3] = Result[3];
-                        Numbers[6] = totalResult[3] - 1;
+                        all.Result[3] = setResult(17);
+                        totalResult[3] = all.Result[3];
+                        all.Numbers[6] = totalResult[3] - 1;
                     }
                 }
             }
         }
-        return Numbers;
+        all.setNumbers(all.Numbers);
+        all.setResult(all.Result);
+        return all;
     }
 
+    Numbers_Result generateResult () {return generateDigitsResult(this.numDigitsUp, this.numDigitsDown, this.carry);}
+
+    //Números de arriba
+    int[] numbersUp() { return numsUp(numDigitsUp, numDigitsDown, all.getNumbers()); }
+
+    private int[] numsUp (int numDigitsUp, int numDigitsDown, int[] Numbers) {
+        int[] numUp = new int[numDigitsUp];
+        int posNumbers = 0, min;
+        boolean more;
+
+        //Diferente nº de dígitos
+        if (numDigitsUp > numDigitsDown) {
+            min = numDigitsDown;
+            more = true;
+        } else if (numDigitsUp < numDigitsDown) {
+            min = numDigitsUp;
+            more = false;
+        } else { //Igual nº de dígitos
+            min = numDigitsUp;
+            more = false;
+        }
+
+        for (int j = 0; j < min; j++) {
+            numUp[j] = Numbers[posNumbers];
+            posNumbers = posNumbers + 2;
+        }
+        if (more) {
+            for (int j = min; j < numDigitsUp; j++) {
+                numUp[j] = Numbers[posNumbers];
+                posNumbers++;
+            }
+        }
+        return numUp;
+    }
+
+    //Números de abajo
+    int[] numbersDown() { return numsDown(numDigitsUp, numDigitsDown, all.getNumbers()); }
+
+    private int[] numsDown (int numDigitsUp, int numDigitsDown, int[] Numbers) {
+        int[] numDown = new int[numDigitsDown];
+        int posNumbers = 1, min;
+        boolean more;
+
+        //Diferente nº de dígitos
+        if (numDigitsUp > numDigitsDown) {
+            min = numDigitsDown;
+            more = false;
+        } else if (numDigitsUp < numDigitsDown) {
+            min = numDigitsUp;
+            more = true;
+        } else { //Igual nº de dígitos
+            min = numDigitsDown;
+            more = false;
+        }
+
+        for (int j = 0; j < min; j++) {
+            numDown[j] = Numbers[posNumbers];
+            posNumbers = posNumbers + 2;
+        }
+        posNumbers = posNumbers - 1;
+        if (more) {
+            for (int j = min; j < numDigitsDown; j++) {
+                numDown[j] = Numbers[posNumbers];
+                posNumbers++;
+            }
+        }
+        return numDown;
+    }
+
+    //Generar números en un rango según el resultado
     private int generateNumbers(int totalResult) {
         int NumDigits = -1;
 
@@ -582,8 +670,8 @@ class Level {
         return NumDigits;
     }
 
-    // Todos los posibles tipos
-    int setResult (int tipo) {
+    // Todos los posibles tipos de suma
+    private int setResult (int tipo) {
         switch (tipo) {
             case 1:     //Tipo 1, 13
                 result = ThreadLocalRandom.current().nextInt(0, 10);
@@ -639,77 +727,6 @@ class Level {
         }
         return result;
     }
-
-    int[] generateResult () {return generateDigitsResult(this.numDigitsUp, this.numDigitsDown, this.carry);}
-
-
-    //Número de arriba
-    int[] numbersUp() { return numsUp(numDigitsUp, numDigitsDown, Numbers); }
-
-    private int[] numsUp (int numDigitsUp, int numDigitsDown, int[] Numbers) {
-        int[] numUp = new int[numDigitsUp];
-        int posNumbers = 0, min;
-        boolean more;
-
-        //Diferente nº de dígitos
-        if (numDigitsUp > numDigitsDown) {
-            min = numDigitsDown;
-            more = true;
-        } else if (numDigitsUp < numDigitsDown) {
-            min = numDigitsUp;
-            more = false;
-        } else { //Igual nº de dígitos
-            min = numDigitsUp;
-            more = false;
-        }
-
-        for (int j = 0; j < min; j++) {
-            numUp[j] = Numbers[posNumbers];
-            posNumbers = posNumbers + 2;
-        }
-        if (more) {
-            for (int j = min; j < numDigitsUp; j++) {
-                numUp[j] = Numbers[posNumbers];
-                posNumbers++;
-            }
-        }
-        return numUp;
-    }
-
-    //Número de abajo
-    int[] numbersDown() { return numsDown(numDigitsUp, numDigitsDown, Numbers); }
-
-    private int[] numsDown (int numDigitsUp, int numDigitsDown, int[] Numbers) {
-        int[] numDown = new int[numDigitsDown];
-        int posNumbers = 1, min;
-        boolean more;
-
-        //Diferente nº de dígitos
-        if (numDigitsUp > numDigitsDown) {
-            min = numDigitsDown;
-            more = false;
-        } else if (numDigitsUp < numDigitsDown) {
-            min = numDigitsUp;
-            more = true;
-        } else { //Igual nº de dígitos
-            min = numDigitsDown;
-            more = false;
-        }
-
-        for (int j = 0; j < min; j++) {
-            numDown[j] = Numbers[posNumbers];
-            posNumbers = posNumbers + 2;
-        }
-        posNumbers = posNumbers - 1;
-        if (more) {
-            for (int j = min; j < numDigitsDown; j++) {
-                numDown[j] = Numbers[posNumbers];
-                posNumbers++;
-            }
-        }
-        return numDown;
-    }
-
 
     // TABLA CON TODOS LOS NIVELES
     static Level[] ALL_LEVELS = {
