@@ -16,6 +16,73 @@
         android:layout_height="56dp"
         android:layout_margin="1dp" />
 
+    <LinearLayout
+        android:id="@+id/correct_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/btn_level"
+        android:layout_below="@+id/btn_level"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="3dp">
+
+        <TextView
+            android:id="@+id/correct_1"
+            android:layout_width="0dp"
+            android:layout_height="14dp"
+            android:layout_weight="1"
+            android:background="@color/yellow"
+            android:text="1"
+            android:textAlignment="center"
+            android:textSize="10dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/correct_2"
+            android:layout_width="0dp"
+            android:layout_height="14dp"
+            android:background="@color/gray"
+            android:layout_weight="1"
+            android:text="2"
+            android:textAlignment="center"
+            android:textSize="10dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/correct_3"
+            android:layout_width="0dp"
+            android:layout_height="14dp"
+            android:background="@color/gray"
+            android:layout_weight="1"
+            android:text="3"
+            android:textAlignment="center"
+            android:textSize="10dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/correct_4"
+            android:layout_width="0dp"
+            android:layout_height="14dp"
+            android:background="@color/gray"
+            android:layout_weight="1"
+            android:text="4"
+            android:textAlignment="center"
+            android:textSize="10dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/correct_5"
+            android:layout_width="0dp"
+            android:layout_height="14dp"
+            android:background="@color/gray"
+            android:layout_weight="1"
+            android:text="5"
+            android:textAlignment="center"
+            android:textSize="10dp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <!--
     <ProgressBar
         android:id="@+id/progress_level"
         android:layout_width="56dp"
@@ -25,18 +92,7 @@
         android:progress="0"
         android:secondaryProgress="20"
         android:theme="@style/MyProgressBarTwo"
-        style="@style/MyProgressBarTwo"/>
-
-    <!--  Circular
-   <ProgressBar
-      android:id="@+id/progress2_level"
-      android:layout_width="58dp"
-      android:layout_height="58dp"
-      android:indeterminate="false"
-      android:indeterminateTint="@color/gray"
-      /> -->
-
-
+        style="@style/MyProgressBarTwo"/> -->
 
 
 </RelativeLayout>
