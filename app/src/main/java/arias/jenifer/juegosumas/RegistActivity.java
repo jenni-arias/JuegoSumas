@@ -23,8 +23,8 @@ public class RegistActivity extends AppCompatActivity {
     EditText login_name, login_lastname1, login_lastname2,
             registry_name, registry_lastname1, registry_lastname2, registry_age;
 
-   // UserSQLiteHelper mUsers;
-    //SQLiteDatabase db;
+    UserSQLiteHelper mUsers;
+    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +32,13 @@ public class RegistActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registry);
 
         //Abrimos la base de datos 'DBUsers' en modo escritura
-      /*  mUsers = new UserSQLiteHelper(
+        mUsers = new UserSQLiteHelper(
                 this,
                 UserSQLiteHelper.DATABASE_NAME,
                 null,
                 UserSQLiteHelper.DATABASE_VERSION);
 
-        db = mUsers.getWritableDatabase(); */
+        db = mUsers.getWritableDatabase();
 
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_registry = (Button) findViewById(R.id.btn_registry);
@@ -106,7 +106,7 @@ public class RegistActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //TODO: Registro del usuario
-               /* String name = registry_name.getText().toString();
+                String name = registry_name.getText().toString();
                 String apellido1 = registry_lastname1.getText().toString();
                 String apellido2 = registry_lastname2.getText().toString();
                 int edad = Integer.parseInt(registry_age.getText().toString());
@@ -124,7 +124,7 @@ public class RegistActivity extends AppCompatActivity {
 
                     db.insert(UserContract.UserScheme.TABLE_NAME, null, values);
                     db.close();
-                }*/
+                }
 
                 Intent intent = new Intent(RegistActivity.this, SumActivity.class);
                 startActivity(intent);
