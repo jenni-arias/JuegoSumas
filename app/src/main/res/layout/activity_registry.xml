@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context="arias.jenifer.juegosumas.RegistActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:padding="20dp">
+        
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:textSize="17dp"
+            android:text="Nombre:"/>
+
+        <EditText
+            android:id="@+id/login_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_name"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tv_lastname1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:textSize="17dp"
+            android:text="Primer Apellido:"/>
+
+        <EditText
+            android:id="@+id/login_lastname1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_lastname1"
+            android:layout_below="@+id/tv_name"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tv_lastname2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_lastname1"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:textSize="17dp"
+            android:text="Segundo Apellido:"/>
+
+        <EditText
+            android:id="@+id/login_lastname2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_lastname2"
+            android:layout_below="@+id/tv_lastname1"
+            android:textSize="14dp" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="Iniciar Sesión" />
+
+    <Button
+        android:id="@+id/btn_registry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="2dp"
+        android:text="Registrarse" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="2dp"
+            android:text="Back" />
+
+        <Button
+            android:id="@+id/btn_go"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="2dp"
+            android:text="Go" />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_registry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/tv_name_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:textSize="17dp"
+            android:text="Nombre:"/>
+
+        <EditText
+            android:id="@+id/registry_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_name_2"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tv_lastname1_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name_2"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:textSize="17dp"
+            android:text="Primer Apellido:"/>
+
+        <EditText
+            android:id="@+id/registry_lastname1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_lastname1_2"
+            android:layout_below="@+id/tv_name_2"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tv_lastname2_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_lastname1_2"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:textSize="17dp"
+            android:text="Segundo Apellido:"/>
+
+        <EditText
+            android:id="@+id/registry_lastname2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_lastname2_2"
+            android:layout_below="@+id/tv_lastname1_2"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/tv_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_lastname2_2"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:textSize="17dp"
+            android:text="Edad:"/>
+
+        <EditText
+            android:id="@+id/registry_age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_age"
+            android:layout_below="@+id/tv_lastname2_2"
+            android:textSize="14dp"
+            android:inputType="number"/>
+    </RelativeLayout>
+
+
+    
+</LinearLayout>
