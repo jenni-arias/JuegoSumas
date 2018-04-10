@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context="arias.jenifer.juegosumas.RegistActivity">
+    tools:context="arias.jenifer.juegosumas.RegistryActivity">
 
     <RelativeLayout
         android:id="@+id/rl_login"
@@ -29,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/tv_name"
+            android:singleLine="true"
             android:textSize="14dp" />
 
         <TextView
@@ -47,6 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/tv_lastname1"
             android:layout_below="@+id/tv_name"
+            android:singleLine="true"
             android:textSize="14dp" />
 
         <TextView
@@ -65,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/tv_lastname2"
             android:layout_below="@+id/tv_lastname1"
+            android:singleLine="true"
             android:textSize="14dp" />
 
     </RelativeLayout>
@@ -75,7 +78,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:text="Iniciar Sesión" />
+        android:text="Iniciar Sesión"
+        android:onClick="pressed"/>
 
     <Button
         android:id="@+id/btn_registry"
@@ -83,7 +87,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="2dp"
-        android:text="Registrarse" />
+        android:text="Registrarse"
+        android:onClick="pressed"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -95,7 +100,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="2dp"
-            android:text="Back" />
+            android:text="Back"
+            android:onClick="pressed"/>
 
         <Button
             android:id="@+id/btn_go"
@@ -129,6 +135,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/tv_name_2"
+            android:singleLine="true"
             android:textSize="14dp" />
 
         <TextView
@@ -147,6 +154,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/tv_lastname1_2"
             android:layout_below="@+id/tv_name_2"
+            android:singleLine="true"
             android:textSize="14dp" />
 
         <TextView
@@ -165,6 +173,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/tv_lastname2_2"
             android:layout_below="@+id/tv_lastname1_2"
+            android:singleLine="true"
             android:textSize="14dp" />
 
         <TextView
@@ -183,6 +192,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/tv_age"
             android:layout_below="@+id/tv_lastname2_2"
+            android:singleLine="true"
             android:textSize="14dp"
             android:inputType="number"/>
     </RelativeLayout>
