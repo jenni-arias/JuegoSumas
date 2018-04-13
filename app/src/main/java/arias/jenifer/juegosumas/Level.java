@@ -233,7 +233,6 @@ import java.util.concurrent.ThreadLocalRandom;
 class Level {
     private int numDigitsUp, numDigitsDown;
     private boolean[] carry;
-    private int result;
     private Numbers_Result all = new Numbers_Result();
 
     private Level(int digitsUp, int digitsDown, boolean[] carry) {
@@ -241,6 +240,9 @@ class Level {
         this.numDigitsUp = digitsUp;
         this.carry = carry;
     }
+
+
+
 
     public class Numbers_Result {
         int[] Numbers;
@@ -683,6 +685,7 @@ class Level {
 
     // Todos los posibles tipos de suma
     private int setResult (int tipo) {
+        int result = -1;
         switch (tipo) {
             case 1:     //Tipo 1, 13
                 result = ThreadLocalRandom.current().nextInt(0, 10);
