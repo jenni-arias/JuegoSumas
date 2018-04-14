@@ -473,14 +473,13 @@ public class ExerciseActivity extends AppCompatActivity
     private String prefixes[] = { "unid", "dec", "cent", "mil" };
     private int correct[] = { 1, 2, 3, 4, 5 };
     private Level level;
-    private Level.Numbers_Result Numbers_Result;
     private int levelIndex;
 
     private Toolbar toolbar_exercise;
     private TextView digitsUp[], digitsDown[], correct_result[];
     private EditText results[], carry[];
     private int[] numbersUp, numbersDown;
-    private int[] Numbers, Result;
+    private int[] Result;
     private boolean[] posCarry;
 
     private int getId(String digit, String position) {
@@ -535,18 +534,17 @@ public class ExerciseActivity extends AppCompatActivity
             // Obtenemos el nivel y le pedimos que nos genere unos números concretos
             // a partir de la plantilla
             level = Level.ALL_LEVELS[levelIndex];
-            Numbers_Result = level.generateResult();
-            Numbers = Numbers_Result.getNumbers();
-            Result = Numbers_Result.getResult();
-            numbersUp = level.numbersUp();
-            numbersDown = level.numbersDown();
+            Level.Instance instance = level.generateInstance();
+            Result = instance.getResult();
+            numbersUp = instance.getUp();
+            numbersDown = instance.getDown();
 
             //Colorear el primer ejercicio del nivel de la progressBar
             correct_result[mCurrentExercise].setBackground(getResources()
                     .getDrawable(R.drawable.progressbar_yellow));
 
             //Obtener las posiciones de los acarreos
-            posCarry = level.posCarry();
+            posCarry = level.getCarry();
 
             //Mostrar ejercicio dependiendo de los datos que se reciben
             setDigits(digitsUp, numbersUp);

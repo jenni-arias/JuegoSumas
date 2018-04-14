@@ -1,804 +1,251 @@
 package arias.jenifer.juegosumas;
 
-
-
-/**
- * Created by j.arias.gallego on 26/02/2018.
- */
-
-
-/******************************
- *          FORMA 1
- *
- *****************************/
-
-/*
-class Level {
-    private int numDigitsUp, numDigitsDown;
-    private boolean[] carry;
-    private int[] Numbers;
-   // Random rand = new Random();
-
-    private Level(int digitsUp, int digitsDown, boolean[] carry) {
-        this.numDigitsDown = digitsDown;
-        this.numDigitsUp = digitsUp;
-        this.carry = carry;
-    }
-
-    //TODO: que no se genere el número 10!
-    //Generar dígitos aleatórios
-    private int[] generateDigits(int n) {
-        int[] digits = new int[n];
-        for (int i = 0; i < digits.length-1; i++) {
-            digits[i] = (int) (Math.random() * 10);                  //digits[i] = rand.nextInt(10);
-        }
-        digits[digits.length-1] = (int) (Math.random() * 10) + 1;    // Que el primer número no sea un 0.
-        return digits;
-    }
-
-    int[] generateUp() {
-        return generateDigits(this.numDigitsUp);
-    }
-
-    int[] generateDown() {
-        return generateDigits(this.numDigitsDown);
-    }
-
-    //Generamos números con el formato correcto
-    int[] Numbers() { return generateNumbers(generateUp(), generateDown(), carry); }
-
-    private int[] generateNumbers(int[] numbersUp, int[] numbersDown, boolean[] posCarry) {
-        int[] numUp = new int[numbersUp.length];
-        int[] numDown = new int[numbersDown.length];
-        int min, dif = 0, n;
-
-        //Diferente nº de dígitos
-        if (numbersUp.length < numbersDown.length) {
-            dif = numbersDown.length - numbersUp.length;
-            min = numbersUp.length;
-            n = 1;
-        } else if (numbersUp.length > numbersDown.length) {
-            dif = numbersUp.length - numbersDown.length;
-            min = numbersDown.length;
-            n = 2;
-        } else { //Igual nº de dígitos
-            min = numbersUp.length;
-            n = 3;
-        }
-
-        //Comprobar que el formato es correcto
-        for (int i = 0; i < min; i++) {
-            if (numbersUp[i] + numbersDown[i] < 10 && !posCarry[i]) {
-                numUp[i] = numbersUp[i];
-                numDown[i] = numbersDown[i];
-            } else if (numbersUp[i] + numbersDown[i] > 10 && posCarry[i]) {
-                numUp[i] = numbersUp[i];
-                numDown[i] = numbersDown[i];
-            } else {
-                if (n == 3 && i == numbersUp.length-1) {
-                    numbersUp[i] = (int) (Math.random() * 10) + 1;         //Que el primer número no sea un 0.
-                    numbersDown[i] = (int) (Math.random() * 10) + 1;
-                } else {
-                    numbersUp[i] = (int) (Math.random() * 10);
-                    numbersDown[i] = (int) (Math.random() * 10);
-                }
-                i--;
-            }
-        }
-
-        //Si los números tienen diferente nº de dígitos, añadimos el/los último/s
-        if (n == 1 && dif == 1) {
-            int end = numbersDown.length - 1;
-            if (numbersDown[end] >= 9 && posCarry[posCarry.length - 2]) {
-                numDown[end] = (int) (Math.random() * 9) + 1;               //Si la última suma tiene acarreo, el primer número no puede ser un 9. //TODO: Funciona?¿?¿
-            } else { numDown[end] = numbersDown[end]; }
-        } else if (n == 1 && dif == 2) {
-            int end = numbersDown.length-1;
-            numDown[end-1] = numbersDown[end-1];
-            if (numbersDown[end] >= 9 && posCarry[posCarry.length-2]) {
-                numDown[end] = (int) (Math.random() * 9) + 1;
-            } else { numDown[end] = numbersDown[end]; }
-        } else if (n == 2 && dif == 1) {
-            int end = numbersUp.length-1;
-            if (numbersUp[end] >= 9 && posCarry[posCarry.length-2]) {
-                numUp[end] = (int) (Math.random() * 9) + 1;
-            } else { numUp[end] = numbersUp[end]; }
-        } else if (n == 2 && dif == 2) {
-            int end = numbersUp.length-1;
-            numUp[end-1] = numbersUp[end-1];
-            if (numbersUp[end] >= 9 && posCarry[posCarry.length-2]) {
-                numUp[end] = (int) (Math.random() * 9) + 1;
-            } else { numUp[end] = numbersUp[end]; }
-        }
-
-        Numbers = concat(numUp, numDown);
-        return Numbers;
-    }
-
-    //Concatenar todos los dígitos para enviarlos juntos en el return
-    private int[] concat(int[] numUp, int[] numDown) {
-        int[] Numbers = new int[numUp.length + numDown.length];
-        int j=0;
-
-        for (int i = 0; i < numDigitsUp; i++) {
-            Numbers[i] = numUp[i];
-        }
-        for (int i = numDigitsUp; i < Numbers.length; i++) {
-            Numbers[i] = numDown[j];
-            j++;
-        }
-        return Numbers;
-    }
-
-    //Número de arriba
-    int[] numbersUp() { return numsUp(numDigitsUp, Numbers); }
-
-    private int[] numsUp (int numDigitsUp, int[] Numbers) {
-        int[] numUp = new int[numDigitsUp];
-        for (int i = 0; i < numDigitsUp; i++) {
-            numUp[i] = Numbers[i];
-        }
-        return numUp;
-    }
-
-    //Número de abajo
-    int[] numbersDown() { return numsDown(numDigitsUp, numDigitsDown, Numbers); }
-
-    private int[] numsDown (int numDigitsUp, int numDigitsDown, int[] Numbers) {
-        int[] numDown = new int[numDigitsDown];
-        int j = 0;
-        for (int i = numDigitsUp; i < Numbers.length; i++) {
-            numDown[j] = Numbers[i];
-            j++;
-        }
-        return numDown;
-    }
-
-    //Posicion de los acarreos
-    boolean[] posCarry() {
-        return this.carry;
-    }
-
-
-    // TABLA CON TODOS LOS NIVELES
-    static Level[] ALL_LEVELS = {
-            //Bloque 1: 1 suma, sin acarreo (Level 1 - 5)
-            new Level(1, 1, new boolean[]{ false }),
-            new Level(1, 2, new boolean[]{ false, false }),
-            new Level(2, 1, new boolean[]{ false, false }),
-            new Level(3, 1, new boolean[]{ false, false, false }),
-            new Level(1, 3, new boolean[]{ false, false, false }),
-            //Bloque 2: 2 sumas, sin acarreo (Level 6 - 10)
-            new Level(2, 2, new boolean[]{ false, false }),
-            new Level(2, 3, new boolean[]{ false, false, false }),
-            new Level(3, 2, new boolean[]{ false, false, false }),
-            new Level(4, 2, new boolean[]{ false, false, false, false }),
-            new Level(2, 4, new boolean[]{ false, false, false, false }),
-            //Bloque 3: 1 suma, 1 acarreo (Level 11 - 15)
-            new Level(1, 1, new boolean[]{ true }),
-            new Level(2, 1, new boolean[]{ true, false }),
-            new Level(1, 2, new boolean[]{ true, false }),
-            new Level(3, 1, new boolean[]{ true, false, false }),
-            new Level(1, 3, new boolean[]{ true, false, false }),
-            //Bloque 4: 2 sumas, 1 acarreo (Level 16 - 25)
-            new Level(2, 2, new boolean[]{ true, false }),
-            new Level(2, 3, new boolean[]{ true, false, false }),
-            new Level(3, 2, new boolean[]{ true, false, false }),
-            new Level(4, 2, new boolean[]{ true, false, false, false }),
-            new Level(2, 4, new boolean[]{ true, false, false, false }),
-            new Level(2, 2, new boolean[]{ false, true }),
-            new Level(2, 3, new boolean[]{ false, true, false }),
-            new Level(3, 2, new boolean[]{ false, true, false }),
-            new Level(4, 2, new boolean[]{ false, true, false, false }),
-            new Level(2, 4, new boolean[]{ false, true, false, false }),
-            //Bloque 5: 3 sumas, sin acarreo (Level 26 - 28)
-            new Level(3, 3, new boolean[]{ false, false, false }),
-            new Level(4, 3, new boolean[]{ false, false, false, false }),
-            new Level(3, 4, new boolean[]{ false, false, false, false }),
-            //Bloque 6: 3 sumas, 1 acarreo (Level 29 - 37)
-            new Level(3, 3, new boolean[]{ true, false, false }),
-            new Level(4, 3, new boolean[]{ true, false, false, false }),
-            new Level(3, 4, new boolean[]{ true, false, false, false }),
-            new Level(3, 3, new boolean[]{ false, true, false }),
-            new Level(4, 3, new boolean[]{ false, true, false, false }),
-            new Level(3, 4, new boolean[]{ false, true, false, false }),
-            new Level(3, 3, new boolean[]{ false, false, true }),
-            new Level(4, 3, new boolean[]{ false, false, true, false }),
-            new Level(3, 4, new boolean[]{ false, false, true, false }),
-            //Bloque 7: 3 sumas, 2 acarreos (Level 38 - 40)
-            new Level(3, 3, new boolean[]{ true, false, true }),
-            new Level(4, 3, new boolean[]{ true, false, true, false }),
-            new Level(3, 4, new boolean[]{ true, false, true, false }),
-            //Bloque 8: 3 sumas, 2 acarreos (Level 41 - 43)
-            new Level(2, 2, new boolean[]{ true, true }),
-            new Level(2, 3, new boolean[]{ true, true, false }),
-            new Level(3, 2, new boolean[]{ true, true, false }),
-            //Bloque 9: 3 sumas, 3 acarreo (Level 44 - 46)
-            new Level(3, 3, new boolean[]{ true, true, true }),
-            new Level(4, 3, new boolean[]{ true, true, true }),
-            new Level(3, 4, new boolean[]{ true, true, true }),
-
-    };
-}
-
-*/
 import java.util.concurrent.ThreadLocalRandom;
-
-/******************************
- *          FORMA 2
- *
- *****************************/
-
+import java.lang.System;
 
 class Level {
-    private int numDigitsUp, numDigitsDown;
+    final static int UP = 0, DOWN = 1, RESULT = 2;
+    private int size[] = {-1, -1, -1};
     private boolean[] carry;
-    private Numbers_Result all = new Numbers_Result();
 
-    private Level(int digitsUp, int digitsDown, boolean[] carry) {
-        this.numDigitsDown = digitsDown;
-        this.numDigitsUp = digitsUp;
+    static ThreadLocalRandom R = ThreadLocalRandom.current();
+
+    private Level(int sizeUp, int sizeDown, String scarry) {
+        carry = new boolean[scarry.length()];
+        for (int i = 0; i < carry.length; i++) {
+            carry[i] = (scarry.charAt(i) != '_');
+        }
+        // assert(Math.max(sizeUp, sizeDown) == carry.length);
+        this.size[UP]     = sizeUp;
+        this.size[DOWN]   = sizeDown;
+        this.size[RESULT] = -1;
         this.carry = carry;
     }
 
+    boolean[] getCarry() { return carry; }
 
+    public class Instance {
+        int[][] digits;
 
-
-    public class Numbers_Result {
-        int[] Numbers;
-        int[] Result;
-
-        public int[] getNumbers() { return Numbers; }
-
-        public void setNumbers(int[] numbers) {
-            this.Numbers = numbers;
+        Instance() {
+            size[RESULT] = Math.max(size[UP], size[DOWN]);
+            // Si hay acarreo en la cifra más significativa -> el resultado tiene una cifra más
+            if (carry[size[RESULT]-1]) {
+                size[RESULT]++;
+            }
+            digits = new int[][]{
+                    new int[size[UP]],
+                    new int[size[DOWN]],
+                    new int[size[RESULT]]
+            };
         }
 
-        public int[] getResult() { return Result; }
+        int[] getUp()     { return digits[UP]; }
+        int[] getDown()   { return digits[DOWN]; }
+        int[] getResult() { return digits[RESULT]; }
 
-        public void setResult(int[] result) {
-            this.Result = result;
-        }
-    }
-
-    //Posicion de los acarreos
-    boolean[] posCarry() {
-        return this.carry;
-    }
-
-    //Generar resultados aleatórios
-    private Numbers_Result generateDigitsResult (int numDigitsUp, int numDigitsDown, boolean[] posCarry) {
-        int size, dif = 0, max;
-        int num1, num2, nums[];
-        int total = numDigitsDown + numDigitsUp;
-        boolean equal = false;
-
-        //Diferente nº de dígitos
-        if (numDigitsUp > numDigitsDown) {
-            dif = numDigitsUp - numDigitsDown;
-            max = numDigitsUp;
-            size = numDigitsDown;
-        } else if (numDigitsUp < numDigitsDown) {
-            dif = numDigitsDown - numDigitsUp;
-            max = numDigitsDown;
-            size = numDigitsUp;
-        } else { //Igual nº de dígitos
-            size = numDigitsUp;
-            max = numDigitsUp;
-            equal = true;
+        private int _value(int which) {
+            int val = 0;
+            for (int i = 0; i < size[which]; i++) {
+                val = val*10 + digits[which][i];
+            }
+            return val;
         }
 
-        all.Numbers = new int[total];       //Números de la suma
-        all.Result = new int[max];          //Dígitos definitivos para el resultado correcto
-        int[] totalResult = new int[max];   //Números reales que representan el resultado
+        boolean selfCheck() {
+            int up   = _value(UP);
+            int down = _value(DOWN);
+            int res  = _value(RESULT);
+            return up + down == res;
+        }
 
-        if (size == 1) {
-            if (equal) {
-                if(!posCarry[0]) {
-                    all.Result[0] = setResult(9);
-                    totalResult[0] = all.Result[0];
-                    all.Numbers[0] = generateNumbers(totalResult[0]);
-                    all.Numbers[1] = totalResult[0] - all.Numbers[0];
-                } else if (posCarry[0]) {
-                    all.Result = new int[max + 1];
-                    all.Result[0] = setResult(10);
-                    all.Result[1] = 1;
-                    totalResult[0] = all.Result[0] + 10;
-                    all.Numbers[0] = generateNumbers(totalResult[0]);
-                    all.Numbers[1] = totalResult[0] - all.Numbers[0];
+        void generateColumn(int i)
+        {
+            if (i >= size[DOWN] && i >= size[UP]) {
+                digits[RESULT][i] = 1;
+                return;
+            }
+
+            boolean carry_last = (i - 1 >= 0 && carry[i - 1]);
+            boolean carry_now  = (i < carry.length && carry[i]);
+            boolean last[]     = { (i == (size[UP] - 1)), (i == (size[DOWN] - 1)) };
+            boolean single[]   = { (i >= size[DOWN]),     (i >= size[UP])         };
+
+            // Solo una cifra arriba o abajo
+            if (single[UP] || single[DOWN]) {
+                int which = (single[UP] ? UP : DOWN);
+                if (carry_last && carry_now) {
+                    // Acarreo antes y después, solo puede ser 9
+                    digits[RESULT][i] = 9;
+                    digits[which][i] = 9;
+                    return;
                 }
+                int lower = (last[which] ? 1 : 0) + (carry_last ? 1 : 0);
+                int upper = 9;
+                digits[RESULT][i] = R.nextInt(lower, upper + 1);
+                digits[which][i]  = digits[RESULT][i] - (carry_last ? 1 : 0);
+                return;
+            }
+
+            // Dos cifras seguro
+
+            // Generar un resultado entre 10 y 18
+            if (carry_now) {
+                int lower = 10;
+                int upper = 18 + (carry_last ? 1 : 0);
+                int sum = R.nextInt(lower, upper + 1);
+                digits[RESULT][i] = sum % 10;
+                sum -= (carry_last ? 1 : 0);
+                if (sum == 18) {
+                    digits[UP][i] = 9;
+                    digits[DOWN][i] = 9;
+                } else {
+                    int start = sum - 9;
+                    if (start == 0) {
+                        start++;
+                    }
+                    digits[UP][i]   = start + R.nextInt(9 - start + 1);
+                    digits[DOWN][i] = sum - digits[UP][i];
+                }
+                return;
+            }
+
+            // Generar un resultado entre lower y upper.
+            int lower = (carry_last ? 1 : 0) + (last[UP] ? 1 : 0) + (last[DOWN] ? 1 : 0);
+            int upper = 9;
+            int res = R.nextInt(lower, upper + 1);
+            digits[RESULT][i] = res;
+            res -= (carry_last ? 1 : 0);
+
+            if (!last[UP] && !last[DOWN]) {
+                if (res == 0) {
+                    digits[UP][i] = 0;
+                    digits[DOWN][i] = 0;
+                } else {
+                    int x = R.nextInt(0, res + 1);
+                    digits[UP][i]   = x;
+                    digits[DOWN][i] = res - x;
+                }
+            } else if (last[UP] && last[DOWN]) { // last[UP] && last[DOWN]
+                if (res == 2) {
+                    digits[UP][i] = 1;
+                    digits[DOWN][i] = 1;
+                } else {
+                    int x = R.nextInt(1, res); // sin +1 !
+                    digits[UP][i] = x;
+                    digits[DOWN][i] = res - x;
+                }
+            } else { // last[UP] || last[DOWN]
+                int which = (last[UP] ? UP : DOWN);
+                int other = (last[UP] ? DOWN : UP);
+
+                if (digits[RESULT][i] == 1) {
+                    digits[which][i] = 1;
+                    digits[other][i] = 0;
+                } else {
+                    int x = R.nextInt(1, res + 1);
+                    digits[which][i] = x;
+                    digits[other][i] = res - x;
+                }
+            }
+        }
+    }
+
+    Instance generateInstance() {
+        Instance I = new Instance();
+        for (int i = 0; i < size[RESULT]; i++) {
+            I.generateColumn(i);
+        }
+        assert(I.selfCheck());
+        return I;
+    }
+
+    private static String[] DIGITS = {"0","1","2","3","4","5","6","7","8","9"};
+
+    public static void printDigits(int size, int[] digits) {
+        String output = "";
+        for (int i = size-1; i >= 0; i--) {
+            if (i < digits.length) {
+                output += DIGITS[digits[i]];
             } else {
-                if(!posCarry[0]) {
-                    all.Result[0] = setResult(5);
-                    totalResult[0] = all.Result[0];
-                    all.Numbers[0] = generateNumbers(totalResult[0]);
-                    all.Numbers[1] = totalResult[0] - all.Numbers[0];
-                } else if (posCarry[0]) {
-                    all.Result[0] = setResult(6);
-                    totalResult[0] = all.Result[0] + 10;
-                    all.Numbers[0] = generateNumbers(totalResult[0]);
-                    all.Numbers[1] = totalResult[0] - all.Numbers[0];
-                }
-                if (dif == 1) {
-                    if(!posCarry[0] && !posCarry[1]) {
-                        all.Result[1] = setResult(16);
-                        totalResult[1] = all.Result[1];
-                        all.Numbers[2] = totalResult[1];
-                    } else if (posCarry[0] && !posCarry[1]) {
-                        all.Result[1] = setResult(17);
-                        totalResult[1] = all.Result[1];
-                        all.Numbers[2] = totalResult[1] - 1;
-                    }
-                } else if (dif == 2) {
-                    if(!posCarry[0] && !posCarry[1]) {
-                        all.Result[1] = setResult(13);
-                        totalResult[1] = all.Result[1];
-                        all.Numbers[2] = totalResult[1];
-                    } else if (posCarry[0] && !posCarry[1]) {
-                        all.Result[1] = setResult(14);
-                        totalResult[1] = all.Result[1];
-                        all.Numbers[2] = totalResult[1] - 1;
-                    }
-                    if(!posCarry[1] && !posCarry[2]) {
-                        all.Result[2] = setResult(16);
-                        totalResult[2] = all.Result[2];
-                        all.Numbers[3] = totalResult[2];
-                    }
-                }
-            }
-        } else if (size == 2) {
-            if(!posCarry[0]) {
-                all.Result[0] = setResult(1);
-                totalResult[0] = all.Result[0];
-                all.Numbers[0] = generateNumbers(totalResult[0]);
-                all.Numbers[1] = totalResult[0] - all.Numbers[0];
-            } else if (posCarry[0]) {
-                all.Result[0] = setResult(2);
-                totalResult[0] = all.Result[0] + 10;
-                all.Numbers[0] = generateNumbers(totalResult[0]);
-                all.Numbers[1] = totalResult[0] - all.Numbers[0];
-            }
-            if (equal) {
-                if(!posCarry[0] && !posCarry[1]) {
-                    all.Result[1] = setResult(9);
-                    totalResult[1] = all.Result[1];
-                    all.Numbers[2] = generateNumbers(totalResult[1]);
-                    all.Numbers[3] = totalResult[1] - all.Numbers[2];
-                } else if (!posCarry[0] && posCarry[1]) {
-                    nums = all.getResult();
-                    num1 = nums[0];
-                    all.Result = new int[max + 1];
-                    all.Result[0] = num1;
-                    all.Result[1] = setResult(10);
-                    all.Result[2] = 1;
-                    totalResult[1] = all.Result[1] + 10;
-                    all.Numbers[2] = generateNumbers(totalResult[1]);
-                    all.Numbers[3] = totalResult[1] - all.Numbers[2];
-                } else if (posCarry[0] && !posCarry[1]) {
-                    all.Result[1] = setResult(11);
-                    totalResult[1] = all.Result[1];
-                    all.Numbers[2] = generateNumbers(totalResult[1]);
-                    all.Numbers[3] = totalResult[1] - all.Numbers[2] - 1;
-                } else if (posCarry[0] && posCarry[1]) {
-                    nums = all.getResult();
-                    num1 = nums[0];
-                    all.Result = new int[max + 1];
-                    all.Result[0] = num1;
-                    all.Result[1] = setResult(12);
-                    all.Result[2] = 1;
-                    totalResult[1] = all.Result[1] + 10;
-                    all.Numbers[2] = generateNumbers(totalResult[1]);
-                    all.Numbers[3] = totalResult[1] - all.Numbers[2] - 1;
-                }
-            } else {
-                if(!posCarry[0] && !posCarry[1]) {
-                    all.Result[1] = setResult(5);
-                    totalResult[1] = all.Result[1];
-                    all.Numbers[2] = generateNumbers(totalResult[1]);
-                    all.Numbers[3] = totalResult[1] - all.Numbers[2];
-                } else if (!posCarry[0] && posCarry[1]) {
-                    all.Result[1] = setResult(6);
-                    totalResult[1] = all.Result[1] + 10;
-                    all.Numbers[2] = generateNumbers(totalResult[1]);
-                    all.Numbers[3] = totalResult[1] - all.Numbers[2];
-                } else if (posCarry[0] && !posCarry[1]) {
-                    all.Result[1] = setResult(7);
-                    totalResult[1] = all.Result[1];
-                    all.Numbers[2] = generateNumbers(totalResult[1]);
-                    all.Numbers[3] = totalResult[1] - all.Numbers[2] - 1;
-                } else if (posCarry[0] && posCarry[1]) {
-                    all.Result[1] = setResult(8);
-                    totalResult[1] = all.Result[1] + 10;
-                    all.Numbers[2] = generateNumbers(totalResult[1]);
-                    all.Numbers[3] = totalResult[1] - all.Numbers[2] - 1;
-                }
-                if (dif == 1) {
-                    if(!posCarry[1] && !posCarry[2]) {
-                        all.Result[2] = setResult(16);
-                        totalResult[2] = all.Result[2];
-                        all.Numbers[4] = totalResult[2];
-                    } else if (posCarry[1] && !posCarry[2]) {
-                        all.Result[2] = setResult(17);
-                        totalResult[2] = all.Result[2];
-                        all.Numbers[4] = totalResult[2] - 1;
-                    }
-                } else if (dif == 2) {
-                    if(!posCarry[1] && !posCarry[2]) {
-                        all.Result[2] = setResult(13);
-                        totalResult[2] = all.Result[2];
-                        all.Numbers[4] = totalResult[2];
-                    } else if (posCarry[1] && !posCarry[2]) {
-                        all.Result[2] = setResult(14);
-                        totalResult[2] = all.Result[2];
-                        all.Numbers[4] = totalResult[2] - 1;
-                    }
-                    if(!posCarry[2] && !posCarry[3]) {
-                        all.Result[3] = setResult(16);
-                        totalResult[3] = all.Result[3];
-                        all.Numbers[5] = totalResult[3];
-                    }
-                }
-            }
-        } else if (size == 3) {
-            if(!posCarry[0]) {
-                all.Result[0] = setResult(1);
-                totalResult[0] = all.Result[0];
-                all.Numbers[0] = generateNumbers(totalResult[0]);
-                all.Numbers[1] = totalResult[0] - all.Numbers[0];
-            } else if (posCarry[0]) {
-                all.Result[0] = setResult(2);
-                totalResult[0] = all.Result[0] + 10;
-                all.Numbers[0] = generateNumbers(totalResult[0]);
-                all.Numbers[1] = totalResult[0] - all.Numbers[0];
-            }
-            if(!posCarry[0] && !posCarry[1]) {
-                all.Result[1] = setResult(1);
-                totalResult[1] = all.Result[1];
-                all.Numbers[2] = generateNumbers(totalResult[1]);
-                all.Numbers[3] = totalResult[1] - all.Numbers[2];
-            } else if (!posCarry[0] && posCarry[1]) {
-                all.Result[1] = setResult(2);
-                totalResult[1] = all.Result[1] + 10;
-                all.Numbers[2] = generateNumbers(totalResult[1]);
-                all.Numbers[3] = totalResult[1] - all.Numbers[2];
-            } else if (posCarry[0] && !posCarry[1]) {
-                all.Result[1] = setResult(3);
-                totalResult[1] = all.Result[1];
-                all.Numbers[2] = generateNumbers(totalResult[1]);
-                all.Numbers[3] = totalResult[1] - all.Numbers[2] - 1;
-            } else if (posCarry[0] && posCarry[1]) {
-                all.Result[1] = setResult(4);
-                totalResult[1] = all.Result[1] + 10;
-                all.Numbers[2] = generateNumbers(totalResult[1]);
-                all.Numbers[3] = totalResult[1] - all.Numbers[2] - 1;
-            }
-            if (equal) {
-                if(!posCarry[1] && !posCarry[2]) {
-                    all.Result[2] = setResult(9);
-                    totalResult[2] = all.Result[2];
-                    all.Numbers[4] = generateNumbers(totalResult[2]);
-                    all.Numbers[5] = totalResult[2] - all.Numbers[2];
-                } else if (!posCarry[1] && posCarry[2]) {
-                    nums = all.getResult();
-                    num1 = nums[0];
-                    num2 = nums[1];
-                    all.Result = new int[max + 1];
-                    all.Result[0] = num1;
-                    all.Result[1] = num2;
-                    all.Result[3] = 1;
-                    all.Result[2] = setResult(10);
-                    totalResult[2] = all.Result[2] + 10;
-                    all.Numbers[4] = generateNumbers(totalResult[2]);
-                    all.Numbers[5] = totalResult[2] - all.Numbers[4];
-                } else if (posCarry[1] && !posCarry[2]) {
-                    all.Result[2] = setResult(11);
-                    totalResult[2] = all.Result[2];
-                    all.Numbers[4] = generateNumbers(totalResult[2]);
-                    all.Numbers[5] = totalResult[2] - all.Numbers[4] - 1;
-                } else if (posCarry[1] && posCarry[2]) {
-                    nums = all.getResult();
-                    num1 = nums[0];
-                    num2 = nums[1];
-                    all.Result = new int[max + 1];
-                    all.Result[0] = num1;
-                    all.Result[1] = num2;
-                    all.Result[3] = 1;
-                    all.Result[2] = setResult(12);
-                    totalResult[2] = all.Result[2] + 10;
-                    all.Numbers[4] = generateNumbers(totalResult[2]);
-                    all.Numbers[5] = totalResult[2] - all.Numbers[4] - 1;
-                }
-            } else {
-                if (dif == 1) {
-                    if(!posCarry[1] && !posCarry[2]) {
-                        all.Result[2] = setResult(5);
-                        totalResult[2] = all.Result[2];
-                        all.Numbers[4] = generateNumbers(totalResult[2]);
-                        all.Numbers[5] = totalResult[2] - all.Numbers[4];
-                    } else if (!posCarry[1] && posCarry[2]) {
-                        all.Result[2] = setResult(6);
-                        totalResult[2] = all.Result[2] + 10;
-                        all.Numbers[4] = generateNumbers(totalResult[2]);
-                        all.Numbers[5] = totalResult[2] - all.Numbers[4];
-                    } else if (posCarry[1] && !posCarry[2]) {
-                        all.Result[2] = setResult(7);
-                        totalResult[2] = all.Result[2];
-                        all.Numbers[4] = generateNumbers(totalResult[2]);
-                        all.Numbers[5] = totalResult[2] - all.Numbers[4] - 1;
-                    } else if (posCarry[1] && posCarry[2]) {
-                        all.Result[2] = setResult(8);
-                        totalResult[2] = all.Result[2] + 10;
-                        all.Numbers[4] = generateNumbers(totalResult[2]);
-                        all.Numbers[5] = totalResult[2] - all.Numbers[4] - 1;
-                    }
-                    if(!posCarry[2] && !posCarry[3]) {
-                        all.Result[3] = setResult(16);
-                        totalResult[3] = all.Result[3];
-                        all.Numbers[6] = totalResult[3];
-                    } else if (posCarry[2] && !posCarry[3]) {
-                        all.Result[3] = setResult(17);
-                        totalResult[3] = all.Result[3];
-                        all.Numbers[6] = totalResult[3] - 1;
-                    }
-                }
+                output += ' ';
             }
         }
-        all.setNumbers(all.Numbers);
-        all.setResult(all.Result);
-        return all;
+        System.out.println(output);
     }
 
-    Numbers_Result generateResult () {return generateDigitsResult(this.numDigitsUp, this.numDigitsDown, this.carry);}
-
-    //Números de arriba
-    int[] numbersUp() { return numsUp(numDigitsUp, numDigitsDown, all.getNumbers()); }
-
-    private int[] numsUp (int numDigitsUp, int numDigitsDown, int[] Numbers) {
-        int[] numUp = new int[numDigitsUp];
-        int posNumbers = 0, min;
-        boolean more;
-
-        //Diferente nº de dígitos
-        if (numDigitsUp > numDigitsDown) {
-            min = numDigitsDown;
-            more = true;
-        } else if (numDigitsUp < numDigitsDown) {
-            min = numDigitsUp;
-            more = false;
-        } else { //Igual nº de dígitos
-            min = numDigitsUp;
-            more = false;
-        }
-
-        for (int j = 0; j < min; j++) {
-            numUp[j] = Numbers[posNumbers];
-            posNumbers = posNumbers + 2;
-        }
-        if (more) {
-            for (int j = min; j < numDigitsUp; j++) {
-                numUp[j] = Numbers[posNumbers];
-                posNumbers++;
+    public static void main(String[] args) {
+        for (int i = 0; i < ALL_LEVELS.length; i++) {
+            System.out.println("LEVEL " + i + "\n");
+            for (int k = 0; k < 1000; k++) {
+                Instance I = ALL_LEVELS[i].generateInstance();
+                int L = I.digits[RESULT].length;
+                printDigits(L, I.digits[UP]);
+                printDigits(L, I.digits[DOWN]);
+                printDigits(L, I.digits[RESULT]);
+                System.out.println();
             }
         }
-        return numUp;
     }
 
-    //Números de abajo
-    int[] numbersDown() { return numsDown(numDigitsUp, numDigitsDown, all.getNumbers()); }
-
-    private int[] numsDown (int numDigitsUp, int numDigitsDown, int[] Numbers) {
-        int[] numDown = new int[numDigitsDown];
-        int posNumbers = 1, min;
-        boolean more;
-
-        //Diferente nº de dígitos
-        if (numDigitsUp > numDigitsDown) {
-            min = numDigitsDown;
-            more = false;
-        } else if (numDigitsUp < numDigitsDown) {
-            min = numDigitsUp;
-            more = true;
-        } else { //Igual nº de dígitos
-            min = numDigitsDown;
-            more = false;
-        }
-
-        for (int j = 0; j < min; j++) {
-            numDown[j] = Numbers[posNumbers];
-            posNumbers = posNumbers + 2;
-        }
-        posNumbers = posNumbers - 1;
-        if (more) {
-            for (int j = min; j < numDigitsDown; j++) {
-                numDown[j] = Numbers[posNumbers];
-                posNumbers++;
-            }
-        }
-        return numDown;
-    }
-
-    //Generar números en un rango según el resultado
-    private int generateNumbers(int totalResult) {
-        int NumDigits = -1;
-
-        switch (totalResult) {
-            case 0:
-                NumDigits = 0;
-                break;
-            case 1:
-                NumDigits = ThreadLocalRandom.current().nextInt(0, 2);
-                break;
-            case 2:
-                NumDigits = ThreadLocalRandom.current().nextInt(1, 2);
-                break;
-            case 3:
-                NumDigits = ThreadLocalRandom.current().nextInt(1, 3);
-                break;
-            case 4:
-                NumDigits = ThreadLocalRandom.current().nextInt(1, 4);
-                break;
-            case 5:
-                NumDigits = ThreadLocalRandom.current().nextInt(1, 5);
-                break;
-            case 6:
-                NumDigits = ThreadLocalRandom.current().nextInt(1, 6);
-                break;
-            case 7:
-                NumDigits = ThreadLocalRandom.current().nextInt(1, 7);
-                break;
-            case 8:
-                NumDigits = ThreadLocalRandom.current().nextInt(1, 8);
-                break;
-            case 9:
-                NumDigits = ThreadLocalRandom.current().nextInt(1, 9);
-                break;
-            case 10:
-                NumDigits = ThreadLocalRandom.current().nextInt(1, 10);
-                break;
-            case 11:
-                NumDigits = ThreadLocalRandom.current().nextInt(2, 10);
-                break;
-            case 12:
-                NumDigits = ThreadLocalRandom.current().nextInt(3, 10);
-                break;
-            case 13:
-                NumDigits = ThreadLocalRandom.current().nextInt(4, 10);
-                break;
-            case 14:
-                NumDigits = ThreadLocalRandom.current().nextInt(5, 10);
-                break;
-            case 15:
-                NumDigits = ThreadLocalRandom.current().nextInt(6, 10);
-                break;
-            case 16:
-                NumDigits = ThreadLocalRandom.current().nextInt(7, 10);
-                break;
-            case 17:
-                NumDigits = ThreadLocalRandom.current().nextInt(8, 10);
-                break;
-            case 18:
-                NumDigits = 9;
-                break;
-        }
-        return NumDigits;
-    }
-
-    // Todos los posibles tipos de suma
-    private int setResult (int tipo) {
-        int result = -1;
-        switch (tipo) {
-            case 1:     //Tipo 1, 13
-                result = ThreadLocalRandom.current().nextInt(0, 10);
-                break;
-            case 2:     //Tipo 2
-                result = ThreadLocalRandom.current().nextInt(0, 9);
-                break;
-            case 3 :     //Tipo 3, 4, 5, 14, 16
-                result = ThreadLocalRandom.current().nextInt(1, 10);
-                break;
-            case 4:
-                result = ThreadLocalRandom.current().nextInt(1, 10);
-                break;
-            case 5:
-                result = ThreadLocalRandom.current().nextInt(1, 10);
-                break;
-            case 6:     //Tipo 6
-                result = ThreadLocalRandom.current().nextInt(1, 9);
-                break;
-            case 7:     //Tipo 7, 8, 9, 17
-                result = ThreadLocalRandom.current().nextInt(2, 10);
-                break;
-            case 8:
-                result = ThreadLocalRandom.current().nextInt(2, 10);
-                break;
-            case 9:
-                result = ThreadLocalRandom.current().nextInt(2, 10);
-                break;
-            case 10:    //Tipo 10
-                result = ThreadLocalRandom.current().nextInt(2, 9);
-                break;
-            case 11:    //Tipo 11, 12
-                result = ThreadLocalRandom.current().nextInt(3, 10);
-                break;
-            case 12:
-                result = ThreadLocalRandom.current().nextInt(3, 10);
-                break;
-            case 13:
-                result = ThreadLocalRandom.current().nextInt(0, 10);
-                break;
-            case 14:
-                result = ThreadLocalRandom.current().nextInt(1, 10);
-                break;
-            case 15:    //Tipo 15
-                result = ThreadLocalRandom.current().nextInt(9, 10);
-                break;
-            case 16:
-                result = ThreadLocalRandom.current().nextInt(1, 10);
-                break;
-            case 17:
-                result = ThreadLocalRandom.current().nextInt(2, 10);
-                break;
-        }
-        return result;
-    }
 
     // TABLA CON TODOS LOS NIVELES
     static Level[] ALL_LEVELS = {
             //Bloque 1: 1 suma, sin acarreo (Level 1 - 5)
-            new Level(1, 1, new boolean[]{ false }),
-            new Level(1, 2, new boolean[]{ false, false }),
-            new Level(2, 1, new boolean[]{ false, false }),
-            new Level(3, 1, new boolean[]{ false, false, false }),
-            new Level(1, 3, new boolean[]{ false, false, false }),
+            new Level(1, 1, "_"),
+            new Level(1, 2, "__"),
+            new Level(2, 1, "__"),
             //Bloque 2: 2 sumas, sin acarreo (Level 6 - 10)
-            new Level(2, 2, new boolean[]{ false, false }),
-            new Level(2, 3, new boolean[]{ false, false, false }),
-            new Level(3, 2, new boolean[]{ false, false, false }),
-            new Level(4, 2, new boolean[]{ false, false, false, false }),
-            new Level(2, 4, new boolean[]{ false, false, false, false }),
+            new Level(2, 2, "__"),
+            new Level(2, 3, "___"),
+            new Level(3, 2, "___"),
             //Bloque 3: 1 suma, 1 acarreo (Level 11 - 15)
-            new Level(1, 1, new boolean[]{ true }),
-            new Level(2, 1, new boolean[]{ true, false }),
-            new Level(1, 2, new boolean[]{ true, false }),
-            new Level(3, 1, new boolean[]{ true, false, false }),
-            new Level(1, 3, new boolean[]{ true, false, false }),
+            new Level(1, 1, "c"),
+            new Level(2, 1, "c_"),
+            new Level(1, 2, "c_"),
             //Bloque 4: 2 sumas, 1 acarreo (Level 16 - 25)
-            new Level(2, 2, new boolean[]{ true, false }),
-            new Level(2, 3, new boolean[]{ true, false, false }),
-            new Level(3, 2, new boolean[]{ true, false, false }),
-            new Level(4, 2, new boolean[]{ true, false, false, false }),
-            new Level(2, 4, new boolean[]{ true, false, false, false }),
-            new Level(2, 2, new boolean[]{ false, true }),
-            new Level(2, 3, new boolean[]{ false, true, false }),
-            new Level(3, 2, new boolean[]{ false, true, false }),
-            new Level(4, 2, new boolean[]{ false, true, false, false }),
-            new Level(2, 4, new boolean[]{ false, true, false, false }),
+            new Level(2, 2, "c_"),
+            new Level(2, 3, "c__"),
+            new Level(3, 2, "c__"),
+            new Level(2, 2, "_c"),
+            new Level(2, 3, "_c_"),
+            new Level(3, 2, "_c_"),
+            new Level(4, 2, "_c__"),
+            new Level(2, 4, "_c__"),
             //Bloque 5: 3 sumas, sin acarreo (Level 26 - 28)
-            new Level(3, 3, new boolean[]{ false, false, false }),
-            new Level(4, 3, new boolean[]{ false, false, false, false }),
-            new Level(3, 4, new boolean[]{ false, false, false, false }),
+            new Level(3, 3, "___"),
+            new Level(4, 3, "____"),
+            new Level(3, 4, "____"),
             //Bloque 6: 3 sumas, 1 acarreo (Level 29 - 37)
-            new Level(3, 3, new boolean[]{ true, false, false }),
-            new Level(4, 3, new boolean[]{ true, false, false, false }),
-            new Level(3, 4, new boolean[]{ true, false, false, false }),
-            new Level(3, 3, new boolean[]{ false, true, false }),
-            new Level(4, 3, new boolean[]{ false, true, false, false }),
-            new Level(3, 4, new boolean[]{ false, true, false, false }),
-            new Level(3, 3, new boolean[]{ false, false, true }),
-            new Level(4, 3, new boolean[]{ false, false, true, false }),
-            new Level(3, 4, new boolean[]{ false, false, true, false }),
+            new Level(3, 3, "c__"),
+            new Level(4, 3, "c___"),
+            new Level(3, 4, "c___"),
+            new Level(3, 3, "_c_"),
+            new Level(4, 3, "_c__"),
+            new Level(3, 4, "_c__"),
+            new Level(3, 3, "__c"),
+            new Level(4, 3, "__c_"),
+            new Level(3, 4, "__c_"),
             //Bloque 7: 3 sumas, 2 acarreos (Level 38 - 40)
-            new Level(3, 3, new boolean[]{ true, false, true }),
-            new Level(4, 3, new boolean[]{ true, false, true, false }),
-            new Level(3, 4, new boolean[]{ true, false, true, false }),
+            new Level(2, 2, "cc"),
+            new Level(2, 3, "cc_"),
+            new Level(3, 2, "cc_"),
+            new Level(3, 3, "c_c"),
+            new Level(4, 3, "c_c_"),
+            new Level(3, 4, "c_c_"),
+            new Level(3, 3, "_cc"),
+            new Level(4, 3, "_cc_"),
+            new Level(3, 4, "_cc_"),
+            new Level(4, 4, "cc__"),
+            new Level(4, 4, "c_c_"),
+            new Level(4, 4, "_cc_"),
             //Bloque 8: 3 sumas, 2 acarreos (Level 41 - 43)
-            new Level(2, 2, new boolean[]{ true, true }),
-            new Level(2, 3, new boolean[]{ true, true, false }),
-            new Level(3, 2, new boolean[]{ true, true, false }),
             //Bloque 9: 3 sumas, 3 acarreo (Level 44 - 46)
-            new Level(3, 3, new boolean[]{ true, true, true }),
-            new Level(4, 3, new boolean[]{ true, true, true, false }),
-            new Level(3, 4, new boolean[]{ true, true, true, false }),
-
+            new Level(3, 3, "ccc"),
+            new Level(4, 3, "ccc_"),
+            new Level(3, 4, "ccc_"),
+            new Level(4, 4, "_ccc"),
+            new Level(4, 4, "c_cc"),
+            new Level(4, 4, "cc_c"),
     };
 }
