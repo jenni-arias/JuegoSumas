@@ -191,19 +191,19 @@ class Level {
 
     // TABLA CON TODOS LOS NIVELES
     static Level[] ALL_LEVELS = {
-            //Bloque 1: 1 suma, sin acarreo (Level 1 - 5)
+            //Bloque 1: 1 suma, sin acarreo (Level 1 - 3)
             new Level(1, 1, "_"),
             new Level(1, 2, "__"),
             new Level(2, 1, "__"),
-            //Bloque 2: 2 sumas, sin acarreo (Level 6 - 10)
+            //Bloque 2: 2 sumas, sin acarreo (Level 4 - 6)
             new Level(2, 2, "__"),
             new Level(2, 3, "___"),
             new Level(3, 2, "___"),
-            //Bloque 3: 1 suma, 1 acarreo (Level 11 - 15)
+            //Bloque 3: 1 suma, 1 acarreo (Level 7 - 9)
             new Level(1, 1, "c"),
             new Level(2, 1, "c_"),
             new Level(1, 2, "c_"),
-            //Bloque 4: 2 sumas, 1 acarreo (Level 16 - 25)
+            //Bloque 4: 2 sumas, 1 acarreo (Level 10 - 17)
             new Level(2, 2, "c_"),
             new Level(2, 3, "c__"),
             new Level(3, 2, "c__"),
@@ -212,11 +212,11 @@ class Level {
             new Level(3, 2, "_c_"),
             new Level(4, 2, "_c__"),
             new Level(2, 4, "_c__"),
-            //Bloque 5: 3 sumas, sin acarreo (Level 26 - 28)
+            //Bloque 5: 3 sumas, sin acarreo (Level 18 - 20)
             new Level(3, 3, "___"),
             new Level(4, 3, "____"),
             new Level(3, 4, "____"),
-            //Bloque 6: 3 sumas, 1 acarreo (Level 29 - 37)
+            //Bloque 6: 3 sumas, 1 acarreo (Level 21 - 29)
             new Level(3, 3, "c__"),
             new Level(4, 3, "c___"),
             new Level(3, 4, "c___"),
@@ -226,7 +226,7 @@ class Level {
             new Level(3, 3, "__c"),
             new Level(4, 3, "__c_"),
             new Level(3, 4, "__c_"),
-            //Bloque 7: 3 sumas, 2 acarreos (Level 38 - 40)
+            //Bloque 7: 3 sumas, 2 acarreos (Level 30 - 41)
             new Level(2, 2, "cc"),
             new Level(2, 3, "cc_"),
             new Level(3, 2, "cc_"),
@@ -239,13 +239,12 @@ class Level {
             new Level(4, 4, "cc__"),
             new Level(4, 4, "c_c_"),
             new Level(4, 4, "_cc_"),
-            //Bloque 8: 3 sumas, 2 acarreos (Level 41 - 43)
-            //Bloque 9: 3 sumas, 3 acarreo (Level 44 - 46)
+            //Bloque 8: 3 sumas, 2 acarreos (Level 42 - 47)
             new Level(3, 3, "ccc"),
             new Level(4, 3, "ccc_"),
             new Level(3, 4, "ccc_"),
             new Level(4, 4, "_ccc"),
             new Level(4, 4, "c_cc"),
-            new Level(4, 4, "cc_c"),
+            new Level(4, 4, "cc_c"),    //carry del primer dígito al último
     };
 }
