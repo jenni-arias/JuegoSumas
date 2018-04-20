@@ -1,9 +1,13 @@
 package arias.jenifer.juegosumas;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,9 +19,8 @@ import android.widget.Toast;
 
 import java.util.Locale;
 
-//import arias.jenifer.juegosumas.database2.AppDatabase;
-//import arias.jenifer.juegosumas.database2.UserData;
-
+import arias.jenifer.juegosumas.database.LevelContract;
+import arias.jenifer.juegosumas.database.LevelSQLiteHelper;
 
 
 public class ExerciseActivity extends AppCompatActivity
@@ -30,7 +33,7 @@ public class ExerciseActivity extends AppCompatActivity
     private String prefixes[] = { "unid", "dec", "cent", "mil" };
     private int correct[] = { 1, 2, 3, 4, 5 };
     private Level level;
-    private int levelIndex;
+    private int levelIndex,numLevel;
 
     private Toolbar toolbar_exercise;
     private TextView digitsUp[], digitsDown[], correct_result[];
@@ -39,8 +42,9 @@ public class ExerciseActivity extends AppCompatActivity
     private int[] Result;
     private boolean[] posCarry;
 
-  //  private AppDatabase db; //DB
-   // private UserData data;
+    private LevelSQLiteHelper mLevel;
+    private SQLiteDatabase db;
+    private String TAG = "TAG";
 
     private int getId(String digit, String position) {
         String name = String.format("%s_%s", digit, position);
@@ -87,10 +91,21 @@ public class ExerciseActivity extends AppCompatActivity
         if (savedInstanceState != null) {
             mCurrentExercise = savedInstanceState.getInt(CURRENT_EXERCISE);
         } else {
+
+            //Abrimos la base de datos 'DBLevel' en modo escritura
+            Log.i(TAG, "Abrir BBDD DBLevel.db");
+            mLevel = new LevelSQLiteHelper(
+                    this,
+                    LevelSQLiteHelper.DATABASE_NAME,
+                    null,
+                    LevelSQLiteHelper.DATABASE_VERSION);
+
+            db = mLevel.getWritableDatabase();
+
             //Intent SumActivity
             levelIndex = getIntent().getIntExtra("Nivel", -1);
-            int showNum = levelIndex + 1;
-            String title = String.format(Locale.getDefault(), "Ejercicios Nivel %d", showNum);
+            numLevel = levelIndex + 1;
+            String title = String.format(Locale.getDefault(), "Ejercicios Nivel %d", numLevel);
 
             // Obtenemos el nivel y le pedimos que nos genere unos números concretos
             // a partir de la plantilla
@@ -151,7 +166,8 @@ public class ExerciseActivity extends AppCompatActivity
                 finish();
                 return true;
             case R.id.action_check:
-                checkResult(Result, results);
+                checkResult(Result, results, numLevel);
+                //TODO: PETA AQUÍ! Falta arreglar como regenerar la actividad con una nueva suma
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -188,7 +204,6 @@ public class ExerciseActivity extends AppCompatActivity
     //Mostrar / Ocultar los EditText del acarreo según el nivel.
     private void hideEditCarry(boolean[] posCarry, EditText[] carry) {
 
-        //TODO: se repite, crear método
         boolean[] pos = new boolean[4];
         for (int i = 0; i < posCarry.length; i++) {
             pos[i] = posCarry[i];
@@ -221,7 +236,6 @@ public class ExerciseActivity extends AppCompatActivity
     public void setResults (EditText results[], EditText carry[], boolean[] posCarry, int num) {
         String number = String.valueOf(num);
 
-        //TODO: se repite, crear método
         boolean[] pos = new boolean[4];
         for (int i = 0; i < posCarry.length; i++) {
             pos[i] = posCarry[i];
@@ -263,8 +277,10 @@ public class ExerciseActivity extends AppCompatActivity
     }
 
     //Comprobar que el resultado es correcto
-    private void checkResult(int[] Result, EditText results[]) {
+    private void checkResult(int[] Result, EditText results[], int numLevel) {
         boolean correct = true;
+        int nextEx = 0;
+        ContentValues values = new ContentValues();
 
         for (int i = 0; i<Result.length; i ++) {
             int result = Integer.parseInt(results[i].getText().toString());
@@ -274,9 +290,29 @@ public class ExerciseActivity extends AppCompatActivity
         }
 
         if (correct) {
+            String[] campos = new String[] {"levelId", "level", "exercise"};
+            Cursor c = db.query(LevelContract.LevelScheme.TABLE_NAME, campos,
+                    null, null, null, null, null);
+            //Recorremos el cursor de la BBDD
+            if(c.moveToFirst()) {
+                for(int i = 0; i < c.getCount(); i++) {
+                    if (c.getInt(1) == numLevel) {
+                        nextEx = Integer.parseInt(c.getString(2)) + 1;
+                    }
+                    c.moveToNext();
+                }
+            }
+            values.put(LevelContract.LevelScheme.COLUMN_EXERCISE, nextEx);
+            db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
+
             Toast.makeText(this, "Bien hecho!", Toast.LENGTH_SHORT).show();
             nextExercise(mCurrentExercise, correct);
+
         } else {
+            nextEx = 1;
+            values.put(LevelContract.LevelScheme.COLUMN_EXERCISE, nextEx);
+            db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
+
             Toast.makeText(this, "Vuelve a intentarlo...", Toast.LENGTH_SHORT).show();
             mCurrentExercise = 0;
             setColors(mCurrentExercise, correct);
