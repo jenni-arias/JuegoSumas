@@ -26,7 +26,7 @@ public class SumActivity extends AppCompatActivity {
     private LevelSQLiteHelper mLevel;
     private SQLiteDatabase db;
     private String TAG = "Proceso";
-    private int nextId;
+    private int nextId, nextEx;
     private boolean exist = false;
 
 
@@ -70,16 +70,16 @@ public class SumActivity extends AppCompatActivity {
                     for(int i = 0; i < c.getCount(); i++) {
                         if (c.getInt(1) == select_level) {
                             exist = true;
+                            nextEx = c.getInt(2);
                         }
                         c.moveToNext();
                     }
                 }
 
                 if (exist) {
-                    int nextEx = c.getInt(2) + 1;
                     ContentValues values = new ContentValues();
                     values.put(LevelContract.LevelScheme.COLUMN_EXERCISE, nextEx);
-                    db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + level, null);
+                    db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + select_level, null);
                 } else {
                     if(db != null ) {
                         if (c.getCount() == 0) {

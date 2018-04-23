@@ -124,6 +124,20 @@ public class ExerciseActivity extends AppCompatActivity
         numbersUp = instance.getUp();
         numbersDown = instance.getDown();
 
+        String[] campos = new String[] {"levelId", "level", "exercise"};
+        Cursor c = db.query(LevelContract.LevelScheme.TABLE_NAME, campos,
+                null, null, null, null, null);
+        //Recorremos el cursor de la BBDD
+        if(c.moveToFirst()) {
+            for(int i = 0; i < c.getCount(); i++) {
+                if (c.getInt(1) == numLevel) {
+                    //Si el nivel existe obtenemos el Ejercicio en el que nos quedamos
+                    mCurrentExercise = c.getInt(2) - 1;
+                }
+                c.moveToNext();
+            }
+        }
+
         //Colorear los ejercicio del nivel en la progressBar
         if (mCurrentExercise == 0) {
             setColors(mCurrentExercise, false);
