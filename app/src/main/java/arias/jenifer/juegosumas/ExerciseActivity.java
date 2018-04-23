@@ -27,8 +27,8 @@ public class ExerciseActivity extends AppCompatActivity
 {
     static final String CURRENT_EXERCISE = "current_exercise";
     int mCurrentExercise = 0;
-    boolean correct_exercise = false;
     private Bundle savedInstanceState = null;
+    private Bundle nextExercise = new Bundle();
 
     private String prefixes[] = { "unid", "dec", "cent", "mil" };
     private int correct[] = { 1, 2, 3, 4, 5 };
@@ -90,64 +90,76 @@ public class ExerciseActivity extends AppCompatActivity
 
         if (savedInstanceState != null) {
             mCurrentExercise = savedInstanceState.getInt(CURRENT_EXERCISE);
+            init();
         } else {
-
-            //Abrimos la base de datos 'DBLevel' en modo escritura
-            Log.i(TAG, "Abrir BBDD DBLevel.db");
-            mLevel = new LevelSQLiteHelper(
-                    this,
-                    LevelSQLiteHelper.DATABASE_NAME,
-                    null,
-                    LevelSQLiteHelper.DATABASE_VERSION);
-
-            db = mLevel.getWritableDatabase();
-
-            //Intent SumActivity
-            levelIndex = getIntent().getIntExtra("Nivel", -1);
-            numLevel = levelIndex + 1;
-            String title = String.format(Locale.getDefault(), "Ejercicios Nivel %d", numLevel);
-
-            // Obtenemos el nivel y le pedimos que nos genere unos números concretos
-            // a partir de la plantilla
-            level = Level.ALL_LEVELS[levelIndex];
-            Level.Instance instance = level.generateInstance();
-            Result = instance.getResult();
-            numbersUp = instance.getUp();
-            numbersDown = instance.getDown();
-
-            //Colorear el primer ejercicio del nivel de la progressBar
-            correct_result[mCurrentExercise].setBackground(getResources()
-                    .getDrawable(R.drawable.progressbar_yellow));
-
-            //Obtener las posiciones de los acarreos
-            posCarry = level.getCarry();
-
-            //Mostrar ejercicio dependiendo de los datos que se reciben
-            setDigits(digitsUp, numbersUp);
-            setDigits(digitsDown, numbersDown);
-
-            //Mostrar / Ocultar los EditText del resultado según acarreo del nivel.
-            hideEditResult(numbersUp, numbersDown, posCarry, results);
-            hideEditCarry(posCarry, carry);
-
-            //Configuración actionbar - toolbar
-            toolbar_exercise = (Toolbar) findViewById(R.id.toolbar_exercise);
-            setSupportActionBar(toolbar_exercise);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.back);
-            getSupportActionBar().setTitle(title);
-
-            //Ocultar teclado del móvil
-            for (EditText e : results) {
-                hideKeyboard(e);
-            }
-            for (EditText e : carry) {
-                hideKeyboard(e);
-            }
-
-            //Indicar primera posición del número a introducir
-            results[0].requestFocus();
+            init();
         }
+    }
+
+    public void init() {
+
+        //Abrimos la base de datos 'DBLevel' en modo escritura
+        Log.i(TAG, "Abrir BBDD DBLevel.db");
+        mLevel = new LevelSQLiteHelper(
+                this,
+                LevelSQLiteHelper.DATABASE_NAME,
+                null,
+                LevelSQLiteHelper.DATABASE_VERSION);
+
+        db = mLevel.getWritableDatabase();
+
+        //Intent SumActivity
+        levelIndex = getIntent().getIntExtra("Nivel", -1);
+        numLevel = levelIndex + 1;
+        String title = String.format(Locale.getDefault(), "Ejercicios Nivel %d", numLevel);
+
+        // Obtenemos el nivel y le pedimos que nos genere unos números concretos
+        // a partir de la plantilla
+        level = Level.ALL_LEVELS[levelIndex];
+        Level.Instance instance = level.generateInstance();
+        Result = instance.getResult();
+        numbersUp = instance.getUp();
+        numbersDown = instance.getDown();
+
+        //Colorear los ejercicio del nivel en la progressBar
+        if (mCurrentExercise == 0) {
+            setColors(mCurrentExercise, false);
+        } else if (mCurrentExercise < 5) {
+            setColors(mCurrentExercise-1, true);
+        } else {
+            setColors(mCurrentExercise-1, true);
+            finish();
+        }
+
+        //Obtener las posiciones de los acarreos
+        posCarry = level.getCarry();
+
+        //Mostrar ejercicio dependiendo de los datos que se reciben
+        setDigits(digitsUp, numbersUp);
+        setDigits(digitsDown, numbersDown);
+
+        //Mostrar / Ocultar los EditText del resultado según acarreo del nivel.
+        hideEditResult(numbersUp, numbersDown, posCarry, results);
+        hideEditCarry(posCarry, carry);
+
+        //Configuración actionbar - toolbar
+        toolbar_exercise = (Toolbar) findViewById(R.id.toolbar_exercise);
+        setSupportActionBar(toolbar_exercise);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.back);
+        getSupportActionBar().setTitle(title);
+
+        //Ocultar teclado del móvil
+        for (EditText e : results) {
+            hideKeyboard(e);
+        }
+        for (EditText e : carry) {
+            hideKeyboard(e);
+        }
+
+        //Indicar primera posición del número a introducir
+        results[0].requestFocus();
+
     }
 
     //Inflamos el menú en la Toolbar
@@ -166,9 +178,14 @@ public class ExerciseActivity extends AppCompatActivity
                 finish();
                 return true;
             case R.id.action_check:
-                checkResult(Result, results, numLevel);
-                //TODO: PETA AQUÍ! Falta arreglar como regenerar la actividad con una nueva suma
-
+                //TODO: PETA AQUÍ al debuggar!!
+                if (mCurrentExercise >= 5) {
+                    finish();
+                } else {
+                    checkResult(Result, results, numLevel);
+                    onDestroy();
+                    onCreate(nextExercise); //--> Peta en onCreate
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -302,11 +319,13 @@ public class ExerciseActivity extends AppCompatActivity
                     c.moveToNext();
                 }
             }
+            //Actualizamos la BBDD
             values.put(LevelContract.LevelScheme.COLUMN_EXERCISE, nextEx);
             db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
 
             Toast.makeText(this, "Bien hecho!", Toast.LENGTH_SHORT).show();
-            nextExercise(mCurrentExercise, correct);
+            mCurrentExercise++;
+            nextExercise(mCurrentExercise);
 
         } else {
             nextEx = 1;
@@ -315,25 +334,21 @@ public class ExerciseActivity extends AppCompatActivity
 
             Toast.makeText(this, "Vuelve a intentarlo...", Toast.LENGTH_SHORT).show();
             mCurrentExercise = 0;
-            setColors(mCurrentExercise, correct);
+            nextExercise(mCurrentExercise);
         }
     }
 
-    //Muestra el siguiente ejercicio del nivel
-    private void nextExercise(int mCurrentExercise, boolean correct) {
-        setColors(mCurrentExercise, correct);
-        mCurrentExercise++;
-        Bundle nextExercise = new Bundle();
+    //Establece el siguiente ejercicio del nivel a generar
+    private void nextExercise(int mCurrentExercise) {
         nextExercise.putInt(CURRENT_EXERCISE, mCurrentExercise);
         onRestoreInstanceState(nextExercise);
-        //  onCreate(nextExercise);
     }
 
-    //Establece los colores en la progressBar del nivel según si el resultado es correcto o no.
+    //Colorear la progressBar del nivel según si el resultado es correcto o no.
     private void setColors(int mCurrentExercise, boolean correct) {
         if (correct) {
             for (int i = 0; i < mCurrentExercise+1; i++) {
-                correct_result[mCurrentExercise].setBackground(getResources()
+                correct_result[i].setBackground(getResources()
                         .getDrawable(R.drawable.progressbar_green));
             }
             if (mCurrentExercise < 4) {
