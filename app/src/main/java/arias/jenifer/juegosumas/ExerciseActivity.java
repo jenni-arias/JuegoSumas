@@ -30,7 +30,8 @@ public class ExerciseActivity extends AppCompatActivity
     private Bundle savedInstanceState = null;
     private Bundle nextExercise = new Bundle();
 
-    private String prefixes[] = { "unid", "dec", "cent", "mil" };
+    private String prefixes_1[] = { "unid", "dec", "cent", "mil" };
+    private String prefixes_2[] = { "unid", "dec", "cent", "unidMil", "decMil" };
     private int correct[] = { 1, 2, 3, 4, 5 };
     private Level level;
     private int levelIndex,numLevel;
@@ -74,13 +75,15 @@ public class ExerciseActivity extends AppCompatActivity
 
         digitsUp = new TextView[4];
         digitsDown = new TextView[4];
-        results = new EditText[4];
-        carry = new EditText[4];
-        for (int i = 0; i < prefixes.length; i++) {
-            digitsUp[i] = (TextView) findViewById(getId(prefixes[i],"up"));
-            digitsDown[i] = (TextView) findViewById(getId(prefixes[i], "down"));
-            results[i] = (EditText) findViewById(getId(prefixes[i], "res"));
-            carry[i] = (EditText) findViewById(getId(prefixes[i], "carry"));
+        results = new EditText[5];
+        carry = new EditText[5];
+        for (int i = 0; i < prefixes_1.length; i++) {
+            digitsUp[i] = (TextView) findViewById(getId(prefixes_1[i],"up"));
+            digitsDown[i] = (TextView) findViewById(getId(prefixes_1[i], "down"));
+        }
+        for (int i = 0; i < prefixes_2.length; i++) {
+            results[i] = (EditText) findViewById(getId(prefixes_2[i], "res"));
+            carry[i] = (EditText) findViewById(getId(prefixes_2[i], "carry"));
         }
 
         correct_result = new TextView[5];
@@ -221,7 +224,7 @@ public class ExerciseActivity extends AppCompatActivity
     //Mostrar / Ocultar los EditText del acarreo según el nivel.
     private void hideEditCarry(boolean[] posCarry, EditText[] carry) {
 
-        boolean[] pos = new boolean[4];
+        boolean[] pos = new boolean[5];
         for (int i = 0; i < posCarry.length; i++) {
             pos[i] = posCarry[i];
         }
@@ -253,7 +256,7 @@ public class ExerciseActivity extends AppCompatActivity
     public void setResults (EditText results[], EditText carry[], boolean[] posCarry, int num) {
         String number = String.valueOf(num);
 
-        boolean[] pos = new boolean[4];
+        boolean[] pos = new boolean[5];
         for (int i = 0; i < posCarry.length; i++) {
             pos[i] = posCarry[i];
         }
@@ -290,6 +293,16 @@ public class ExerciseActivity extends AppCompatActivity
         }
         else if (results[3].hasFocus()) {
             results[3].setText(number);
+            if(pos[3]) {
+                carry[4].requestFocus();
+            } else { results[4].requestFocus(); }
+        }
+        else if (carry[4].hasFocus()) {
+            carry[4].setText(number);
+            results[4].requestFocus();
+        }
+        else if (results[4].hasFocus()) {
+            results[4].setText(number);
         }
     }
 

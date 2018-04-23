@@ -124,10 +124,21 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/mil_carry"
+            android:id="@+id/unidMil_carry"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/cent_carry"
+            android:cursorVisible="false"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/decMil_carry"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/unidMil_carry"
             android:cursorVisible="false"
             android:inputType="number"
             android:maxLength="1"
@@ -284,10 +295,21 @@
             android:textSize="45sp" />
 
         <EditText
-            android:id="@+id/mil_res"
+            android:id="@+id/unidMil_res"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/cent_res"
+            android:textAlignment="center"
+            android:maxLength="1"
+            android:inputType="number"
+            android:cursorVisible="false"
+            android:textSize="45sp" />
+
+        <EditText
+            android:id="@+id/decMil_res"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/unidMil_res"
             android:textAlignment="center"
             android:maxLength="1"
             android:inputType="number"
