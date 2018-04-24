@@ -1,6 +1,7 @@
 package arias.jenifer.juegosumas;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -192,8 +193,18 @@ public class ExerciseActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                //Devolver ejercicio actual a SumActivity
+                Bundle ejerAct = new Bundle();
+                ejerAct.putString("Ejercicio", String.valueOf(mCurrentExercise + 1));
+                ejerAct.putString("Nivel", String.valueOf(numLevel));
+                Intent i = new Intent(this, SumActivity.class);
+                i.putExtras(ejerAct);
+                startActivity(i);
+
+                //Finalizar actividad
                 finish();
                 return true;
+
             case R.id.action_check:
                 //TODO: PETA AQUÍ al debuggar!!
                 if (mCurrentExercise >= 5) {

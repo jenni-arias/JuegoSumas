@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.GridView;
-import android.widget.TextView;
 
 import arias.jenifer.juegosumas.database.LevelContract;
 import arias.jenifer.juegosumas.database.LevelSQLiteHelper;
@@ -20,25 +19,27 @@ public class SumActivity extends AppCompatActivity {
     private GridView gridView;
     private LevelAdapter adaptador;
 
-    private TextView correct_result[];
-    private int correct[] = { 1, 2, 3, 4, 5 };
-
     private LevelSQLiteHelper mLevel;
     private SQLiteDatabase db;
+    private Cursor c;
     private String TAG = "Proceso";
     private int nextId, nextEx;
     private boolean exist = false;
 
 
-    private int getId(String digit, String position) {
-        String name = String.format("%s_%s", digit, position);
-        return getResources().getIdentifier(name, "id", getPackageName());
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sum);
+
+        try{
+            //Volvemos de ExerciseActivity y obtenemos ejercicio por el cual nos quedamos.
+            Bundle exerc = this.getIntent().getExtras();
+            String exercAct = exerc.getString("Ejercicio");
+            String nivelAct = exerc.getString("Nivel");
+            Log.i(TAG, "Volver del nivel: " + nivelAct + "; Último ejercicio pendiente: " + exercAct);
+        } catch (Exception e) {}
+
 
         //Abrimos la base de datos 'DBLevel' en modo escritura
         Log.i(TAG, "Abrir BBDD DBLevel.db");
@@ -50,20 +51,17 @@ public class SumActivity extends AppCompatActivity {
 
         db = mLevel.getWritableDatabase();
 
+        String[] campos = new String[] {"levelId", "level", "exercise"};
+        c = db.query(LevelContract.LevelScheme.TABLE_NAME, campos,
+                null, null, null, null, null);
+
         // Adaptador
         adaptador = new LevelAdapter(this);
         adaptador.setOnLevelClickListener(new LevelAdapter.OnLevelClickListener() {
             @Override
             public void onLevelClick(int level) {
-                correct_result = new TextView[5];
-                for (int i = 0; i < correct.length; i++) {
-                    correct_result[i] = (TextView) findViewById(getId("correct", String.valueOf(correct[i])));
-                }
 
                 int select_level = level + 1;
-                String[] campos = new String[] {"levelId", "level", "exercise"};
-                Cursor c = db.query(LevelContract.LevelScheme.TABLE_NAME, campos,
-                        null, null, null, null, null);
 
                 //Recorremos el cursor de la BBDD
                 if(c.moveToFirst()) {
