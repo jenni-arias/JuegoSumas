@@ -32,15 +32,6 @@ public class SumActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sum);
 
-        try{
-            //Volvemos de ExerciseActivity y obtenemos ejercicio por el cual nos quedamos.
-            Bundle exerc = this.getIntent().getExtras();
-            String exercAct = exerc.getString("Ejercicio");
-            String nivelAct = exerc.getString("Nivel");
-            Log.i(TAG, "Volver del nivel: " + nivelAct + "; Último ejercicio pendiente: " + exercAct);
-        } catch (Exception e) {}
-
-
         //Abrimos la base de datos 'DBLevel' en modo escritura
         Log.i(TAG, "Abrir BBDD DBLevel.db");
         mLevel = new LevelSQLiteHelper(
@@ -92,6 +83,8 @@ public class SumActivity extends AppCompatActivity {
                         newRegist.put(LevelContract.LevelScheme.COLUMN_LEVEL_ID, nextId);
                         newRegist.put(LevelContract.LevelScheme.COLUMN_LEVEL, select_level);
                         newRegist.put(LevelContract.LevelScheme.COLUMN_EXERCISE, 1);
+                        newRegist.put(LevelContract.LevelScheme.COLUMN_FAILS, 0);
+                        newRegist.put(LevelContract.LevelScheme.COLUMN_COMPLETE, "NO");
 
                         try {
                             db.insert(LevelContract.LevelScheme.TABLE_NAME, null, newRegist);
@@ -106,6 +99,7 @@ public class SumActivity extends AppCompatActivity {
                 Intent intent = new Intent(SumActivity.this, ExerciseActivity.class);
                 intent.putExtra("Nivel", level);
                 startActivity(intent);
+                finish();
             }
         });
 

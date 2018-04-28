@@ -26,6 +26,7 @@ public class LevelAdapter extends BaseAdapter {
 
     private LevelSQLiteHelper mLevel;
     private SQLiteDatabase db;
+    private String[] args;
 
     private TextView correct[] = new TextView[5];
 
@@ -84,7 +85,7 @@ public class LevelAdapter extends BaseAdapter {
         });
 
         if(position > -1) {
-            String[] args = new String[] {String.valueOf(showNum)};
+            args = new String[] {String.valueOf(showNum)};
             String query = String.format(" SELECT EXERCISE FROM Level WHERE LEVEL=" + args[0]);
             Cursor c = db.rawQuery(query, null);
             c.moveToFirst();
@@ -100,6 +101,14 @@ public class LevelAdapter extends BaseAdapter {
     }
 
     public void setColors(int mCurrentExercise) {
+        if (mCurrentExercise == 5) {
+            String query = String.format(" SELECT COMPLETE FROM Level WHERE LEVEL=" + args[0]);
+            Cursor c = db.rawQuery(query, null);
+            c.moveToFirst();
+            if(c.getString(0).equals("YES")) {
+                mCurrentExercise++;
+            }
+        }
         for (int i = 0; i < mCurrentExercise - 1; i++) {
             correct[i].setBackgroundColor(Color.parseColor("#76b740")); //Verde
         }

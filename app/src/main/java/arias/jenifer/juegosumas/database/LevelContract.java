@@ -17,6 +17,8 @@ public class LevelContract {
         public static final String COLUMN_LEVEL_ID = "LevelId";
         public static final String COLUMN_LEVEL = "LEVEL";
         public static final String COLUMN_EXERCISE = "EXERCISE";
+        public static final String COLUMN_FAILS = "FAILS";
+        public static final String COLUMN_COMPLETE = "COMPLETE";
 
         private static final String TEXT_TYPE = " TEXT";
         private static final String INT_TYPE = " INTEGER DEFAULT 0";
@@ -27,6 +29,8 @@ public class LevelContract {
                         COLUMN_LEVEL_ID + INT_TYPE + COMMA_SEP +
                         COLUMN_LEVEL + INT_TYPE + COMMA_SEP +
                         COLUMN_EXERCISE + INT_TYPE + COMMA_SEP +
+                        COLUMN_FAILS + INT_TYPE + COMMA_SEP +
+                        COLUMN_COMPLETE + TEXT_TYPE + COMMA_SEP +
                         " PRIMARY KEY (" + COLUMN_LEVEL_ID + ")" + " )";
 
         public static final String SQL_DELETE_TABLE =

@@ -27,7 +27,7 @@ import arias.jenifer.juegosumas.database.LevelSQLiteHelper;
 public class ExerciseActivity extends AppCompatActivity
 {
     static final String CURRENT_EXERCISE = "current_exercise";
-    int mCurrentExercise = 0;
+    int mCurrentExercise = 1;
     private Bundle savedInstanceState = null;
     private Bundle nextExercise = new Bundle();
 
@@ -133,19 +133,19 @@ public class ExerciseActivity extends AppCompatActivity
             for(int i = 0; i < c.getCount(); i++) {
                 if (c.getInt(1) == numLevel) {
                     //Si el nivel existe obtenemos el Ejercicio en el que nos quedamos
-                    mCurrentExercise = c.getInt(2) - 1;
+                    mCurrentExercise = c.getInt(2);
                 }
                 c.moveToNext();
             }
         }
 
         //Colorear los ejercicio del nivel en la progressBar
-        if (mCurrentExercise == 0) {
+        if (mCurrentExercise == 1) {
             setColors(mCurrentExercise, false);
-        } else if (mCurrentExercise < 5) {
-            setColors(mCurrentExercise-1, true);
+        } else if (mCurrentExercise <= 5) {
+            setColors(mCurrentExercise, true);
         } else {
-            setColors(mCurrentExercise-1, true);
+            setColors(mCurrentExercise, true);
             finish();
         }
 
@@ -191,32 +191,115 @@ public class ExerciseActivity extends AppCompatActivity
     // Acciones para el menú del Toolbar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Bundle ejerAct = new Bundle();
         switch (item.getItemId()) {
             case android.R.id.home:
-                //Devolver ejercicio actual a SumActivity
-                Bundle ejerAct = new Bundle();
-                ejerAct.putString("Ejercicio", String.valueOf(mCurrentExercise + 1));
-                ejerAct.putString("Nivel", String.valueOf(numLevel));
-                Intent i = new Intent(this, SumActivity.class);
-                i.putExtras(ejerAct);
-                startActivity(i);
-
-                //Finalizar actividad
+                returnSumActivity(ejerAct);
                 finish();
                 return true;
 
             case R.id.action_check:
-                //TODO: PETA AQUÍ al debuggar!!
+                checkResult(Result, results, numLevel);
                 if (mCurrentExercise >= 5) {
+                    setColors(mCurrentExercise, true);
+                    returnSumActivity(ejerAct);
                     finish();
                 } else {
-                    checkResult(Result, results, numLevel);
                     onDestroy();
                     onCreate(nextExercise); //--> Peta en onCreate
                 }
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+
+    //Comprobar que el resultado es correcto
+    private void checkResult(int[] Result, EditText results[], int numLevel) {
+        boolean correct = true;
+        int nextEx = 0, fail = 0;
+        ContentValues values = new ContentValues();
+
+        for (int i = 0; i<Result.length; i ++) {
+            int result = Integer.parseInt(results[i].getText().toString());
+            if (Result[i] != result) {
+                correct = false;
+            }
+        }
+
+        String[] campos = new String[] {"levelId", "level", "exercise", "fails", "complete"};
+        Cursor c = db.query(LevelContract.LevelScheme.TABLE_NAME, campos,
+                null, null, null, null, null);
+
+        //Recorremos el cursor de la BBDD
+        if(c.moveToFirst()) {
+            for(int i = 0; i < c.getCount(); i++) {
+                if (c.getInt(1) == numLevel) {
+                    nextEx = Integer.parseInt(c.getString(2)) + 1;
+                    fail = Integer.parseInt(c.getString(3)) + 1;
+                }
+                c.moveToNext();
+            }
+        }
+
+        if (correct) {
+            //Actualizamos la BBDD
+            if(mCurrentExercise >= 5) {
+                values.put(LevelContract.LevelScheme.COLUMN_COMPLETE, "YES");
+            } else {
+                values.put(LevelContract.LevelScheme.COLUMN_EXERCISE, nextEx);
+            }
+            mCurrentExercise++;
+            nextExercise(mCurrentExercise);
+            Toast.makeText(this, "Bien hecho!", Toast.LENGTH_SHORT).show();
+            db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
+
+        } else {
+            //Actualizamos la BBDD
+            nextEx = 1;
+            values.put(LevelContract.LevelScheme.COLUMN_EXERCISE, nextEx);
+            values.put(LevelContract.LevelScheme.COLUMN_FAILS, fail);
+            db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
+
+            Toast.makeText(this, "Vuelve a intentarlo...", Toast.LENGTH_SHORT).show();
+            mCurrentExercise = 1;
+            nextExercise(mCurrentExercise);
+        }
+    }
+
+    //Establece el siguiente ejercicio del nivel a generar
+    private void nextExercise(int mCurrentExercise) {
+        nextExercise.putInt(CURRENT_EXERCISE, mCurrentExercise);
+        onRestoreInstanceState(nextExercise);
+    }
+
+    //Colorear la progressBar del nivel según si el resultado es correcto o no.
+    private void setColors(int mCurrentExercise, boolean correct) {
+        if (correct) {
+            for (int i = 0; i < mCurrentExercise-1; i++) {
+                correct_result[i].setBackground(getResources()
+                        .getDrawable(R.drawable.progressbar_green));
+            }
+            if (mCurrentExercise <= 5) {
+                correct_result[mCurrentExercise-1].setBackground(getResources()
+                        .getDrawable(R.drawable.progressbar_yellow));
+            }
+        } else {
+            for (int i = 1; i < 5; i++) {
+                correct_result[i].setBackground(getResources()
+                        .getDrawable(R.drawable.progressbar_gray));
+            } correct_result[mCurrentExercise-1].setBackground(getResources()
+                    .getDrawable(R.drawable.progressbar_yellow));
+        }
+    }
+
+    //Devolver ejercicio actual a SumActivity
+    private void returnSumActivity (Bundle ejerAct) {
+        ejerAct.putString("Ejercicio", String.valueOf(mCurrentExercise));
+        ejerAct.putString("Nivel", String.valueOf(numLevel));
+        Intent i = new Intent(this, SumActivity.class);
+        i.putExtras(ejerAct);
+        startActivity(i);
     }
 
     //Insertar los números en los TextView.
@@ -331,74 +414,4 @@ public class ExerciseActivity extends AppCompatActivity
         }
     }
 
-    //Comprobar que el resultado es correcto
-    private void checkResult(int[] Result, EditText results[], int numLevel) {
-        boolean correct = true;
-        int nextEx = 0;
-        ContentValues values = new ContentValues();
-
-        for (int i = 0; i<Result.length; i ++) {
-            int result = Integer.parseInt(results[i].getText().toString());
-            if (Result[i] != result) {
-                correct = false;
-            }
-        }
-
-        if (correct) {
-            String[] campos = new String[] {"levelId", "level", "exercise"};
-            Cursor c = db.query(LevelContract.LevelScheme.TABLE_NAME, campos,
-                    null, null, null, null, null);
-            //Recorremos el cursor de la BBDD
-            if(c.moveToFirst()) {
-                for(int i = 0; i < c.getCount(); i++) {
-                    if (c.getInt(1) == numLevel) {
-                        nextEx = Integer.parseInt(c.getString(2)) + 1;
-                    }
-                    c.moveToNext();
-                }
-            }
-            //Actualizamos la BBDD
-            values.put(LevelContract.LevelScheme.COLUMN_EXERCISE, nextEx);
-            db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
-
-            Toast.makeText(this, "Bien hecho!", Toast.LENGTH_SHORT).show();
-            mCurrentExercise++;
-            nextExercise(mCurrentExercise);
-
-        } else {
-            nextEx = 1;
-            values.put(LevelContract.LevelScheme.COLUMN_EXERCISE, nextEx);
-            db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
-
-            Toast.makeText(this, "Vuelve a intentarlo...", Toast.LENGTH_SHORT).show();
-            mCurrentExercise = 0;
-            nextExercise(mCurrentExercise);
-        }
-    }
-
-    //Establece el siguiente ejercicio del nivel a generar
-    private void nextExercise(int mCurrentExercise) {
-        nextExercise.putInt(CURRENT_EXERCISE, mCurrentExercise);
-        onRestoreInstanceState(nextExercise);
-    }
-
-    //Colorear la progressBar del nivel según si el resultado es correcto o no.
-    private void setColors(int mCurrentExercise, boolean correct) {
-        if (correct) {
-            for (int i = 0; i < mCurrentExercise+1; i++) {
-                correct_result[i].setBackground(getResources()
-                        .getDrawable(R.drawable.progressbar_green));
-            }
-            if (mCurrentExercise < 4) {
-                correct_result[mCurrentExercise+1].setBackground(getResources()
-                        .getDrawable(R.drawable.progressbar_yellow));
-            }
-        } else {
-            for (int i = 1; i < 5; i++) {
-                correct_result[i].setBackground(getResources()
-                        .getDrawable(R.drawable.progressbar_gray));
-            } correct_result[mCurrentExercise].setBackground(getResources()
-                    .getDrawable(R.drawable.progressbar_yellow));
-        }
-    }
 }
