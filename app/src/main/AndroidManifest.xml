@@ -9,17 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SumActivity">
+        <activity android:name=".SumActivity"
+                android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
    <!--     <activity android:name=".RegistryActivity" /> -->
 
-        <activity android:name=".ExerciseActivity" />
+        <activity android:name=".ExerciseActivity"
+                android:screenOrientation="portrait"/>
 
     </application>
 

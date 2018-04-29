@@ -246,20 +246,20 @@
 
     </RelativeLayout>
 
-    <View
-        android:id="@+id/ruler"
-        android:layout_width="250dp"
-        android:layout_height="2dp"
-        android:background="#808c8c8c"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="300dp" />
-
     <RelativeLayout
         android:id="@+id/result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/select_numbers"
         android:layout_alignParentStart="true">
+
+        <View
+            android:id="@+id/ruler"
+            android:layout_width="250dp"
+            android:layout_height="2dp"
+            android:background="#808c8c8c"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="0dp" />
 
         <EditText
             android:id="@+id/unid_res"
