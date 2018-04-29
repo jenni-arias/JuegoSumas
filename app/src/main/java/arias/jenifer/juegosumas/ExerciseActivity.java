@@ -34,12 +34,14 @@ public class ExerciseActivity extends AppCompatActivity
     private String prefixes_1[] = { "unid", "dec", "cent", "mil" };
     private String prefixes_2[] = { "unid", "dec", "cent", "unidMil", "decMil" };
     private int correct[] = { 1, 2, 3, 4, 5 };
+    private int btn_nums[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
     private Level level;
     private int levelIndex,numLevel;
 
     private Toolbar toolbar_exercise;
     private TextView digitsUp[], digitsDown[], correct_result[];
     private EditText results[], carry[];
+    private Button nums[];
     private int[] numbersUp, numbersDown;
     private int[] Result;
     private boolean[] posCarry;
@@ -90,6 +92,11 @@ public class ExerciseActivity extends AppCompatActivity
         correct_result = new TextView[5];
         for (int i = 0; i < correct.length; i++) {
             correct_result[i] = (TextView) findViewById(getId("correct", String.valueOf(correct[i])));
+        }
+
+        nums = new Button[10];
+        for (int i = 0; i < btn_nums.length; i++) {
+            nums[i] = (Button) findViewById(getId("btn", String.valueOf(btn_nums[i])));
         }
 
         if (savedInstanceState != null) {
@@ -347,6 +354,25 @@ public class ExerciseActivity extends AppCompatActivity
         }
     }
 
+    //Ocultar los Botones de los Números, excepto el 1, según el acarreo
+    private void hideBtnNumbers(boolean[] posCarry, Button[] btns) {
+        for (int i = 0; i < posCarry.length; i++) {
+            if(posCarry[i]) {
+                btns[0].setVisibility(View.VISIBLE);
+                for (int j = 1; j < 10; j++) {
+                    btns[j].setVisibility(View.INVISIBLE);
+                }
+            }
+        }
+    }
+
+    //Mostrar los Botones de los Números
+    private void showBtnNumbers(Button[] btns) {
+        for (int i = 0; i < 10; i++) {
+            btns[i].setVisibility(View.VISIBLE);
+        }
+    }
+
     //Ocultar teclado del móvil
     private void hideKeyboard(EditText editText) {
         editText.setInputType(InputType.TYPE_NULL);
@@ -373,41 +399,49 @@ public class ExerciseActivity extends AppCompatActivity
             results[0].setText(number);
             if(pos[0]) {
                 carry[1].requestFocus();
+                hideBtnNumbers(posCarry, nums);
             } else { results[1].requestFocus(); }
         }
         else if (carry[1].hasFocus()) {
             carry[1].setText(number);
             results[1].requestFocus();
+            showBtnNumbers(nums);
         }
         else if (results[1].hasFocus()) {
             results[1].setText(number);
             if(pos[1]) {
                 carry[2].requestFocus();
+                hideBtnNumbers(posCarry, nums);
             } else { results[2].requestFocus(); }
         }
         else if (carry[2].hasFocus()) {
             carry[2].setText(number);
             results[2].requestFocus();
+            showBtnNumbers(nums);
         }
         else if (results[2].hasFocus()) {
             results[2].setText(number);
             if(pos[2]) {
                 carry[3].requestFocus();
+                hideBtnNumbers(posCarry, nums);
             } else { results[3].requestFocus(); }
         }
         else if (carry[3].hasFocus()) {
             carry[3].setText(number);
             results[3].requestFocus();
+            showBtnNumbers(nums);
         }
         else if (results[3].hasFocus()) {
             results[3].setText(number);
             if(pos[3]) {
                 carry[4].requestFocus();
+                hideBtnNumbers(posCarry, nums);
             } else { results[4].requestFocus(); }
         }
         else if (carry[4].hasFocus()) {
             carry[4].setText(number);
             results[4].requestFocus();
+            showBtnNumbers(nums);
         }
         else if (results[4].hasFocus()) {
             results[4].setText(number);
