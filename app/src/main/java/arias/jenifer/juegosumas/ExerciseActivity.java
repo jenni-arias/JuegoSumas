@@ -207,13 +207,13 @@ public class ExerciseActivity extends AppCompatActivity
 
             case R.id.action_check:
                 checkResult(Result, results, numLevel);
-                if (mCurrentExercise >= 5) {
+                if (mCurrentExercise > 5) {
                     setColors(mCurrentExercise, true);
                     returnSumActivity(ejerAct);
                     finish();
                 } else {
                     onDestroy();
-                    onCreate(nextExercise); //--> Peta en onCreate
+                    onCreate(nextExercise);
                 }
             default:
                 return super.onOptionsItemSelected(item);
