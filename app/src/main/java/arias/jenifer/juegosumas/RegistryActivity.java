@@ -1,4 +1,4 @@
-package arias.jenifer.juegosumas;
+/*package arias.jenifer.juegosumas;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -68,11 +68,11 @@ public class RegistryActivity extends AppCompatActivity {
 
         //Abrimos la base de datos 'DBUsers' en modo escritura
         Log.i(TAG, "Abrir BBDD DBUsers.db");
-        mUsers = new UserSQLiteHelper(
+        mUsers = new LevelSQLiteHelper(
                 this,
-                UserSQLiteHelper.DATABASE_NAME,
+                LevelSQLiteHelper.DATABASE_NAME,
                 null,
-                UserSQLiteHelper.DATABASE_VERSION);
+                LevelSQLiteHelper.DATABASE_VERSION);
 
         db = mUsers.getWritableDatabase();
 
@@ -175,13 +175,13 @@ public class RegistryActivity extends AppCompatActivity {
 
             //Insertamos usuarios a la BBDD
             ContentValues newRegist = new ContentValues();
-            newRegist.put(UserContract.UserScheme.COLUMN_NAME_USER_ID, nextId);
-            newRegist.put(UserContract.UserScheme.COLUMN_NAME_NOMBRE, name);
-            newRegist.put(UserContract.UserScheme.COLUMN_NAME_LASTANME_1, apellido1);
-            newRegist.put(UserContract.UserScheme.COLUMN_NAME_LASTNAME_2, apellido2);
-            newRegist.put(UserContract.UserScheme.COLUMN_NAME_AGE, edad);
-            newRegist.put(UserContract.UserScheme.COLUMN_NAME_LEVEL, 1);
-            newRegist.put(UserContract.UserScheme.COLUMN_NAME_EXERCISE, 1);
+            newRegist.put(UserContract.UserScheme.COLUMN_USER_ID, nextId);
+            newRegist.put(UserContract.UserScheme.COLUMN_NAME, name);
+            newRegist.put(UserContract.UserScheme.COLUMN_LASTANME_1, apellido1);
+            newRegist.put(UserContract.UserScheme.COLUMN_LASTANME_2, apellido2);
+            newRegist.put(UserContract.UserScheme.COLUMN_AGE, edad);
+            newRegist.put(UserContract.UserScheme.COLUMN_LEVEL, 1);
+            newRegist.put(UserContract.UserScheme.COLUMN_EXERCISE, 1);
 
             try {
                 db.insert(UserContract.UserScheme.TABLE_NAME, null, newRegist);
@@ -233,4 +233,4 @@ public class RegistryActivity extends AppCompatActivity {
     }
 
 }
-
+*/
