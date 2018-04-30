@@ -5,15 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
     tools:context="arias.jenifer.juegosumas.SumActivity">
 
     <GridView
         android:id="@+id/gridView"
-        android:layout_marginTop="80dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="4">
-    </GridView>
+        android:numColumns="4"></GridView>
 
 </RelativeLayout>
