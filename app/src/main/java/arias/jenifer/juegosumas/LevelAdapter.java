@@ -3,8 +3,6 @@ package arias.jenifer.juegosumas;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +75,11 @@ public class LevelAdapter extends BaseAdapter {
 
         final int showNum = position + 1; //
         btn_level.setText(String.valueOf(showNum));
+        // TODO: descomentar este "if" cuando empiece las dependencias de niveles
+     //   if (position == 0) {  
+            btn_level.setEnabled(true);
+            btn_level.setBackgroundResource(R.drawable.oval_enabled);
+        //}
         btn_level.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,10 +113,10 @@ public class LevelAdapter extends BaseAdapter {
             }
         }
         for (int i = 0; i < mCurrentExercise - 1; i++) {
-            correct[i].setBackgroundColor(Color.parseColor("#76b740")); //Verde
+            correct[i].setBackgroundResource(R.color.light_green);
         }
         if (mCurrentExercise <= 5) {
-            correct[mCurrentExercise-1].setBackgroundColor(Color.parseColor("#F7FE2E")); //Amarillo
+            correct[mCurrentExercise-1].setBackgroundResource(R.color.yellow);
         }
     }
 

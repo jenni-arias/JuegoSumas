@@ -28,6 +28,7 @@ public class ExerciseActivity extends AppCompatActivity
 {
     static final String CURRENT_EXERCISE = "current_exercise";
     int mCurrentExercise = 1;
+    String exerciseComplete;
     private Bundle savedInstanceState = null;
     private Bundle nextExercise = new Bundle();
 
@@ -132,7 +133,7 @@ public class ExerciseActivity extends AppCompatActivity
         numbersUp = instance.getUp();
         numbersDown = instance.getDown();
 
-        String[] campos = new String[] {"levelId", "level", "exercise"};
+        String[] campos = new String[] {"levelId", "level", "exercise", "fails", "complete"};
         Cursor c = db.query(LevelContract.LevelScheme.TABLE_NAME, campos,
                 null, null, null, null, null);
         //Recorremos el cursor de la BBDD
@@ -141,6 +142,7 @@ public class ExerciseActivity extends AppCompatActivity
                 if (c.getInt(1) == numLevel) {
                     //Si el nivel existe obtenemos el Ejercicio en el que nos quedamos
                     mCurrentExercise = c.getInt(2);
+                    exerciseComplete = c.getString(4);
                 }
                 c.moveToNext();
             }
@@ -283,12 +285,15 @@ public class ExerciseActivity extends AppCompatActivity
     //Colorear la progressBar del nivel según si el resultado es correcto o no.
     private void setColors(int mCurrentExercise, boolean correct) {
         if (correct) {
-            for (int i = 0; i < mCurrentExercise-1; i++) {
+            if(!exerciseComplete.equals("YES")) {
+                mCurrentExercise = mCurrentExercise -1 ;
+            }
+            for (int i = 0; i < mCurrentExercise; i++) {
                 correct_result[i].setBackground(getResources()
                         .getDrawable(R.drawable.progressbar_green));
             }
-            if (mCurrentExercise <= 5) {
-                correct_result[mCurrentExercise-1].setBackground(getResources()
+            if (mCurrentExercise < 5) {
+                correct_result[mCurrentExercise].setBackground(getResources()
                         .getDrawable(R.drawable.progressbar_yellow));
             }
         } else {
