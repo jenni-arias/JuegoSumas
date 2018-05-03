@@ -106,10 +106,42 @@ public class ExerciseActivity extends AppCompatActivity
         } else {
             init();
         }
+
+        //Listener para indicar el número del resultado que se quiere modificar
+        for(int i = 0; i < results.length; i++) {
+            final int pos = i;
+            results[i].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        results[pos].setBackgroundResource(R.drawable.rounded_edittext);
+                        showBtnNumbers(nums);
+                    } else {
+                        results[pos].setBackgroundResource(0);
+                    }
+                }
+            });
+        }
+        //Listener para indicar el número del acarreo que se quiere modificar
+        //(quizás se puede quitar ya que el acarreo siempre será 1)
+        for(int i = 0; i < carry.length; i++) {
+            final int pos = i;
+            carry[i].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        carry[pos].setBackgroundResource(R.drawable.rounded_edittext);
+                        hideBtnNumbers(posCarry, nums);
+                    } else {
+                        carry[pos].setBackgroundResource(0);
+                    }
+                }
+            });
+        }
+
     }
 
     public void init() {
-
         //Abrimos la base de datos 'DBLevel' en modo escritura
         Log.i(TAG, "Abrir BBDD DBLevel.db");
         mLevel = new LevelSQLiteHelper(
@@ -186,6 +218,7 @@ public class ExerciseActivity extends AppCompatActivity
 
         //Indicar primera posición del número a introducir
         results[0].requestFocus();
+        results[0].setBackgroundResource(R.drawable.rounded_edittext);
 
     }
 
@@ -222,7 +255,6 @@ public class ExerciseActivity extends AppCompatActivity
         }
     }
 
-
     //Comprobar que el resultado es correcto
     private void checkResult(int[] Result, EditText results[], int numLevel) {
         boolean correct = true;
@@ -251,8 +283,8 @@ public class ExerciseActivity extends AppCompatActivity
             }
         }
 
+        //Actualizamos la BBDD
         if (correct) {
-            //Actualizamos la BBDD
             if(mCurrentExercise >= 5) {
                 values.put(LevelContract.LevelScheme.COLUMN_COMPLETE, "YES");
             } else {
@@ -264,7 +296,6 @@ public class ExerciseActivity extends AppCompatActivity
             db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
 
         } else {
-            //Actualizamos la BBDD
             nextEx = 1;
             values.put(LevelContract.LevelScheme.COLUMN_EXERCISE, nextEx);
             values.put(LevelContract.LevelScheme.COLUMN_FAILS, fail);
@@ -402,55 +433,75 @@ public class ExerciseActivity extends AppCompatActivity
 
         if (results[0].hasFocus()) {
             results[0].setText(number);
+            results[0].setBackgroundResource(0); //Transparente
             if(pos[0]) {
                 carry[1].requestFocus();
+                carry[1].setBackgroundResource(R.drawable.rounded_edittext);
                 hideBtnNumbers(posCarry, nums);
-            } else { results[1].requestFocus(); }
+            } else { results[1].requestFocus();
+                results[1].setBackgroundResource(R.drawable.rounded_edittext);}
         }
         else if (carry[1].hasFocus()) {
             carry[1].setText(number);
+            carry[1].setBackgroundResource(0);
             results[1].requestFocus();
+            results[1].setBackgroundResource(R.drawable.rounded_edittext);
             showBtnNumbers(nums);
         }
         else if (results[1].hasFocus()) {
             results[1].setText(number);
+            results[1].setBackgroundResource(0);
             if(pos[1]) {
                 carry[2].requestFocus();
+                carry[2].setBackgroundResource(R.drawable.rounded_edittext);
                 hideBtnNumbers(posCarry, nums);
-            } else { results[2].requestFocus(); }
+            } else { results[2].requestFocus();
+                results[2].setBackgroundResource(R.drawable.rounded_edittext);}
         }
         else if (carry[2].hasFocus()) {
             carry[2].setText(number);
+            carry[2].setBackgroundResource(0);
             results[2].requestFocus();
+            results[2].setBackgroundResource(R.drawable.rounded_edittext);
             showBtnNumbers(nums);
         }
         else if (results[2].hasFocus()) {
             results[2].setText(number);
+            results[2].setBackgroundResource(0);
             if(pos[2]) {
                 carry[3].requestFocus();
+                carry[3].setBackgroundResource(R.drawable.rounded_edittext);
                 hideBtnNumbers(posCarry, nums);
-            } else { results[3].requestFocus(); }
+            } else { results[3].requestFocus();
+                results[3].setBackgroundResource(R.drawable.rounded_edittext);}
         }
         else if (carry[3].hasFocus()) {
             carry[3].setText(number);
+            carry[3].setBackgroundResource(0);
             results[3].requestFocus();
+            results[3].setBackgroundResource(R.drawable.rounded_edittext);
             showBtnNumbers(nums);
         }
         else if (results[3].hasFocus()) {
             results[3].setText(number);
+            results[3].setBackgroundResource(0);
             if(pos[3]) {
                 carry[4].requestFocus();
+                carry[4].setBackgroundResource(R.drawable.rounded_edittext);
                 hideBtnNumbers(posCarry, nums);
-            } else { results[4].requestFocus(); }
+            } else { results[4].requestFocus();
+                results[4].setBackgroundResource(R.drawable.rounded_edittext);}
         }
         else if (carry[4].hasFocus()) {
             carry[4].setText(number);
+            carry[4].setBackgroundResource(0);
             results[4].requestFocus();
+            results[4].setBackgroundResource(R.drawable.rounded_edittext);
             showBtnNumbers(nums);
         }
         else if (results[4].hasFocus()) {
             results[4].setText(number);
+            results[4].setBackgroundResource(0);
         }
     }
-
 }

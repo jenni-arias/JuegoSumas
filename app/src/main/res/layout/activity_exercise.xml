@@ -244,6 +244,15 @@
             android:textAlignment="center"
             android:textSize="50dp" />
 
+        <View
+            android:id="@+id/ruler"
+            android:layout_width="250dp"
+            android:layout_height="2dp"
+            android:background="#808c8c8c"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="0dp"
+            android:layout_below="@id/suma"/>
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -251,15 +260,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/select_numbers"
-        android:layout_alignParentStart="true">
-
-        <View
-            android:id="@+id/ruler"
-            android:layout_width="250dp"
-            android:layout_height="2dp"
-            android:background="#808c8c8c"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="0dp" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp">
 
         <EditText
             android:id="@+id/unid_res"
