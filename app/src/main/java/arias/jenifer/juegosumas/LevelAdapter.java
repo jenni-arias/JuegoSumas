@@ -26,6 +26,9 @@ public class LevelAdapter extends BaseAdapter {
     private SQLiteDatabase db;
     private String[] args;
 
+    private Level level;
+    private int[] depend;
+
     private TextView correct[] = new TextView[5];
 
     public LevelAdapter(Context context) {
@@ -71,15 +74,19 @@ public class LevelAdapter extends BaseAdapter {
 
         db = mLevel.getWritableDatabase();
 
+        final int levelNum = position + 1;
         Button btn_level = (Button) view.findViewById(R.id.btn_level);
+        btn_level.setText(String.valueOf(levelNum));
 
-        final int showNum = position + 1; //
-        btn_level.setText(String.valueOf(showNum));
-        // TODO: descomentar este "if" cuando empiece las dependencias de niveles
-     //   if (position == 0) {  
+        //Obtener dependencias del nivel
+        level = Level.ALL_LEVELS[position];
+        depend = level.getDependencies();
+
+        if (levelNum == 1 || enableLevel(depend)) {
             btn_level.setEnabled(true);
             btn_level.setBackgroundResource(R.drawable.oval_enabled);
-        //}
+        }
+
         btn_level.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,25 +94,53 @@ public class LevelAdapter extends BaseAdapter {
             }
         });
 
-        if(position > -1) {
-            args = new String[] {String.valueOf(showNum)};
+        if(levelNum > 0) {
+            args = new String[] {String.valueOf(levelNum)};
             String query = String.format(" SELECT EXERCISE FROM Level WHERE LEVEL=" + args[0]);
             Cursor c = db.rawQuery(query, null);
             c.moveToFirst();
             try {
                 setColors(c.getInt(0));
-               // Log.i(TAG, "ProgressBar del nivel: "+ showNum + ", coloreada correctamente en SumActivity.");
+               // Log.i(TAG, "ProgressBar del nivel: "+ levelNum + ", coloreada correctamente en SumActivity.");
             }catch (Exception e) {
-               // Log.i(TAG, "Nivel " + showNum + " todavía no empezado. Error al colorear la progressBar en SumActivity.");
+               // Log.i(TAG, "Nivel " + levelNum + " todavía no empezado. Error al colorear la progressBar en SumActivity.");
             }
         }
-
         return view;
     }
 
-    public void setColors(int mCurrentExercise) {
+    private boolean enableLevel (int[] depend) {
+        String query = "";
+        boolean enableLevel = true;
+        boolean[] pass = new boolean[depend.length];
+
+        for (int i = 0; i < depend.length; i++) {
+            try {
+                query = "SELECT COMPLETE FROM Level WHERE LEVEL=" + depend[i];
+                Cursor c = db.rawQuery(query, null);
+                c.moveToFirst();
+                if(c.getString(0).equals("YES")) {
+                    pass[i] = true;
+                } else {
+                    pass[i] = false;}
+            } catch (Exception e) { //El nivel todavía no se ha empezado, no existe en la BBDD.
+                enableLevel = false;
+            }
+        }
+
+        for (int i = 0; i < pass.length; i++) {
+            if(!pass[i]) {
+                enableLevel = false;
+            } else if (pass[i] && enableLevel){
+                enableLevel = true;
+            }
+        }
+        return enableLevel;
+    }
+
+    private void setColors(int mCurrentExercise) {
         if (mCurrentExercise == 5) {
-            String query = String.format(" SELECT COMPLETE FROM Level WHERE LEVEL=" + args[0]);
+            String query = "SELECT COMPLETE FROM Level WHERE LEVEL=" + args[0];
             Cursor c = db.rawQuery(query, null);
             c.moveToFirst();
             if(c.getString(0).equals("YES")) {
