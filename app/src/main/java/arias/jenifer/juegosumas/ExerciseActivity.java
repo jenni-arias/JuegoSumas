@@ -46,6 +46,7 @@ public class ExerciseActivity extends AppCompatActivity
     private int[] numbersUp, numbersDown;
     private int[] Result;
     private boolean[] posCarry;
+    private int[] depend;
 
     private LevelSQLiteHelper mLevel;
     private SQLiteDatabase db;
@@ -192,6 +193,9 @@ public class ExerciseActivity extends AppCompatActivity
 
         //Obtener las posiciones de los acarreos
         posCarry = level.getCarry();
+
+        //Obtener dependencias del nivel
+        depend = level.getDependencies();
 
         //Mostrar ejercicio dependiendo de los datos que se reciben
         setDigits(digitsUp, numbersUp);

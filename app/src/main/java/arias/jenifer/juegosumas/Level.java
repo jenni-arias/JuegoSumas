@@ -7,10 +7,11 @@ class Level {
     final static int UP = 0, DOWN = 1, RESULT = 2;
     private int size[] = {-1, -1, -1};
     private boolean[] carry;
+    private int[] dependencies;
 
     static ThreadLocalRandom R = ThreadLocalRandom.current();
 
-    private Level(int sizeUp, int sizeDown, String scarry) {
+    private Level(int sizeUp, int sizeDown, String scarry, int[] dpd) {
         carry = new boolean[scarry.length()];
         for (int i = 0; i < carry.length; i++) {
             carry[i] = (scarry.charAt(i) != '_');
@@ -20,9 +21,16 @@ class Level {
         this.size[DOWN]   = sizeDown;
         this.size[RESULT] = -1;
         this.carry = carry;
+        dependencies = new int[dpd.length];
+        for (int i = 0; i < dependencies.length; i++) {
+            dependencies[i] = dpd[i];
+        }
+        this.dependencies = dependencies;
     }
 
     boolean[] getCarry() { return carry; }
+
+    public int[] getDependencies() { return dependencies; }
 
     public class Instance {
         int[][] digits;
@@ -192,59 +200,59 @@ class Level {
     // TABLA CON TODOS LOS NIVELES
     static Level[] ALL_LEVELS = {
             //Bloque 1: 1 suma, sin acarreo (Level 1 - 3)
-            new Level(1, 1, "_"),
-            new Level(1, 2, "__"),
-            new Level(2, 1, "__"),
+            new Level(1, 1, "_", new int[] {0}),
+            new Level(1, 2, "__", new int[] {1}),
+            new Level(2, 1, "__", new int[] {1}),
             //Bloque 2: 2 sumas, sin acarreo (Level 4 - 6)
-            new Level(2, 2, "__"),
-            new Level(2, 3, "___"),
-            new Level(3, 2, "___"),
+            new Level(2, 2, "__", new int[] {1}),
+            new Level(2, 3, "___", new int[] {2,3,4}),
+            new Level(3, 2, "___", new int[] {2,3,4}),
             //Bloque 3: 1 suma, 1 acarreo (Level 7 - 9)
-            new Level(1, 1, "c"),
-            new Level(2, 1, "c_"),
-            new Level(1, 2, "c_"),
+            new Level(1, 1, "c", new int[] {1}),
+            new Level(2, 1, "c_", new int[] {2,3,7}),
+            new Level(1, 2, "c_", new int[] {2,3,7}),
             //Bloque 4: 2 sumas, 1 acarreo (Level 10 - 17)
-            new Level(2, 2, "c_"),
-            new Level(2, 3, "c__"),
-            new Level(3, 2, "c__"),
-            new Level(2, 2, "_c"),
-            new Level(2, 3, "_c_"),
-            new Level(3, 2, "_c_"),
-            new Level(4, 2, "_c__"),
-            new Level(2, 4, "_c__"),
+            new Level(2, 2, "c_", new int[] {4,8,9}),
+            new Level(2, 3, "c__", new int[] {5,6,10}),
+            new Level(3, 2, "c__", new int[] {5,6,10}),
+            new Level(2, 2, "_c", new int[] {10}),
+            new Level(2, 3, "_c_", new int[] {11,12,13}),
+            new Level(3, 2, "_c_", new int[] {11,12,13}),
+            new Level(4, 2, "_c__", new int[] {14,15}),
+            new Level(2, 4, "_c__", new int[] {14,15}),
             //Bloque 5: 3 sumas, sin acarreo (Level 18 - 20)
-            new Level(3, 3, "___"),
-            new Level(4, 3, "____"),
-            new Level(3, 4, "____"),
+            new Level(3, 3, "___", new int[] {4,5,6}),
+            new Level(4, 3, "____", new int[] {4,5,6}),
+            new Level(3, 4, "____", new int[] {4,5,6}),
             //Bloque 6: 3 sumas, 1 acarreo (Level 21 - 29)
-            new Level(3, 3, "c__"),
-            new Level(4, 3, "c___"),
-            new Level(3, 4, "c___"),
-            new Level(3, 3, "_c_"),
-            new Level(4, 3, "_c__"),
-            new Level(3, 4, "_c__"),
-            new Level(3, 3, "__c"),
-            new Level(4, 3, "__c_"),
-            new Level(3, 4, "__c_"),
+            new Level(3, 3, "c__", new int[] {10,18}),
+            new Level(4, 3, "c___", new int[] {19,20,21}),
+            new Level(3, 4, "c___", new int[] {19,20,21}),
+            new Level(3, 3, "_c_", new int[] {10,18}),
+            new Level(4, 3, "_c__", new int[] {22,23}),
+            new Level(3, 4, "_c__", new int[] {22,23}),
+            new Level(3, 3, "__c", new int[] {13,24}),
+            new Level(4, 3, "__c_", new int[] {25,26}),
+            new Level(3, 4, "__c_", new int[] {25,26}),
             //Bloque 7: 3 sumas, 2 acarreos (Level 30 - 41)
-            new Level(2, 2, "cc"),
-            new Level(2, 3, "cc_"),
-            new Level(3, 2, "cc_"),
-            new Level(3, 3, "c_c"),
-            new Level(4, 3, "c_c_"),
-            new Level(3, 4, "c_c_"),
-            new Level(3, 3, "_cc"),
-            new Level(4, 3, "_cc_"),
-            new Level(3, 4, "_cc_"),
-            new Level(4, 4, "cc__"),
-            new Level(4, 4, "c_c_"),
-            new Level(4, 4, "_cc_"),
+            new Level(2, 2, "cc", new int[] {10,13}),
+            new Level(2, 3, "cc_", new int[] {11,12,14,15}),
+            new Level(3, 2, "cc_", new int[] {11,12,14,15}),
+            new Level(3, 3, "c_c", new int[] {18,21,27}),
+            new Level(4, 3, "c_c_", new int[] {22,23,28,29}),
+            new Level(3, 4, "c_c_", new int[] {22,23,28,29}),
+            new Level(3, 3, "_cc", new int[] {18,24,27}),
+            new Level(4, 3, "_cc_", new int[] {31,32}),
+            new Level(3, 4, "_cc_", new int[] {31,32}),
+            new Level(4, 4, "cc__", new int[] {31,32}),
+            new Level(4, 4, "c_c_", new int[] {31,32}),
+            new Level(4, 4, "_cc_", new int[] {31,32}),
             //Bloque 8: 3 sumas, 2 acarreos (Level 42 - 47)
-            new Level(3, 3, "ccc"),
-            new Level(4, 3, "ccc_"),
-            new Level(3, 4, "ccc_"),
-            new Level(4, 4, "_ccc"),
-            new Level(4, 4, "c_cc"),
-            new Level(4, 4, "cc_c"),    //carry del primer dígito al último
+            new Level(3, 3, "ccc", new int[] {33,36}),
+            new Level(4, 3, "ccc_", new int[] {37,38}),
+            new Level(3, 4, "ccc_", new int[] {37,38}),
+            new Level(4, 4, "_ccc", new int[] {42}),
+            new Level(4, 4, "c_cc", new int[] {39,40,41,45}),
+            new Level(4, 4, "cc_c", new int[] {39,40,41,45}),    //carry del primer dígito al último
     };
 }
