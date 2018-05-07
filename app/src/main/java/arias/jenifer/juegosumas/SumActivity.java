@@ -8,7 +8,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -19,6 +23,7 @@ import arias.jenifer.juegosumas.database.LevelSQLiteHelper;
 public class SumActivity extends AppCompatActivity {
     private GridView gridView;
     private LevelAdapter adaptador;
+    private Toolbar toolbar_sumactivity;
 
     private LevelSQLiteHelper mLevel;
     private SQLiteDatabase db;
@@ -34,6 +39,11 @@ public class SumActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sum);
+
+        //Configuración actionbar - toolbar
+        toolbar_sumactivity = (Toolbar) findViewById(R.id.toolbar_exercise);
+        setSupportActionBar(toolbar_sumactivity);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         //Abrimos la base de datos 'DBLevel' en modo escritura
         Log.i(TAG, "Abrir BBDD DBLevel.db");
@@ -79,6 +89,7 @@ public class SumActivity extends AppCompatActivity {
                         Toast.makeText(SumActivity.this, "Nivel ya completado!", Toast.LENGTH_SHORT).show();
                     }
                 } else {
+                    complete = false;
                     if(db != null ) {
                         if (c.getCount() == 0) {
                             nextId = 1;
@@ -110,6 +121,8 @@ public class SumActivity extends AppCompatActivity {
                     intent.putExtra("Nivel", level);
                     startActivity(intent);
                     finish();
+                } else {
+                    exist = false;
                 }
             }
         });
@@ -117,6 +130,39 @@ public class SumActivity extends AppCompatActivity {
         //GridView
         gridView = (GridView) findViewById(R.id.gridView);
         gridView.setAdapter(adaptador);
+    }
+
+    //Inflamos el menú en la Toolbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_sumactivity, menu);
+        return true;
+    }
+
+    // Acciones para el menú del Toolbar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete:
+                new AlertDialog.Builder(this)
+                        .setTitle("Seguro que quieres borrar todos los datos?")
+                        .setNegativeButton(android.R.string.no, null)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                db.delete(LevelContract.LevelScheme.TABLE_NAME, null, null);
+                                Intent intent = new Intent(SumActivity.this, SumActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        })
+                        .create()
+                        .show();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
