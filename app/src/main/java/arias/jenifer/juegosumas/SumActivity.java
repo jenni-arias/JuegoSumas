@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import arias.jenifer.juegosumas.database.LevelContract;
 import arias.jenifer.juegosumas.database.LevelSQLiteHelper;
@@ -25,6 +26,8 @@ public class SumActivity extends AppCompatActivity {
     private String TAG = "Proceso";
     private int nextId, nextEx;
     private boolean exist = false;
+    private String scomplete;
+    private boolean complete;
 
 
     @Override
@@ -42,7 +45,7 @@ public class SumActivity extends AppCompatActivity {
 
         db = mLevel.getWritableDatabase();
 
-        String[] campos = new String[] {"levelId", "level", "exercise"};
+        String[] campos = new String[] {"levelId", "level", "exercise", "fails", "complete"};
         c = db.query(LevelContract.LevelScheme.TABLE_NAME, campos,
                 null, null, null, null, null);
 
@@ -60,15 +63,21 @@ public class SumActivity extends AppCompatActivity {
                         if (c.getInt(1) == select_level) {
                             exist = true;
                             nextEx = c.getInt(2);
+                            scomplete = c.getString(4);
                         }
                         c.moveToNext();
                     }
                 }
 
                 if (exist) {
+                    complete = false;
                     ContentValues values = new ContentValues();
                     values.put(LevelContract.LevelScheme.COLUMN_EXERCISE, nextEx);
                     db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + select_level, null);
+                    if(scomplete.equals("YES")) {
+                        complete = true;
+                        Toast.makeText(SumActivity.this, "Nivel ya completado!", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     if(db != null ) {
                         if (c.getCount() == 0) {
@@ -95,11 +104,13 @@ public class SumActivity extends AppCompatActivity {
                     }
                 }
 
-                //Iniciar ExerciseActivity
-                Intent intent = new Intent(SumActivity.this, ExerciseActivity.class);
-                intent.putExtra("Nivel", level);
-                startActivity(intent);
-                finish();
+                if(!complete) {
+                    //Iniciar ExerciseActivity
+                    Intent intent = new Intent(SumActivity.this, ExerciseActivity.class);
+                    intent.putExtra("Nivel", level);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
