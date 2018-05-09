@@ -251,7 +251,7 @@
             android:background="#808c8c8c"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="0dp"
-            android:layout_below="@id/suma"/>
+            android:layout_below="@id/cent_down"/>
 
     </RelativeLayout>
 
