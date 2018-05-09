@@ -245,18 +245,36 @@ public class ExerciseActivity extends AppCompatActivity
                 return true;
 
             case R.id.action_check:
-                checkResult(Result, results, numLevel);
-                if (mCurrentExercise > 5) {
-                    setColors(mCurrentExercise, true);
-                    returnSumActivity(ejerAct);
-                    finish();
+                boolean empty = empty();
+
+                if(!empty) {
+                    checkResult(Result, results, numLevel);
+                    if (mCurrentExercise > 5) {
+                        setColors(mCurrentExercise, true);
+                        returnSumActivity(ejerAct);
+                        finish();
+                    } else {
+                        onDestroy();
+                        onCreate(nextExercise); }
                 } else {
-                    onDestroy();
-                    onCreate(nextExercise);
+                    Toast.makeText(this, "Completa todos los campos!", Toast.LENGTH_SHORT).show();
                 }
+
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    //Comprobar si falta algún EditText de resultado por completar
+    private boolean empty() {
+        boolean empty = false;
+
+        for (int i = 0; i< Result.length; i++) {
+            if(results[i].getText().toString().isEmpty()) {
+                empty = true;
+            }
+        }
+        return empty;
     }
 
     //Comprobar que el resultado es correcto
