@@ -4,8 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".SumActivity">
 
-    <item android:id="@+id/delete"
+    <item android:id="@+id/btn_delete"
         android:title="Borrar datos"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/btn_statistics"
+        android:title="Estadísticas"
         android:orderInCategory="100"
         app:showAsAction="never" />
 

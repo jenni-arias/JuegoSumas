@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import arias.jenifer.juegosumas.database.LevelContract;
 import arias.jenifer.juegosumas.database.LevelSQLiteHelper;
 
@@ -28,12 +30,14 @@ public class SumActivity extends AppCompatActivity {
     private LevelSQLiteHelper mLevel;
     private SQLiteDatabase db;
     private Cursor c;
+
     private String TAG = "Proceso";
     private int nextId, nextEx;
     private boolean exist = false;
     private String scomplete;
     private boolean complete;
 
+    //TODO: traducir toooodos los Strings
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,9 +148,9 @@ public class SumActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.delete:
-                new AlertDialog.Builder(this)
-                        .setTitle("Seguro que quieres borrar todos los datos?")
+            case R.id.btn_delete:
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Seguro que quieres borrar todos los datos?")
                         .setNegativeButton(android.R.string.no, null)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface arg0, int arg1) {
@@ -156,13 +160,70 @@ public class SumActivity extends AppCompatActivity {
                                 finish();
                             }
                         })
-                        .create()
-                        .show();
+                        .create().show();
+                return true;
+
+            case R.id.btn_statistics:
+                String[] data = statistics(c);
+                final AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+                builder2.setTitle("Estadísticas")
+                        .setMessage(data[0] + "\n" + data[1] + "\n" + data[2] + "\n" + data[3])
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        })
+                        .create().show();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    // Estadísticas del juego
+    private String[] statistics(Cursor c) {
+        String[] data = new String[4];
+        int complete = 0, fails = 0, activated = 1;
+        boolean contain = false;
+
+        Level all_levels[] = Level.ALL_LEVELS;
+        ArrayList num_level = new ArrayList();
+
+        //Recorremos el cursor de la BBDD
+        if(c.moveToFirst()) {
+            for(int i = 0; i < c.getCount(); i++) {
+                if (c.getString(4).equals("YES")) {
+                    complete++;
+                    num_level.add(c.getInt(1));
+                }
+                fails = fails + c.getInt(3);
+                c.moveToNext();
+            }
+
+            for(int j = 0; j < all_levels.length; j++) {
+                int[] depend = all_levels[j].getDependencies();
+
+                for (int n = 0; n < depend.length; n++) {
+                    if (num_level.contains(depend[n])) {
+                        contain = true;
+                    } else { contain = false; }
+                }
+
+                if(contain) {
+                    activated++;
+                    contain = false;
+                }
+            }
+        }
+
+        //TODO: quizás se pueden poner porcentages y no nº de niveles completados/no completados
+        data[0] = String.format("Niveles completados: " + complete);
+        data[1] = String.format("Niveles activos: " + activated);
+        data[2] = String.format("Niveles no completados: " + (adaptador.getCount() - complete));
+        data[3] = String.format("Fallos: " + fails);
+
+        return data;
     }
 
     @Override
