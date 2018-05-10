@@ -1,5 +1,6 @@
 package arias.jenifer.juegosumas;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -39,6 +40,7 @@ public class ExerciseActivity extends AppCompatActivity
     private Level level;
     private int levelIndex,numLevel;
 
+    private ProgressDialog progressDialog;
     private Toolbar toolbar_exercise;
     private TextView digitsUp[], digitsDown[], correct_result[];
     private EditText results[], carry[];
@@ -240,6 +242,7 @@ public class ExerciseActivity extends AppCompatActivity
         Bundle ejerAct = new Bundle();
         switch (item.getItemId()) {
             case android.R.id.home:
+                showProgressDialog("Cargando");
                 returnSumActivity(ejerAct);
                 finish();
                 return true;
@@ -250,6 +253,7 @@ public class ExerciseActivity extends AppCompatActivity
                 if(!empty) {
                     checkResult(Result, results, numLevel);
                     if (mCurrentExercise > 5) {
+                        showProgressDialog("Cargando");
                         setColors(mCurrentExercise, true);
                         returnSumActivity(ejerAct);
                         finish();
@@ -263,6 +267,17 @@ public class ExerciseActivity extends AppCompatActivity
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    //ProgressDialog
+    private void showProgressDialog(String message) {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage(message);
+        progressDialog.setCancelable(false);
+        progressDialog.setMax(100);
+        progressDialog.setProgress(0);
+        progressDialog.show();
     }
 
     //Comprobar si falta algún EditText de resultado por completar

@@ -1,5 +1,6 @@
 package arias.jenifer.juegosumas;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +27,7 @@ public class SumActivity extends AppCompatActivity {
     private GridView gridView;
     private LevelAdapter adaptador;
     private Toolbar toolbar_sumactivity;
+    private ProgressDialog progressDialog;
 
     private LevelSQLiteHelper mLevel;
     private SQLiteDatabase db;
@@ -120,6 +122,7 @@ public class SumActivity extends AppCompatActivity {
                 }
 
                 if(!complete) {
+                    showProgressDialog("Cargando...");
                     //Iniciar ExerciseActivity
                     Intent intent = new Intent(SumActivity.this, ExerciseActivity.class);
                     intent.putExtra("Nivel", level);
@@ -154,6 +157,7 @@ public class SumActivity extends AppCompatActivity {
                         .setNegativeButton(android.R.string.no, null)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface arg0, int arg1) {
+                                showProgressDialog("Actualizando...");
                                 db.delete(LevelContract.LevelScheme.TABLE_NAME, null, null);
                                 Intent intent = new Intent(SumActivity.this, SumActivity.class);
                                 startActivity(intent);
@@ -179,6 +183,16 @@ public class SumActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showProgressDialog(String message) {
+        progressDialog = new ProgressDialog(SumActivity.this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage(message);
+        progressDialog.setCancelable(false);
+        progressDialog.setMax(100);
+        progressDialog.setProgress(0);
+        progressDialog.show();
     }
 
     // Estadísticas del juego
@@ -216,11 +230,11 @@ public class SumActivity extends AppCompatActivity {
                 }
             }
         }
-
+        activated = activated - complete;
         //TODO: quizás se pueden poner porcentages y no nº de niveles completados/no completados
-        data[0] = String.format("Niveles completados: " + complete);
+        data[0] = String.format("Niveles completados: " + complete + "/47");
         data[1] = String.format("Niveles activos: " + activated);
-        data[2] = String.format("Niveles no completados: " + (adaptador.getCount() - complete));
+        data[2] = String.format("Niveles no activos: " + (adaptador.getCount() - activated));
         data[3] = String.format("Fallos: " + fails);
 
         return data;
