@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -261,7 +260,7 @@ public class ExerciseActivity extends AppCompatActivity
                         onDestroy();
                         onCreate(nextExercise); }
                 } else {
-                    Toast.makeText(this, "Completa todos los campos!", Toast.LENGTH_SHORT).show();
+                    MakeToast.showToast(ExerciseActivity.this, "Completa todos los campos!", 4);
                 }
 
             default:
@@ -329,7 +328,7 @@ public class ExerciseActivity extends AppCompatActivity
             }
             mCurrentExercise++;
             nextExercise(mCurrentExercise);
-            Toast.makeText(this, "Bien hecho!", Toast.LENGTH_SHORT).show();
+            MakeToast.showToast(ExerciseActivity.this, "Bien hecho!", 1);
             db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
 
         } else {
@@ -338,7 +337,7 @@ public class ExerciseActivity extends AppCompatActivity
             values.put(LevelContract.LevelScheme.COLUMN_FAILS, fail);
             db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
 
-            Toast.makeText(this, "Vuelve a intentarlo...", Toast.LENGTH_SHORT).show();
+            MakeToast.showToast(ExerciseActivity.this, "Vuelve a intentarlo...", 2);
             mCurrentExercise = 1;
             nextExercise(mCurrentExercise);
         }

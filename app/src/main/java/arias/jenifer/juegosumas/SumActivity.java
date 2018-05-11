@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -92,7 +91,7 @@ public class SumActivity extends AppCompatActivity {
                     db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + select_level, null);
                     if(scomplete.equals("YES")) {
                         complete = true;
-                        Toast.makeText(SumActivity.this, "Nivel ya completado!", Toast.LENGTH_SHORT).show();
+                        MakeToast.showToast(SumActivity.this, "Nivel ya completado!", 3);
                     }
                 } else {
                     complete = false;
@@ -230,10 +229,10 @@ public class SumActivity extends AppCompatActivity {
                 }
             }
         }
-        activated = activated - complete;
-        //TODO: quizás se pueden poner porcentages y no nº de niveles completados/no completados
+
+        //TODO: quizás se pueden poner porcentages y no nº de niveles completados
         data[0] = String.format("Niveles completados: " + complete + "/47");
-        data[1] = String.format("Niveles activos: " + activated);
+        data[1] = String.format("Niveles activos: " + (activated - complete));
         data[2] = String.format("Niveles no activos: " + (adaptador.getCount() - activated));
         data[3] = String.format("Fallos: " + fails);
 
