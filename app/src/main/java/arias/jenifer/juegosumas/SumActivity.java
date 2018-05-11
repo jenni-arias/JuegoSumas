@@ -1,5 +1,6 @@
 package arias.jenifer.juegosumas;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -14,7 +15,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -27,6 +32,7 @@ public class SumActivity extends AppCompatActivity {
     private LevelAdapter adaptador;
     private Toolbar toolbar_sumactivity;
     private ProgressDialog progressDialog;
+    private Dialog dialog;
 
     private LevelSQLiteHelper mLevel;
     private SQLiteDatabase db;
@@ -151,37 +157,64 @@ public class SumActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.btn_delete:
-                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Seguro que quieres borrar todos los datos?")
-                        .setNegativeButton(android.R.string.no, null)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                showProgressDialog("Actualizando...");
-                                db.delete(LevelContract.LevelScheme.TABLE_NAME, null, null);
-                                Intent intent = new Intent(SumActivity.this, SumActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                        })
-                        .create().show();
+                showDialog("¿Estás seguro?",
+                            "Se borrarán todos los datos.",
+                            1);
                 return true;
 
             case R.id.btn_statistics:
                 String[] data = statistics(c);
-                final AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
-                builder2.setTitle("Estadísticas")
-                        .setMessage(data[0] + "\n" + data[1] + "\n" + data[2] + "\n" + data[3])
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        })
-                        .create().show();
+                showDialog("Estadísticas",
+                            data[0] + "\n" + data[1] + "\n" + data[2] + "\n" + data[3],
+                            2);
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showDialog(String title, String message, int type) {
+        dialog = new Dialog(this, R.style.Theme_Dialog_Translucent);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog);
+
+        TextView titulo = (TextView) dialog.findViewById(R.id.titulo);
+        titulo.setText(title);
+        TextView contenido = (TextView) dialog.findViewById(R.id.contenido);
+        contenido.setText(message);
+        Button btn_ok = (Button) dialog.findViewById(R.id.btn_ok);
+        Button btn_cancel = (Button) dialog.findViewById(R.id.btn_cancel);
+
+        if(type == 1) {
+            btn_ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showProgressDialog("Actualizando...");
+                    db.delete(LevelContract.LevelScheme.TABLE_NAME, null, null);
+                    Intent intent = new Intent(SumActivity.this, SumActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+            btn_cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.cancel();
+                }
+            });
+        } else {
+            btn_ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.cancel();
+                }
+            });
+            btn_cancel.setVisibility(View.INVISIBLE);
+        }
+
+        dialog.show();
     }
 
     private void showProgressDialog(String message) {
@@ -242,7 +275,7 @@ public class SumActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
-                .setTitle("Seguro que quieres salir?")
+                .setTitle("¿Seguro que quieres salir?")
                 .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
