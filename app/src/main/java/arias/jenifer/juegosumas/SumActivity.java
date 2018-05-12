@@ -71,7 +71,7 @@ public class SumActivity extends AppCompatActivity {
                 null, null, null, null, null);
 
         // Adaptador
-        adaptador = new LevelAdapter(this);
+        adaptador = new LevelAdapter(this, db);
         adaptador.setOnLevelClickListener(new LevelAdapter.OnLevelClickListener() {
             @Override
             public void onLevelClick(int level) {

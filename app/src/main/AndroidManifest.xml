@@ -17,8 +17,6 @@
             </intent-filter>
         </activity>
 
-   <!--     <activity android:name=".RegistryActivity" /> -->
-
         <activity android:name=".ExerciseActivity"
                 android:screenOrientation="portrait"/>
 

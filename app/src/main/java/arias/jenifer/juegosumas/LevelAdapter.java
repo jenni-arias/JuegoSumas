@@ -31,8 +31,9 @@ public class LevelAdapter extends BaseAdapter {
 
     private TextView correct[] = new TextView[5];
 
-    public LevelAdapter(Context context) {
+    public LevelAdapter(Context context, SQLiteDatabase db) {
         this.context = context;
+        this.db = db;
     }
 
     @Override
@@ -64,15 +65,6 @@ public class LevelAdapter extends BaseAdapter {
         correct[2] = (TextView) view.findViewById(R.id.correct_3);
         correct[3] = (TextView) view.findViewById(R.id.correct_4);
         correct[4] = (TextView) view.findViewById(R.id.correct_5);
-
-        //Abrimos la base de datos 'DBLevel' en modo escritura
-        mLevel = new LevelSQLiteHelper(
-                context,
-                LevelSQLiteHelper.DATABASE_NAME,
-                null,
-                LevelSQLiteHelper.DATABASE_VERSION);
-
-        db = mLevel.getWritableDatabase();
 
         final int levelNum = position + 1;
         Button btn_level = (Button) view.findViewById(R.id.btn_level);
