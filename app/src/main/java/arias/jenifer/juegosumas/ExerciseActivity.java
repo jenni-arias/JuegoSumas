@@ -39,6 +39,7 @@ public class ExerciseActivity extends AppCompatActivity
     private Level level;
     private int levelIndex,numLevel;
 
+    private Bundle ejerAct = new Bundle();
     private ProgressDialog progressDialog;
     private Toolbar toolbar_exercise;
     private TextView digitsUp[], digitsDown[], correct_result[];
@@ -227,6 +228,13 @@ public class ExerciseActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public void onBackPressed() {
+        showProgressDialog("Cargando...");
+        returnSumActivity(ejerAct);
+        finish();
+    }
+
     //Inflamos el menú en la Toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -238,10 +246,9 @@ public class ExerciseActivity extends AppCompatActivity
     // Acciones para el menú del Toolbar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Bundle ejerAct = new Bundle();
         switch (item.getItemId()) {
             case android.R.id.home:
-                showProgressDialog("Cargando");
+                showProgressDialog("Cargando...");
                 returnSumActivity(ejerAct);
                 finish();
                 return true;
@@ -252,7 +259,7 @@ public class ExerciseActivity extends AppCompatActivity
                 if(!empty) {
                     checkResult(Result, results, numLevel);
                     if (mCurrentExercise > 5) {
-                        showProgressDialog("Cargando");
+                        showProgressDialog("Cargando...");
                         setColors(mCurrentExercise, true);
                         returnSumActivity(ejerAct);
                         finish();

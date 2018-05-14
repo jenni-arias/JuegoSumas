@@ -144,6 +144,63 @@ public class SumActivity extends AppCompatActivity {
         gridView.setAdapter(adaptador);
     }
 
+    //Consulta para obtener ejercicio
+    public static int queryExerciseLevel(SQLiteDatabase db, int levelNum) {
+        int num = 0;
+        String query = String.format(" SELECT EXERCISE FROM Level WHERE LEVEL=" + levelNum);
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        try {
+            num = c.getInt(0);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return num;
+    }
+
+    //Consulta para obtener si el nivel está completado o no
+    public static String queryCompleteLevel(SQLiteDatabase db, int levelNum) {
+        String complete = null;
+        String query = "SELECT COMPLETE FROM Level WHERE LEVEL=" + levelNum;
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        try {
+            complete = c.getString(0);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return complete;
+    }
+
+    //Consulta para habilitar los niveles
+    public static boolean queryEnableLevel(SQLiteDatabase db, int[] depend) {
+        boolean enableLevel = true;
+        boolean[] pass = new boolean[depend.length];
+
+        for (int i = 0; i < depend.length; i++) {
+            try {
+                String query = "SELECT COMPLETE FROM Level WHERE LEVEL=" + depend[i];
+                Cursor c = db.rawQuery(query, null);
+                c.moveToFirst();
+                if(c.getString(0).equals("YES")) {
+                    pass[i] = true;
+                } else {
+                    pass[i] = false;}
+            } catch (Exception e) { //El nivel todavía no se ha empezado, no existe en la BBDD.
+                enableLevel = false;
+            }
+        }
+
+        for (int i = 0; i < pass.length; i++) {
+            if(!pass[i]) {
+                enableLevel = false;
+            } else if (pass[i] && enableLevel){
+                enableLevel = true;
+            }
+        }
+        return enableLevel;
+    }
+
     //Inflamos el menú en la Toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -293,8 +350,3 @@ public class SumActivity extends AppCompatActivity {
     }
 
 }
-
-        /*Divisiones niveles dificultad
-        recView.addItemDecoration(
-                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        recView.setItemAnimator(new DefaultItemAnimator()); */
