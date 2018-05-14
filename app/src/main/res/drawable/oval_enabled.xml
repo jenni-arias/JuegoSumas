@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="?android:colorControlHighlight">
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="oval">
+            <solid android:color="@color/indigo" />
+        </shape>
+    </item>
+
     <item>
         <shape android:shape="oval">
             <solid android:color="@color/colorLevelButton"/>
         </shape>
     </item>
-</ripple>
+</selector>
