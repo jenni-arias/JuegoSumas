@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Joc Sumes</string>
+    <string name="exercise_title">Exercicis Nivell</string>
+    <string name="loading">Carregant...</string>
+    <string name="complete">Completa tots els camps</string>
+    <string name="bien_hecho">Ben fet!</string>
+    <string name="volver_intentar">Torna a intentar-ho...</string>
+    <string name="level_complete">Nivell ja completat!</string>
+    <string name="sure">Estàs segur?</string>
+    <string name="delete_data">S\'esborraran totes les dades</string>
+    <string name="statistics">Estadístiques</string>
+    <string name="statistics_complete">"Nivells completats: "</string>
+    <string name="statistics_active">"Nivells actius: "</string>
+    <string name="statistics_inactive">"Nivells no actius: "</string>
+    <string name="statistics_fails">"Errors: "</string>
+    <string name="updating">Actualitzant...</string>
+    <string name="ok">Ok</string>
+    <string name="borrar_datos">Esborrar dades</string>
+    <string name="cancel">Cancel·lar</string>
+    <string name="sure_exit">Segur que vols sortir?</string>
+</resources>

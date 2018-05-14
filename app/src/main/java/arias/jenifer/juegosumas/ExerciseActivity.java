@@ -158,7 +158,7 @@ public class ExerciseActivity extends AppCompatActivity
         //Intent SumActivity
         levelIndex = getIntent().getIntExtra("Nivel", -1);
         numLevel = levelIndex + 1;
-        String title = String.format(Locale.getDefault(), "Ejercicios Nivel %d", numLevel);
+        String title = String.format(Locale.getDefault(), getString(R.string.exercise_title) + " %d", numLevel);
 
         // Obtenemos el nivel y le pedimos que nos genere unos números concretos
         // a partir de la plantilla
@@ -230,7 +230,7 @@ public class ExerciseActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        showProgressDialog("Cargando...");
+        showProgressDialog(getString(R.string.loading));
         returnSumActivity(ejerAct);
         finish();
     }
@@ -248,7 +248,7 @@ public class ExerciseActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                showProgressDialog("Cargando...");
+                showProgressDialog(getString(R.string.loading));
                 returnSumActivity(ejerAct);
                 finish();
                 return true;
@@ -259,7 +259,7 @@ public class ExerciseActivity extends AppCompatActivity
                 if(!empty) {
                     checkResult(Result, results, numLevel);
                     if (mCurrentExercise > 5) {
-                        showProgressDialog("Cargando...");
+                        showProgressDialog(getString(R.string.loading));
                         setColors(mCurrentExercise, true);
                         returnSumActivity(ejerAct);
                         finish();
@@ -267,7 +267,7 @@ public class ExerciseActivity extends AppCompatActivity
                         onDestroy();
                         onCreate(nextExercise); }
                 } else {
-                    MakeToast.showToast(ExerciseActivity.this, "Completa todos los campos!", 4);
+                    MakeToast.showToast(ExerciseActivity.this, getString(R.string.complete), 4);
                 }
 
             default:
@@ -335,7 +335,7 @@ public class ExerciseActivity extends AppCompatActivity
             }
             mCurrentExercise++;
             nextExercise(mCurrentExercise);
-            MakeToast.showToast(ExerciseActivity.this, "Bien hecho!", 1);
+            MakeToast.showToast(ExerciseActivity.this, getString(R.string.bien_hecho), 1);
             db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
 
         } else {
@@ -344,7 +344,7 @@ public class ExerciseActivity extends AppCompatActivity
             values.put(LevelContract.LevelScheme.COLUMN_FAILS, fail);
             db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
 
-            MakeToast.showToast(ExerciseActivity.this, "Vuelve a intentarlo...", 2);
+            MakeToast.showToast(ExerciseActivity.this, getString(R.string.volver_intentar), 2);
             mCurrentExercise = 1;
             nextExercise(mCurrentExercise);
         }

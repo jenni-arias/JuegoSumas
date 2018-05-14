@@ -5,12 +5,12 @@
     tools:context=".SumActivity">
 
     <item android:id="@+id/btn_delete"
-        android:title="Borrar datos"
+        android:title="@string/borrar_datos"
         android:orderInCategory="100"
         app:showAsAction="never" />
 
     <item android:id="@+id/btn_statistics"
-        android:title="Estadísticas"
+        android:title="@string/statistics"
         android:orderInCategory="100"
         app:showAsAction="never" />
 

@@ -44,7 +44,6 @@ public class SumActivity extends AppCompatActivity {
     private String scomplete;
     private boolean complete;
 
-    //TODO: traducir toooodos los Strings
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +96,7 @@ public class SumActivity extends AppCompatActivity {
                     db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + select_level, null);
                     if(scomplete.equals("YES")) {
                         complete = true;
-                        MakeToast.showToast(SumActivity.this, "Nivel ya completado!", 3);
+                        MakeToast.showToast(SumActivity.this, getString(R.string.level_complete), 3);
                     }
                 } else {
                     complete = false;
@@ -119,15 +118,14 @@ public class SumActivity extends AppCompatActivity {
 
                         try {
                             db.insert(LevelContract.LevelScheme.TABLE_NAME, null, newRegist);
-                            Log.i(TAG, "Nivel " + select_level + " añadido a la BBDD");
                         } catch (Exception e) {
-                            Log.i(TAG, "No se pudo añadir el nuevo nivel a la BBDD");
+                            e.printStackTrace();
                         }
                     }
                 }
 
                 if(!complete) {
-                    showProgressDialog("Cargando...");
+                    showProgressDialog(getString(R.string.loading));
                     //Iniciar ExerciseActivity
                     Intent intent = new Intent(SumActivity.this, ExerciseActivity.class);
                     intent.putExtra("Nivel", level);
@@ -214,14 +212,14 @@ public class SumActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.btn_delete:
-                showDialog("¿Estás seguro?",
-                            "Se borrarán todos los datos.",
+                showDialog(getString(R.string.sure),
+                            getString(R.string.delete_data),
                             1);
                 return true;
 
             case R.id.btn_statistics:
                 String[] data = statistics(c);
-                showDialog("Estadísticas",
+                showDialog(getString(R.string.statistics),
                             data[0] + "\n" + data[1] + "\n" + data[2] + "\n" + data[3],
                             2);
                 return true;
@@ -248,7 +246,7 @@ public class SumActivity extends AppCompatActivity {
             btn_ok.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showProgressDialog("Actualizando...");
+                    showProgressDialog(getString(R.string.updating));
                     db.delete(LevelContract.LevelScheme.TABLE_NAME, null, null);
                     Intent intent = new Intent(SumActivity.this, SumActivity.class);
                     startActivity(intent);
@@ -321,10 +319,10 @@ public class SumActivity extends AppCompatActivity {
         }
 
         //TODO: quizás se pueden poner porcentages y no nº de niveles completados
-        data[0] = String.format("Niveles completados: " + complete + "/47");
-        data[1] = String.format("Niveles activos: " + (activated - complete));
-        data[2] = String.format("Niveles no activos: " + (adaptador.getCount() - activated));
-        data[3] = String.format("Fallos: " + fails);
+        data[0] = String.format(getString(R.string.statistics_complete) + complete + "/47");
+        data[1] = String.format(getString(R.string.statistics_active) + (activated - complete));
+        data[2] = String.format(getString(R.string.statistics_inactive) + (adaptador.getCount() - activated));
+        data[3] = String.format(getString(R.string.statistics_fails) + fails);
 
         return data;
     }
@@ -332,7 +330,7 @@ public class SumActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
-                .setTitle("¿Seguro que quieres salir?")
+                .setTitle(R.string.sure_exit)
                 .setNegativeButton(android.R.string.no, null)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
