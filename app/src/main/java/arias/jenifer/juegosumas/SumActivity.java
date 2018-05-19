@@ -12,16 +12,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseIntArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import arias.jenifer.juegosumas.database.LevelContract;
 import arias.jenifer.juegosumas.database.LevelSQLiteHelper;
@@ -33,6 +37,7 @@ public class SumActivity extends AppCompatActivity {
     private Toolbar toolbar_sumactivity;
     private ProgressDialog progressDialog;
     private Dialog dialog;
+    private Spinner spinner;
 
     private LevelSQLiteHelper mLevel;
     private SQLiteDatabase db;
@@ -43,6 +48,7 @@ public class SumActivity extends AppCompatActivity {
     private boolean exist = false;
     private String scomplete;
     private boolean complete;
+    private List<String> ejFails = new ArrayList<>();
 
 
     @Override
@@ -145,7 +151,7 @@ public class SumActivity extends AppCompatActivity {
     //Consulta para obtener ejercicio
     public static int queryExerciseLevel(SQLiteDatabase db, int levelNum) {
         int num = 0;
-        String query = String.format(" SELECT EXERCISE FROM Level WHERE LEVEL=" + levelNum);
+        String query = "SELECT EXERCISE FROM Level WHERE LEVEL=" + levelNum;
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
         try {
@@ -229,11 +235,27 @@ public class SumActivity extends AppCompatActivity {
         }
     }
 
-    private void showDialog(String title, String message, int type) {
+    private void showDialog(String title, String msg, int type) {
+        String message = msg;
         dialog = new Dialog(this, R.style.Theme_Dialog_Translucent);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.dialog);
+
+        spinner = (Spinner) dialog.findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_spinner_item,
+                ejFails) {
+            @Override
+            public boolean isEnabled(int position){
+                return false;
+            }
+        };
+        spinner.setAdapter(adapter);
+
+        if (type == 1) {
+            spinner.setVisibility(View.GONE); }
 
         TextView titulo = (TextView) dialog.findViewById(R.id.titulo);
         titulo.setText(title);
@@ -285,7 +307,9 @@ public class SumActivity extends AppCompatActivity {
     // Estadísticas del juego
     private String[] statistics(Cursor c) {
         String[] data = new String[4];
-        int complete = 0, fails = 0, activated = 1;
+        String allFails;
+        int complete = 0, fails = 0, activated = 1, exFail = 0, totalFails = 0;
+        SparseIntArray Fails = new SparseIntArray();
         boolean contain = false;
 
         Level all_levels[] = Level.ALL_LEVELS;
@@ -298,19 +322,20 @@ public class SumActivity extends AppCompatActivity {
                     complete++;
                     num_level.add(c.getInt(1));
                 }
-                fails = fails + c.getInt(3);
+                totalFails = totalFails + c.getInt(3);
+                fails = c.getInt(3);
+                exFail = c.getInt(1);
+                Fails.append(exFail, fails);
                 c.moveToNext();
             }
 
             for(int j = 0; j < all_levels.length; j++) {
                 int[] depend = all_levels[j].getDependencies();
-
                 for (int n = 0; n < depend.length; n++) {
                     if (num_level.contains(depend[n])) {
                         contain = true;
                     } else { contain = false; }
                 }
-
                 if(contain) {
                     activated++;
                     contain = false;
@@ -318,11 +343,21 @@ public class SumActivity extends AppCompatActivity {
             }
         }
 
+        ejFails.clear();
+        ejFails.add(getString(R.string.statistics_show_fails));
+        for (int i = 0; i<Fails.size(); i++) {
+            allFails = getString(R.string.statistics_exercise) + Fails.keyAt(i) + getString(R.string.statistics_nFails) + Fails.valueAt(i);
+            ejFails.add(allFails);
+        }
+        if(ejFails.size() == 1) {
+            ejFails.add(getString(R.string.statistics_without_fails));
+        }
+
         //TODO: quizás se pueden poner porcentages y no nº de niveles completados
-        data[0] = String.format(getString(R.string.statistics_complete) + complete + "/47");
-        data[1] = String.format(getString(R.string.statistics_active) + (activated - complete));
-        data[2] = String.format(getString(R.string.statistics_inactive) + (adaptador.getCount() - activated));
-        data[3] = String.format(getString(R.string.statistics_fails) + fails);
+        data[0] = getString(R.string.statistics_complete) + complete + "/47";
+        data[1] = getString(R.string.statistics_active) + (activated - complete);
+        data[2] = getString(R.string.statistics_inactive) + (adaptador.getCount() - activated);
+        data[3] = getString(R.string.statistics_fails) + totalFails;
 
         return data;
     }

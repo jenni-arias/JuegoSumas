@@ -1,27 +1,35 @@
 <resources>
     <string name="app_name">Juego Sumas</string>
-
     <string name="exercise_title">Ejercicios Nivel </string>
-    <string name="loading">Cargando...</string>
+
+    <!-- Toasts -->
     <string name="complete">Completa todos los campos!</string>
     <string name="bien_hecho">Bien hecho!</string>
-    <string name="volver_intentar">Vuelve a intentarlo...</string>
-
+    <string name="volver_intentar">Vuelve a intentarlo&#8230;</string>
     <string name="level_complete">Nivel ya completado!</string>
+
+    <!-- Dialogs -->
+    <string name="loading">Cargando&#8230;</string>
+    <string name="updating">Actualizando&#8230;</string>
     <string name="sure">¿Estás seguro?</string>
     <string name="delete_data">Se borrarán todos los datos.</string>
     <string name="statistics">Estadísticas</string>
-    <string name="updating">Actualizando...</string>
-    <string name="statistics_complete">Niveles completados:</string>
-    <string name="statistics_active">Niveles activos:</string>
-    <string name="statistics_inactive">Niveles no activos:</string>
-    <string name="statistics_fails">Fallos:</string>
+    <string name="statistics_complete">Niveles completados:&#160;</string>
+    <string name="statistics_active">Niveles activos:&#160;</string>
+    <string name="statistics_inactive">Niveles no activos:&#160;</string>
+    <string name="statistics_fails">Total fallos:&#160;</string>
+    <string name="statistics_show_fails">&#160;Mostrar fallos por ejercicio</string>
+    <string name="statistics_exercise">&#160;&#160;&#160;&#160;&#160;&#160;Ejercicio&#160;</string>
+    <string name="statistics_nFails">. Nº fallos:&#160;</string>
+    <string name="statistics_without_fails">&#160;Sin fallos!</string>
 
-    <!-- Menú -->
+    <!-- Menús -->
     <string name="borrar_datos">Borrar datos</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
     <string name="sure_exit">¿Seguro que quieres salir?</string>
+
+
 
 
 </resources>

@@ -27,19 +27,27 @@
         android:layout_height="match_parent"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="7dp"
+        android:layout_weight="1"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/black" />
 
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
     <LinearLayout
         android:id="@+id/botonera"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0">
+        android:layout_weight="0"
+        android:layout_gravity="right">
 
         <Button
             android:id="@+id/btn_cancel"
             android:layout_width="100dp"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:layout_marginLeft="130dp"
             android:background="@drawable/dialog_button"
             android:text="@string/cancel"
@@ -48,7 +56,7 @@
         <Button
             android:id="@+id/btn_ok"
             android:layout_width="100dp"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:layout_marginLeft="5dp"
             android:background="@drawable/dialog_button"
             android:text="@string/ok"
