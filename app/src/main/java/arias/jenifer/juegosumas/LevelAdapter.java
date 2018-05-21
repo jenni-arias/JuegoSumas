@@ -70,11 +70,6 @@ public class LevelAdapter extends BaseAdapter {
         level = Level.ALL_LEVELS[position];
         depend = level.getDependencies();
 
-        if (levelNum == 1 || SumActivity.queryEnableLevel(db, depend)) {
-            btn_level.setEnabled(true);
-            btn_level.setBackgroundResource(R.drawable.oval_enabled);
-        }
-
         btn_level.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,13 +77,21 @@ public class LevelAdapter extends BaseAdapter {
             }
         });
 
-        if(levelNum > 0) {
+        boolean levelEnabled = levelNum == 1 || SumActivity.queryEnableLevel(db, depend);
+        btn_level.setEnabled(levelEnabled);
+        btn_level.setBackgroundResource(levelEnabled ? R.drawable.oval_enabled : R.drawable.oval_disabled);
+
+        if (levelEnabled) {
             //Consulta para obtener ejercicio
             int query = SumActivity.queryExerciseLevel(db, levelNum);
             try {
                 setColors(query);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
+            }
+        } else {
+            for (int i = 0; i < 5; i++) {
+                correct[i].setBackgroundResource(R.color.gray);
             }
         }
 
@@ -99,16 +102,20 @@ public class LevelAdapter extends BaseAdapter {
         if (mCurrentExercise == 5) {
             //Consulta para obtener si el nivel está completado o no
             String query = SumActivity.queryCompleteLevel(db, levelNum);
-            if(query.equals("YES")) {
+            if (query.equals("YES")) {
                 mCurrentExercise++;
             }
         }
-        for (int i = 0; i < mCurrentExercise - 1; i++) {
-            correct[i].setBackgroundResource(R.color.light_green);
+        for (int i = 0; i < 5; i++) {
+            int col = R.color.gray;
+            if (i == mCurrentExercise) {
+                col = R.color.yellow;
+            } else if (i < mCurrentExercise - 1) {
+                col = R.color.light_green;
+            }
+            correct[i].setBackgroundResource(col);
         }
-        if (mCurrentExercise <= 5) {
-            correct[mCurrentExercise-1].setBackgroundResource(R.color.yellow);
-        }
+
     }
 
     interface OnLevelClickListener {
