@@ -82,17 +82,15 @@ public class LevelAdapter extends BaseAdapter {
         btn_level.setBackgroundResource(levelEnabled ? R.drawable.oval_enabled : R.drawable.oval_disabled);
 
         if (levelEnabled) {
+            setExerciseVisibility(true);
             //Consulta para obtener ejercicio
             int query = SumActivity.queryExerciseLevel(db, levelNum);
             try {
                 setColors(query);
             } catch (Exception e) {
-                e.printStackTrace();
-            }
+                e.printStackTrace(); }
         } else {
-            for (int i = 0; i < 5; i++) {
-                correct[i].setBackgroundResource(R.color.gray);
-            }
+            setExerciseVisibility(false);
         }
 
         return view;
@@ -115,7 +113,15 @@ public class LevelAdapter extends BaseAdapter {
             }
             correct[i].setBackgroundResource(col);
         }
+    }
 
+    private void setExerciseVisibility (boolean bool) {
+        for (int i = 0; i < 5; i++) {
+            //correct[i].setBackgroundResource(R.color.gray);
+            if(bool) {
+                correct[i].setVisibility(View.VISIBLE);
+            } else { correct[i].setVisibility(View.INVISIBLE); }
+        }
     }
 
     interface OnLevelClickListener {
