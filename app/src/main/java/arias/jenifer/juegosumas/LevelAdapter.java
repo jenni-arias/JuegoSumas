@@ -96,22 +96,22 @@ public class LevelAdapter extends BaseAdapter {
         return view;
     }
 
-    private void setColors(int mCurrentExercise) {
-        if (mCurrentExercise == 5) {
+    private void setColors(int Exercise) {
+        if (Exercise >= 5) {
             //Consulta para obtener si el nivel está completado o no
             String query = SumActivity.queryCompleteLevel(db, levelNum);
             if (query.equals("YES")) {
-                mCurrentExercise++;
+                Exercise++;
             }
         }
-        for (int i = 0; i < 5; i++) {
+        for (int i = 1; i < 6; i++) {
             int col = R.color.gray;
-            if (i == mCurrentExercise) {
+            if (i == Exercise) {
                 col = R.color.yellow;
-            } else if (i < mCurrentExercise - 1) {
+            } else if (i < Exercise) {
                 col = R.color.light_green;
             }
-            correct[i].setBackgroundResource(col);
+            correct[i-1].setBackgroundResource(col);
         }
     }
 
