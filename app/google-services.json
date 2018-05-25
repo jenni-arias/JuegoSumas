@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "259283761763",
+    "firebase_url": "https://workingsums.firebaseio.com",
+    "project_id": "workingsums",
+    "storage_bucket": "workingsums.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259283761763:android:9e20cb748129aada",
+        "android_client_info": {
+          "package_name": "arias.jenifer.juegosumas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "259283761763-aq6g57r0it07jlubm5srtjke92gr14no.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "259283761763-aq6g57r0it07jlubm5srtjke92gr14no.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCphgu4mehahQxBqphiaqvR19A7bNkMYMA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
