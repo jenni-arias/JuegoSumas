@@ -42,5 +42,9 @@
       }
     }
   ],
+  "rules": {
+    ".read": true,
+    ".write": false
+  },
   "configuration_version": "1"
 }
