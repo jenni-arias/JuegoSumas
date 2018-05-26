@@ -320,121 +320,147 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/select_numbers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:paddingTop="10dp"
-        android:paddingBottom="35dp">
+        android:layout_above="@+id/select_numbers2"
+        android:orientation="horizontal"
+        android:paddingTop="20dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp">
 
         <Button
             android:id="@+id/btn_1"
             style="@style/Widget.AppCompat.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="85dp"
+            android:layout_weight=".20"
             android:layout_toStartOf="@+id/btn_2"
             android:onClick="clicat"
-            android:text="1"
+            android:text="@string/num_1"
             android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_2"
             style="@style/Widget.AppCompat.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="85dp"
+            android:layout_weight=".20"
             android:layout_toStartOf="@+id/btn_3"
             android:onClick="clicat"
-            android:text="2"
+            android:text="@string/num_2"
             android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_3"
             style="@style/Widget.AppCompat.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="85dp"
+            android:layout_weight=".20"
             android:layout_centerHorizontal="true"
             android:onClick="clicat"
-            android:text="3"
+            android:text="@string/num_3"
             android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_4"
             style="@style/Widget.AppCompat.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="85dp"
+            android:layout_weight=".20"
             android:layout_toRightOf="@+id/btn_3"
             android:onClick="clicat"
-            android:text="4"
+            android:text="@string/num_4"
             android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_5"
             style="@style/Widget.AppCompat.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="85dp"
+            android:layout_weight=".20"
             android:layout_toRightOf="@+id/btn_4"
             android:onClick="clicat"
-            android:text="5"
+            android:text="@string/num_5"
             android:textSize="40sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/select_numbers2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:orientation="horizontal"
+        android:paddingBottom="40dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp">
 
         <Button
             android:id="@+id/btn_6"
             style="@style/Widget.AppCompat.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="85dp"
+            android:layout_weight=".20"
             android:layout_below="@+id/btn_1"
             android:layout_toStartOf="@+id/btn_7"
             android:onClick="clicat"
-            android:text="6"
+            android:text="@string/num_6"
             android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_7"
             style="@style/Widget.AppCompat.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="85dp"
+            android:layout_weight=".20"
             android:layout_below="@+id/btn_2"
             android:layout_toStartOf="@+id/btn_8"
             android:onClick="clicat"
-            android:text="7"
+            android:text="@string/num_7"
             android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_8"
             style="@style/Widget.AppCompat.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="85dp"
+            android:layout_weight=".20"
             android:layout_below="@+id/btn_3"
             android:layout_centerHorizontal="true"
             android:onClick="clicat"
-            android:text="8"
+            android:text="@string/num_8"
             android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_9"
             style="@style/Widget.AppCompat.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="85dp"
+            android:layout_weight=".20"
             android:layout_below="@+id/btn_4"
             android:layout_toRightOf="@id/btn_8"
             android:onClick="clicat"
-            android:text="9"
+            android:text="@string/num_9"
             android:textSize="40sp" />
 
         <Button
             android:id="@+id/btn_0"
             style="@style/Widget.AppCompat.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="85dp"
+            android:layout_weight=".20"
             android:layout_below="@+id/btn_5"
             android:layout_toRightOf="@+id/btn_9"
             android:onClick="clicat"
-            android:text="0"
+            android:text="@string/num_0"
             android:textSize="40sp" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>
