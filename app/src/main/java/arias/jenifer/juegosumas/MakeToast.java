@@ -1,6 +1,7 @@
 package arias.jenifer.juegosumas;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import es.dmoral.toasty.Toasty;
 
@@ -25,16 +26,16 @@ public class MakeToast {
 
         switch (type) {
             case 1: //Success
-                Toasty.success(context, message, android.widget.Toast.LENGTH_SHORT, true).show();
+                Toasty.success(context, message,Toast.LENGTH_SHORT, true).show();
                 break;
             case 2: //Error
-                Toasty.error(context, message, android.widget.Toast.LENGTH_SHORT, true).show();
+                Toasty.error(context, message, Toast.LENGTH_SHORT, true).show();
                 break;
             case 3: //Info
-                Toasty.info(context, message, android.widget.Toast.LENGTH_SHORT, true).show();
+                Toasty.info(context, message, Toast.LENGTH_LONG, true).show();
                 break;
             case 4: //Warning
-                Toasty.warning(context, message, android.widget.Toast.LENGTH_SHORT, true).show();
+                Toasty.warning(context, message, Toast.LENGTH_SHORT, true).show();
                 break;
             case 5: //Normal without icon
                 Toasty.normal(context, message).show();

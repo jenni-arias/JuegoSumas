@@ -49,6 +49,7 @@ public class ExerciseActivity extends AppCompatActivity
     private int[] Result;
     private boolean[] posCarry;
     private int[] depend;
+    private boolean firstcompletelevel = false;
 
     private LevelSQLiteHelper mLevel;
     private SQLiteDatabase db;
@@ -259,10 +260,15 @@ public class ExerciseActivity extends AppCompatActivity
                 if(!empty) {
                     checkResult(Result, results, numLevel);
                     if (mCurrentExercise > 5) {
-                        showProgressDialog(getString(R.string.loading));
                         setColors(mCurrentExercise, true);
-                        returnSumActivity(ejerAct);
-                        finish();
+                        if(firstcompletelevel) {
+                            showProgressDialog(getString(R.string.loading));
+                            returnSumActivity(ejerAct);
+                            finish();
+                        } else {
+                            firstcompletelevel = false;
+                            onDestroy();
+                            onCreate(nextExercise); }
                     } else {
                         onDestroy();
                         onCreate(nextExercise); }
@@ -286,7 +292,7 @@ public class ExerciseActivity extends AppCompatActivity
         progressDialog.show();
     }
 
-    //Comprobar si falta algún EditText de resultado por completar
+    //Comprobar si falta algún EditText del resultado por completar
     private boolean empty() {
         boolean empty = false;
 
@@ -339,14 +345,18 @@ public class ExerciseActivity extends AppCompatActivity
             db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
 
         } else {
-            nextEx = 1;
-            values.put(LevelContract.LevelScheme.COLUMN_EXERCISE, nextEx);
-            values.put(LevelContract.LevelScheme.COLUMN_FAILS, fail);
-            db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
+            if(mCurrentExercise >= 5) {
+                MakeToast.showToast(ExerciseActivity.this, getString(R.string.volver_intentar), 2);
+            } else {
+                nextEx = 1;
+                values.put(LevelContract.LevelScheme.COLUMN_EXERCISE, nextEx);
+                values.put(LevelContract.LevelScheme.COLUMN_FAILS, fail);
+                db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
 
-            MakeToast.showToast(ExerciseActivity.this, getString(R.string.volver_intentar), 2);
-            mCurrentExercise = 1;
-            nextExercise(mCurrentExercise);
+                MakeToast.showToast(ExerciseActivity.this, getString(R.string.volver_intentar), 2);
+                mCurrentExercise = 1;
+                nextExercise(mCurrentExercise);
+            }
         }
     }
 
@@ -359,9 +369,16 @@ public class ExerciseActivity extends AppCompatActivity
     //Colorear la progressBar del nivel según si el resultado es correcto o no.
     private void setColors(int mCurrentExercise, boolean correct) {
         if (correct) {
-            if(!exerciseComplete.equals("YES")) {
+            if(exerciseComplete.equals("NO")) {
                 mCurrentExercise = mCurrentExercise -1 ;
             }
+            if(mCurrentExercise == 5 && exerciseComplete.equals("NO")) {
+                firstcompletelevel = true;
+            }
+            if(mCurrentExercise > 5 && exerciseComplete.equals("YES")) {
+                mCurrentExercise = mCurrentExercise -1 ;
+            }
+
             for (int i = 0; i < mCurrentExercise; i++) {
                 correct_result[i].setBackground(getResources()
                         .getDrawable(R.drawable.progressbar_green));

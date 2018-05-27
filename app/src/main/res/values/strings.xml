@@ -6,7 +6,7 @@
     <string name="complete">Completa todos los campos!</string>
     <string name="bien_hecho">Bien hecho!</string>
     <string name="volver_intentar">Vuelve a intentarlo&#8230;</string>
-    <string name="level_complete">Nivel ya completado!</string>
+    <string name="level_complete">Nivel ya completado! \nPero puedes seguir practicando&#8230; :)</string>
 
     <!-- Dialogs -->
     <string name="loading">Cargando&#8230;</string>
@@ -28,6 +28,8 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
     <string name="sure_exit">¿Seguro que quieres salir?</string>
+
+    <!-- Numbers -->
     <string name="num_1">1</string>
     <string name="num_2">2</string>
     <string name="num_3">3</string>

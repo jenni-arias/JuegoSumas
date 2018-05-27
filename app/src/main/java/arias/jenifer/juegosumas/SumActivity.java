@@ -47,7 +47,6 @@ public class SumActivity extends AppCompatActivity {
     private int nextId, nextEx;
     private boolean exist = false;
     private String scomplete;
-    private boolean complete;
     private List<String> ejFails = new ArrayList<>();
 
 
@@ -96,16 +95,13 @@ public class SumActivity extends AppCompatActivity {
                 }
 
                 if (exist) {
-                    complete = false;
                     ContentValues values = new ContentValues();
                     values.put(LevelContract.LevelScheme.COLUMN_EXERCISE, nextEx);
                     db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + select_level, null);
                     if(scomplete.equals("YES")) {
-                        complete = true;
                         MakeToast.showToast(SumActivity.this, getString(R.string.level_complete), 3);
                     }
                 } else {
-                    complete = false;
                     if(db != null ) {
                         if (c.getCount() == 0) {
                             nextId = 1;
@@ -130,16 +126,12 @@ public class SumActivity extends AppCompatActivity {
                     }
                 }
 
-                if(!complete) {
-                    showProgressDialog(getString(R.string.loading));
-                    //Iniciar ExerciseActivity
-                    Intent intent = new Intent(SumActivity.this, ExerciseActivity.class);
-                    intent.putExtra("Nivel", level);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    exist = false;
-                }
+                showProgressDialog(getString(R.string.loading));
+                //Iniciar ExerciseActivity
+                Intent intent = new Intent(SumActivity.this, ExerciseActivity.class);
+                intent.putExtra("Nivel", level);
+                startActivity(intent);
+                finish();
             }
         });
 

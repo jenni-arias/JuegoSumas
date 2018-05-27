@@ -7,7 +7,7 @@
     <string name="complete">Completa tots els camps</string>
     <string name="bien_hecho">Ben fet!</string>
     <string name="volver_intentar">Torna a intentar-ho&#8230;</string>
-    <string name="level_complete">Nivell ja completat!</string>
+    <string name="level_complete">Nivell ja completat! \nPero pots seguir practicant&#8230; :)</string>
 
     <!-- Dialogs -->
     <string name="loading">Carregant&#8230;</string>
