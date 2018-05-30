@@ -5,8 +5,10 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,7 +26,6 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.google.firebase.database.ChildEventListener;
@@ -55,6 +56,7 @@ public class SumActivity extends AppCompatActivity {
     //Firebase
     private DatabaseReference dbFire;
     private String student_name;
+    private SharedPreferences sharedPreferences;
 
     private String TAG = "Proceso";
     private int nextId, nextEx;
@@ -87,7 +89,14 @@ public class SumActivity extends AppCompatActivity {
         c = db.query(LevelContract.LevelScheme.TABLE_NAME, campos,
                 null, null, null, null, null);
 
-        showDialog("Escribe tu nombre completo",null,3);
+        //Registro por primera vez
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean first_run = sharedPreferences.getBoolean("FIRSTRUN", true);
+        if (first_run) {
+            showDialog("Escribe tu nombre completo",null,3);
+        } else {
+            student_name = sharedPreferences.getString("STUDENT_NAME", null);
+        }
 
         //Firebase
         dbFire = FirebaseDatabase.getInstance().getReference();
@@ -317,6 +326,10 @@ public class SumActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     student_name = ed_name.getText().toString();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("STUDENT_NAME", student_name);
+                    editor.putBoolean("FIRSTRUN", false);
+                    editor.apply();
                     goFirebase();
                     dialog.cancel();
                 }
