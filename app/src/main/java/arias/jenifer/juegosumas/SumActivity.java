@@ -20,9 +20,18 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +51,10 @@ public class SumActivity extends AppCompatActivity {
     private LevelSQLiteHelper mLevel;
     private SQLiteDatabase db;
     private Cursor c;
+
+    //Firebase
+    private DatabaseReference dbFire;
+    private String student_name;
 
     private String TAG = "Proceso";
     private int nextId, nextEx;
@@ -74,7 +87,12 @@ public class SumActivity extends AppCompatActivity {
         c = db.query(LevelContract.LevelScheme.TABLE_NAME, campos,
                 null, null, null, null, null);
 
-        // Adaptador
+        showDialog("Escribe tu nombre completo",null,3);
+
+        //Firebase
+        dbFire = FirebaseDatabase.getInstance().getReference();
+
+        //Adaptador
         adaptador = new LevelAdapter(this, db);
         adaptador.setOnLevelClickListener(new LevelAdapter.OnLevelClickListener() {
             @Override
@@ -130,6 +148,7 @@ public class SumActivity extends AppCompatActivity {
                 //Iniciar ExerciseActivity
                 Intent intent = new Intent(SumActivity.this, ExerciseActivity.class);
                 intent.putExtra("Nivel", level);
+                intent.putExtra("Estudiante", student_name);
                 startActivity(intent);
                 finish();
             }
@@ -234,6 +253,14 @@ public class SumActivity extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.dialog);
 
+        TextView titulo = (TextView) dialog.findViewById(R.id.titulo);
+        titulo.setText(title);
+        TextView contenido = (TextView) dialog.findViewById(R.id.contenido);
+        final EditText ed_name = (EditText) dialog.findViewById(R.id.student_name);
+
+        Button btn_ok = (Button) dialog.findViewById(R.id.btn_ok);
+        Button btn_cancel = (Button) dialog.findViewById(R.id.btn_cancel);
+
         spinner = (Spinner) dialog.findViewById(R.id.spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this,
@@ -246,17 +273,13 @@ public class SumActivity extends AppCompatActivity {
         };
         spinner.setAdapter(adapter);
 
-        if (type == 1) {
+        if (type == 1 || type == 3) {
             spinner.setVisibility(View.GONE); }
 
-        TextView titulo = (TextView) dialog.findViewById(R.id.titulo);
-        titulo.setText(title);
-        TextView contenido = (TextView) dialog.findViewById(R.id.contenido);
-        contenido.setText(message);
-        Button btn_ok = (Button) dialog.findViewById(R.id.btn_ok);
-        Button btn_cancel = (Button) dialog.findViewById(R.id.btn_cancel);
-
         if(type == 1) {
+            contenido.setText(message);
+            ed_name.setVisibility(View.INVISIBLE);
+
             btn_ok.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -273,7 +296,10 @@ public class SumActivity extends AppCompatActivity {
                     dialog.cancel();
                 }
             });
-        } else {
+        } else if (type == 2){
+            contenido.setText(message);
+            ed_name.setVisibility(View.INVISIBLE);
+
             btn_ok.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -281,9 +307,58 @@ public class SumActivity extends AppCompatActivity {
                 }
             });
             btn_cancel.setVisibility(View.INVISIBLE);
-        }
+        } else if (type == 3) {
+            contenido.setVisibility(View.INVISIBLE);
+            ed_name.setVisibility(View.VISIBLE);
+            btn_cancel.setVisibility(View.INVISIBLE);
+            dialog.setCancelable(true);
 
+            btn_ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    student_name = ed_name.getText().toString();
+                    goFirebase();
+                    dialog.cancel();
+                }
+            });
+        }
         dialog.show();
+    }
+
+    private void goFirebase() {
+
+        dbFire.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                //Comprobar si el estudiante existe. Si no existe crearlo en Firebase.
+                if(!dataSnapshot.hasChild(student_name)) {
+                    dbFire.child(student_name).child("1").child("Completado").setValue("NO");
+                } else {
+                    Log.i("JENN", dataSnapshot.child(student_name).getKey());
+                }
+                MakeToast.showToast(SumActivity.this, "Hola " + student_name + "!", 5);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void showProgressDialog(String message) {
