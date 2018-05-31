@@ -57,6 +57,7 @@ public class SumActivity extends AppCompatActivity {
     private DatabaseReference dbFire;
     private String student_name;
     private SharedPreferences sharedPreferences;
+    boolean first_run;
 
     private String TAG = "Proceso";
     private int nextId, nextEx;
@@ -71,7 +72,7 @@ public class SumActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sum);
 
         //Configuración actionbar - toolbar
-        toolbar_sumactivity = (Toolbar) findViewById(R.id.toolbar_exercise);
+        toolbar_sumactivity = (Toolbar) findViewById(R.id.toolbar_sum);
         setSupportActionBar(toolbar_sumactivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
@@ -91,7 +92,7 @@ public class SumActivity extends AppCompatActivity {
 
         //Registro por primera vez
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean first_run = sharedPreferences.getBoolean("FIRSTRUN", true);
+        first_run = sharedPreferences.getBoolean("FIRSTRUN", true);
         if (first_run) {
             showDialog("Escribe tu nombre completo",null,3);
         } else {
@@ -129,6 +130,7 @@ public class SumActivity extends AppCompatActivity {
                         MakeToast.showToast(SumActivity.this, getString(R.string.level_complete), 3);
                     }
                 } else {
+                    goFirebase(select_level);
                     if(db != null ) {
                         if (c.getCount() == 0) {
                             nextId = 1;
@@ -292,6 +294,12 @@ public class SumActivity extends AppCompatActivity {
             btn_ok.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("STUDENT_NAME", null);
+                    editor.putBoolean("FIRSTRUN", true);
+                    editor.apply();
+
+                    goFirebase(1);
                     showProgressDialog(getString(R.string.updating));
                     db.delete(LevelContract.LevelScheme.TABLE_NAME, null, null);
                     Intent intent = new Intent(SumActivity.this, SumActivity.class);
@@ -308,19 +316,15 @@ public class SumActivity extends AppCompatActivity {
         } else if (type == 2){
             contenido.setText(message);
             ed_name.setVisibility(View.INVISIBLE);
-
-            btn_ok.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.cancel();
-                }
-            });
+            btn_ok.setVisibility(View.INVISIBLE);
             btn_cancel.setVisibility(View.INVISIBLE);
+            dialog.setCancelable(true);
+
         } else if (type == 3) {
             contenido.setVisibility(View.INVISIBLE);
             ed_name.setVisibility(View.VISIBLE);
             btn_cancel.setVisibility(View.INVISIBLE);
-            dialog.setCancelable(true);
+            dialog.setCancelable(false);
 
             btn_ok.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -330,7 +334,8 @@ public class SumActivity extends AppCompatActivity {
                     editor.putString("STUDENT_NAME", student_name);
                     editor.putBoolean("FIRSTRUN", false);
                     editor.apply();
-                    goFirebase();
+                    MakeToast.showToast(SumActivity.this, "Hola " + student_name + "!", 5);
+                    goFirebase(1);
                     dialog.cancel();
                 }
             });
@@ -338,18 +343,22 @@ public class SumActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void goFirebase() {
+    private void goFirebase(int level) {
 
+        final String slevel = String.valueOf(level);
         dbFire.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //Comprobar si el estudiante existe. Si no existe crearlo en Firebase.
+                //Comprobar si el estudiante o el nivel seleccionado existe. Si no, lo crea.
                 if(!dataSnapshot.hasChild(student_name)) {
-                    dbFire.child(student_name).child("1").child("Completado").setValue("NO");
+                    dbFire.child(student_name).child(slevel).child("Fecha").setValue("00-00-0000");
+                    dbFire.child(student_name).child(slevel).child("Hora").setValue("00:00:00");
+                    dbFire.child(student_name).child(slevel).child("Ejercicios bien").setValue("0");
+                    dbFire.child(student_name).child(slevel).child("Ejercicios mal").setValue("0");
+                    dbFire.child(student_name).child(slevel).child("Completado").setValue("NO");
                 } else {
                     Log.i("JENN", dataSnapshot.child(student_name).getKey());
                 }
-                MakeToast.showToast(SumActivity.this, "Hola " + student_name + "!", 5);
             }
 
             @Override
@@ -359,7 +368,13 @@ public class SumActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                if(dataSnapshot.hasChild(student_name)) {
+                    dbFire.child(student_name).child(slevel).child("Fecha").setValue("00-00-0000");
+                    dbFire.child(student_name).child(slevel).child("Hora").setValue("00:00:00");
+                    dbFire.child(student_name).child(slevel).child("Ejercicios bien").setValue("0");
+                    dbFire.child(student_name).child(slevel).child("Ejercicios mal").setValue("0");
+                    dbFire.child(student_name).child(slevel).child("Completado").setValue("NO");
+                }
             }
 
             @Override

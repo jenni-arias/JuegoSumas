@@ -18,6 +18,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 
 import arias.jenifer.juegosumas.database.LevelContract;
@@ -51,9 +59,16 @@ public class ExerciseActivity extends AppCompatActivity
     private int[] depend;
     private boolean firstcompletelevel = false;
 
+    //SQLite
     private LevelSQLiteHelper mLevel;
     private SQLiteDatabase db;
     private String TAG = "TAG";
+
+    //Firebase
+    private DatabaseReference dbFire;
+    private String student_name;
+    private String FireFecha, FireHora, FireComplet;
+    private int FireEjBien, FireEjMal;
 
     private int getId(String digit, String position) {
         String name = String.format("%s_%s", digit, position);
@@ -158,6 +173,7 @@ public class ExerciseActivity extends AppCompatActivity
 
         //Intent SumActivity
         levelIndex = getIntent().getIntExtra("Nivel", -1);
+        student_name = getIntent().getStringExtra("Estudiante");
         numLevel = levelIndex + 1;
         String title = String.format(Locale.getDefault(), getString(R.string.exercise_title) + " %d", numLevel);
 
@@ -227,6 +243,54 @@ public class ExerciseActivity extends AppCompatActivity
         results[0].requestFocus();
         results[0].setBackgroundResource(R.drawable.rounded_edittext);
 
+    }
+
+    private void goFirebase(int numLevel, int mCurrentExercise, final boolean correct) {
+        final String level = String.valueOf(numLevel);
+        final int exercise = mCurrentExercise;
+
+        //Fecha, Hora
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+        String[] fecha_hora = simpleDateFormat.format(c.getTime()).split(" ");
+        FireFecha = fecha_hora[0];
+        FireHora = fecha_hora[1];
+        Log.i("HORA", simpleDateFormat.format(c.getTime()));
+
+        dbFire = FirebaseDatabase.getInstance().getReference().child(student_name);
+
+        dbFire.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(level)) {
+                    dbFire.child(level).child("Fecha").setValue(FireFecha);
+                    dbFire.child(level).child("Hora").setValue(FireHora);
+
+                    if(correct) {
+                        if(dataSnapshot.child(level).hasChild("Ejercicios bien")) {
+                            String s_ejbien = dataSnapshot.child(level).child("Ejercicios bien").getValue().toString();
+                            int ejbien = Integer.parseInt(s_ejbien) + 1;
+                            dbFire.child(level).child("Ejercicios bien").setValue(String.valueOf(ejbien));
+                        }
+                    } else {
+                        if(dataSnapshot.child(level).hasChild("Ejercicios mal")) {
+                            String s_ejmal = dataSnapshot.child(level).child("Ejercicios mal").getValue().toString();
+                            int ejmal = Integer.parseInt(s_ejmal) + 1;
+                            dbFire.child(level).child("Ejercicios mal").setValue(String.valueOf(ejmal));
+                        }
+                    }
+
+                    if(dataSnapshot.child(level).hasChild("Completado") && exercise == 6) {
+                        dbFire.child(level).child("Completado").setValue("YES");
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -346,7 +410,18 @@ public class ExerciseActivity extends AppCompatActivity
 
         } else {
             if(mCurrentExercise >= 5) {
-                MakeToast.showToast(ExerciseActivity.this, getString(R.string.volver_intentar), 2);
+                if(exerciseComplete.equals("YES")) {
+                    MakeToast.showToast(ExerciseActivity.this, getString(R.string.volver_intentar), 2);
+                } else {
+                    nextEx = 1;
+                    values.put(LevelContract.LevelScheme.COLUMN_EXERCISE, nextEx);
+                    values.put(LevelContract.LevelScheme.COLUMN_FAILS, fail);
+                    db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
+
+                    MakeToast.showToast(ExerciseActivity.this, getString(R.string.volver_intentar), 2);
+                    mCurrentExercise = 1;
+                    nextExercise(mCurrentExercise);
+                }
             } else {
                 nextEx = 1;
                 values.put(LevelContract.LevelScheme.COLUMN_EXERCISE, nextEx);
@@ -358,6 +433,7 @@ public class ExerciseActivity extends AppCompatActivity
                 nextExercise(mCurrentExercise);
             }
         }
+        goFirebase(numLevel, mCurrentExercise, correct);
     }
 
     //Establece el siguiente ejercicio del nivel a generar

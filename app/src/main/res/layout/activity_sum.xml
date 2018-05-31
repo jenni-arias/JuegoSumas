@@ -8,7 +8,7 @@
     tools:context="arias.jenifer.juegosumas.SumActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_exercise"
+        android:id="@+id/toolbar_sum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
@@ -23,7 +23,7 @@
         android:id="@+id/gridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar_exercise"
+        android:layout_below="@id/toolbar_sum"
         android:numColumns="4"/>
 
 </RelativeLayout>
