@@ -18,8 +18,8 @@
     <string name="statistics_active">Niveles activos:&#160;</string>
     <string name="statistics_inactive">Niveles no activos:&#160;</string>
     <string name="statistics_fails">Total fallos:&#160;</string>
-    <string name="statistics_show_fails">&#160;Mostrar fallos por ejercicio</string>
-    <string name="statistics_exercise">&#160;&#160;&#160;&#160;&#160;&#160;Ejercicio&#160;</string>
+    <string name="statistics_show_fails">&#160;Mostrar fallos por nivel</string>
+    <string name="statistics_exercise">&#160;&#160;&#160;&#160;&#160;&#160;Nivel&#160;</string>
     <string name="statistics_nFails">. Nº fallos:&#160;</string>
     <string name="statistics_without_fails">&#160;Sin fallos!</string>
 
@@ -40,6 +40,7 @@
     <string name="num_8">8</string>
     <string name="num_9">9</string>
     <string name="num_0">0</string>
+    <string name="complete_name">Escribe tu nombre completo</string>
 
 
 </resources>

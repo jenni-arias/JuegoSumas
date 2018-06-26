@@ -101,8 +101,7 @@ public class LevelAdapter extends BaseAdapter {
             //Consulta para obtener si el nivel está completado o no
             String query = SumActivity.queryCompleteLevel(db, levelNum);
             if (query.equals("YES")) {
-                Exercise++;
-            }
+                Exercise++; }
         }
         for (int i = 1; i < 6; i++) {
             int col = R.color.gray;
@@ -117,7 +116,6 @@ public class LevelAdapter extends BaseAdapter {
 
     private void setExerciseVisibility (boolean bool) {
         for (int i = 0; i < 5; i++) {
-            //correct[i].setBackgroundResource(R.color.gray);
             if(bool) {
                 correct[i].setVisibility(View.VISIBLE);
             } else { correct[i].setVisibility(View.INVISIBLE); }

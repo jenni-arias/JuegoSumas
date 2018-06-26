@@ -49,12 +49,14 @@ public class SumActivity extends AppCompatActivity {
     private Dialog dialog;
     private Spinner spinner;
 
+    //SQLite
     private LevelSQLiteHelper mLevel;
     private SQLiteDatabase db;
     private Cursor c;
 
     //Firebase
     private DatabaseReference dbFire;
+
     private String student_name;
     private SharedPreferences sharedPreferences;
     boolean first_run;
@@ -94,7 +96,7 @@ public class SumActivity extends AppCompatActivity {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         first_run = sharedPreferences.getBoolean("FIRSTRUN", true);
         if (first_run) {
-            showDialog("Escribe tu nombre completo",null,3);
+            showDialog(getString(R.string.complete_name),null,3);
         } else {
             student_name = sharedPreferences.getString("STUDENT_NAME", null);
         }
@@ -287,6 +289,7 @@ public class SumActivity extends AppCompatActivity {
         if (type == 1 || type == 3) {
             spinner.setVisibility(View.GONE); }
 
+        //Borrar datos
         if(type == 1) {
             contenido.setText(message);
             ed_name.setVisibility(View.INVISIBLE);
@@ -313,14 +316,14 @@ public class SumActivity extends AppCompatActivity {
                     dialog.cancel();
                 }
             });
-        } else if (type == 2){
+        } else if (type == 2){  //Estadísticas
             contenido.setText(message);
             ed_name.setVisibility(View.INVISIBLE);
             btn_ok.setVisibility(View.INVISIBLE);
             btn_cancel.setVisibility(View.INVISIBLE);
             dialog.setCancelable(true);
 
-        } else if (type == 3) {
+        } else if (type == 3) { //Registro del estudiante por primera vez
             contenido.setVisibility(View.INVISIBLE);
             ed_name.setVisibility(View.VISIBLE);
             btn_cancel.setVisibility(View.INVISIBLE);
@@ -369,11 +372,11 @@ public class SumActivity extends AppCompatActivity {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.hasChild(student_name)) {
-                    dbFire.child(student_name).child(slevel).child("Fecha").setValue("00-00-0000");
+                    /*dbFire.child(student_name).child(slevel).child("Fecha").setValue("00-00-0000");
                     dbFire.child(student_name).child(slevel).child("Hora").setValue("00:00:00");
                     dbFire.child(student_name).child(slevel).child("Ejercicios bien").setValue("0");
                     dbFire.child(student_name).child(slevel).child("Ejercicios mal").setValue("0");
-                    dbFire.child(student_name).child(slevel).child("Completado").setValue("NO");
+                    dbFire.child(student_name).child(slevel).child("Completado").setValue("NO"); */
                 }
             }
 

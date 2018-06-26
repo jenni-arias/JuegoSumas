@@ -67,8 +67,7 @@ public class ExerciseActivity extends AppCompatActivity
     //Firebase
     private DatabaseReference dbFire;
     private String student_name;
-    private String FireFecha, FireHora, FireComplet;
-    private int FireEjBien, FireEjMal;
+    private String FireFecha, FireHora;
 
     private int getId(String digit, String position) {
         String name = String.format("%s_%s", digit, position);
@@ -188,6 +187,7 @@ public class ExerciseActivity extends AppCompatActivity
         String[] campos = new String[] {"levelId", "level", "exercise", "fails", "complete"};
         Cursor c = db.query(LevelContract.LevelScheme.TABLE_NAME, campos,
                 null, null, null, null, null);
+
         //Recorremos el cursor de la BBDD
         if(c.moveToFirst()) {
             for(int i = 0; i < c.getCount(); i++) {
@@ -268,7 +268,8 @@ public class ExerciseActivity extends AppCompatActivity
 
                     if(correct) {
                         if(dataSnapshot.child(level).hasChild("Ejercicios bien")) {
-                            String s_ejbien = dataSnapshot.child(level).child("Ejercicios bien").getValue().toString();
+                            String s_ejbien = dataSnapshot.child(level)
+                                    .child("Ejercicios bien").getValue().toString();
                             int ejbien = Integer.parseInt(s_ejbien) + 1;
                             dbFire.child(level).child("Ejercicios bien").setValue(String.valueOf(ejbien));
                         }
@@ -407,7 +408,6 @@ public class ExerciseActivity extends AppCompatActivity
             nextExercise(mCurrentExercise);
             MakeToast.showToast(ExerciseActivity.this, getString(R.string.bien_hecho), 1);
             db.update(LevelContract.LevelScheme.TABLE_NAME, values, "level=" + numLevel, null);
-
         } else {
             if(mCurrentExercise >= 5) {
                 if(exerciseComplete.equals("YES")) {
@@ -493,7 +493,8 @@ public class ExerciseActivity extends AppCompatActivity
     }
 
     //Mostrar / Ocultar los EditText del resultado según acarreo del nivel.
-    private void hideEditResult(int[] numbersUp, int[] numbersDown, boolean[] posCarry, EditText results[]) {
+    private void hideEditResult(int[] numbersUp, int[] numbersDown,
+                                boolean[] posCarry, EditText results[]) {
         int max;
         if (numbersUp.length >= numbersDown.length) {
             max = numbersUp.length;
